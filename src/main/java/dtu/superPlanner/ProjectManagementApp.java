@@ -12,4 +12,8 @@ public class ProjectManagementApp {
     public Project createProject() {
         return null;
     }
+
+    public int getProjectIdNumerator() {
+        return 0;
+    }
 }
