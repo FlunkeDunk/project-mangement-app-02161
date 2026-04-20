@@ -15,9 +15,11 @@ public class ProjectStepDefs {
     public String date;
     public ProjectManagementApp myApp;
     public Project project;
+    private ErrorMessageHolder errorHolder;
 
-    public ProjectStepDefs(ProjectManagementApp myApp) {
+    public ProjectStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
         this.myApp = myApp;
+        this.errorHolder = errorHolder;
 
     }
 
@@ -36,7 +38,12 @@ public class ProjectStepDefs {
     }
     @When("the user creates a project")
     public void the_user_creates_a_project() {
-        project = myApp.createProject();
+        try {
+            project = myApp.createProject();
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+
     }
     @Then("there is a project")
     public void there_is_a_project() {
@@ -72,11 +79,11 @@ public class ProjectStepDefs {
         for (int i = 0; i < int1; i++) {
             myApp.createProject();
         }
+        assertEquals(myApp.getProjectIdNumerator(), int1);
     }
 
-    @When("An error is thrown {string}")
+    @Then("An error is thrown {string}")
     public void an_error_is_thrown(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        assertEquals(string, errorHolder.getError());
     }
 }

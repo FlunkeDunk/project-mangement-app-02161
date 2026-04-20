@@ -9,6 +9,9 @@ public class ProjectManagementApp {
 
     public Project createProject() {
         projectIdNumerator++;
+        if (projectIdNumerator > 999) {
+            throw new RuntimeException("Cannot create more than 999 projects a year");
+        }
         return new Project(new WeekBasedCalendar(3,2027), projectIdNumerator);
     }
 
