@@ -1,10 +1,16 @@
 package dtu.superPlanner;
 
 public class Project {
-    private int startDate;
+    private WeekBasedCalendar startDate;
+    private int id;
+
+    public Project(WeekBasedCalendar startDate, int id) {
+        this.startDate = startDate;
+        this.id = id;
+    }
 
     public WeekBasedCalendar getStartDate() {
-        return null;
+        return startDate;
     }
 
     public int getId() {

@@ -1,8 +1,5 @@
 package hellocucumber;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.WeekBasedCalendar;
@@ -10,6 +7,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProjectStepDefs {
     public String user;
@@ -19,6 +18,7 @@ public class ProjectStepDefs {
 
     public ProjectStepDefs(ProjectManagementApp myApp) {
         this.myApp = myApp;
+
     }
 
     @Given("a user is logged in")
@@ -48,7 +48,7 @@ public class ProjectStepDefs {
     }
     @Then("the project has no Project leader")
     public void the_projects_has_no_project_leader() {
-        assertEquals(null, project.getProjectLeader());
+        assertNull(project.getProjectLeader());
     }
 
     @And("the project starts in week {int} and year {int}")
@@ -57,13 +57,26 @@ public class ProjectStepDefs {
         int week = startDate.getWeek();
         int year = startDate.getYear();
 
-        assertEquals(week, weekInput);
-        assertEquals(year, yearInput);
+        assertEquals(weekInput, week);
+        assertEquals(yearInput, year);
 
     }
 
     @Then("the project has the id {int}")
     public void the_project_has_the_id(int i) {
         assertEquals(i, project.getId());
+    }
+
+    @When("there are {int} projects created this year")
+    public void there_are_project_created_this_year(Integer int1) {
+        for (int i = 0; i < int1; i++) {
+            myApp.createProject();
+        }
+    }
+
+    @When("An error is thrown {string}")
+    public void an_error_is_thrown(String string) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 }

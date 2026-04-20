@@ -16,7 +16,7 @@ Feature: Create project
         And the project has the id 27001
         And the project has no Project leader
 
-    #Scenario: User try creating the 1000th
-    #    When there are 999 project created this year
-    #    And the user creates a project
-    #    And An error is thrown "Cannot create more than 999 projects a year"
+    Scenario: User try creating the 1000th
+        When there are 999 projects created this year
+        And the user creates a project
+        And An error is thrown "Cannot create more than 999 projects a year"
