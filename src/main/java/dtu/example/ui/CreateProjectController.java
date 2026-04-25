@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 public class CreateProjectController extends ProjectManagementAwareController {
+    
     @FXML TextField projectNameTextField;
 
     @FXML
@@ -15,6 +16,6 @@ public class CreateProjectController extends ProjectManagementAwareController {
         Project project = app.createProject(projectNameTextField.getText());
         WeekBasedCalendar wbc = project.getStartDate();
         System.out.println("The project \"" + project.getName() + "\" (id: " + project.getId() + ") was created and starts: Week " + wbc.getWeek() + " of " + wbc.getYear());
-        App.setRoot("secondary", app);
+        navigator.changeScene("secondary");
     }
 }

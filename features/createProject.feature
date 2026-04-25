@@ -31,26 +31,19 @@ Feature: Create project
         And the project has the id 28001
         And the project has no Project leader
 
-    Scenario: Create a project with a name
-        Given there are no projects created this year
-        And the date is "24-01-2027"
-        When the user creates a project "Amazing Project 67"
-        Then there is a project
-        And the project has the name "Amazing Project 67"
-        And the project starts in week 3 and year 2027
-        And the project has the id 27001
-        And the project has no Project leader
     
-    Scenario: Create 2 projects
+    Scenario: Create 2 projects with different names
         Given there are no projects created this year
         And the date is "24-01-2027"
-        When the user creates a project
+        When the user creates a project "First project"
         Then there is a project
+        And the project has the name "First project"
         And the project starts in week 3 and year 2027
         And the project has the id 27001
         And the project has no Project leader
-        When the user creates a project
+        When the user creates a project "Second project"
         Then there is a project
+        And the project has the name "Second project"
         And the project starts in week 3 and year 2027
         And the project has the id 27002
         And the project has no Project leader
