@@ -1,9 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.cucumber.junit.platform.engine.CucumberTestEngine
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.415 s <<< FAILURE! -- in io.cucumber.junit.platform.engine.CucumberTestEngine
-Create project.Create project - User try creating the 1000th -- Time elapsed: 0.029 s <<< ERROR!
-io.cucumber.java.PendingException: TODO: implement me
-	at hellofx@0.0.2/hellocucumber.ProjectStepDefs.an_error_is_thrown(ProjectStepDefs.java:80)
-	at ✽.An error is thrown "Cannot create more than 999 projects a year"(file:///C:/Documents/DTU%20opgaver/Repos/project-mangement-app-02161/features/createProject.feature:22)
-
