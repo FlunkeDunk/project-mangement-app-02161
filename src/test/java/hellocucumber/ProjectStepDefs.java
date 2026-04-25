@@ -40,14 +40,12 @@ public class ProjectStepDefs {
         int month = Integer.parseInt(splitString[1]);
         int year = Integer.parseInt(splitString[2]);
         LocalDate date = LocalDate.of(year, month, day);
-        
+
         int week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
         WeekBasedCalendar cal = new WeekBasedCalendar(week, year);
         MockTimeHolder mth = new MockTimeHolder(myApp);
         mth.setDate(cal);
     }
-
-
 
     @When("there are no projects created this year")
     public void there_are_no_project_created_this_year() {
@@ -67,7 +65,7 @@ public class ProjectStepDefs {
 
     @Then("there is a project")
     public void there_is_a_project() {
-        assertNotEquals(null, project);
+        assertNotNull(project);
     }
 
     @Then("project has the id {int}")
@@ -96,7 +94,7 @@ public class ProjectStepDefs {
         assertEquals(i, project.getId());
     }
 
-    @When("there are {int} projects created this year")
+    @When("there are {int} project(s) created this year")
     public void there_are_project_created_this_year(Integer int1) {
         for (int i = 0; i < int1; i++) {
             myApp.createProject();
@@ -107,5 +105,20 @@ public class ProjectStepDefs {
     @Then("An error is thrown {string}")
     public void an_error_is_thrown(String string) {
         assertEquals(string, errorHolder.getError());
+    }
+
+    @Then("under {int} project(s) have been created this year")
+    public void underProjectsHaveBeenCreatedThisYear(Integer int1) {
+        assertTrue(myApp.getProjectIdNumerator() < int1);
+    }
+
+    @When("the user creates a project {string}")
+    public void theUserCreatesAProject(String string) {
+        project = myApp.createProject(string);
+    }
+
+    @Then("the project has the name {string}")
+    public void theProjectHasTheName(String string) {
+        assertEquals(string, project.getName());
     }
 }

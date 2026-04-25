@@ -8,12 +8,21 @@ public class ProjectManagementApp {
         timeServer = new TimeServer();
     }
 
-    public Project createProject() {
-        projectIdNumerator++;
-        if (projectIdNumerator > 999) {
+    public Project createProject() throws RuntimeException {
+        return createProject("");
+    }
+
+    public Project createProject(String name) throws RuntimeException {
+        if (projectIdNumerator >= 999) {
             throw new RuntimeException("Cannot create more than 999 projects a year");
         }
-        return new Project(timeServer.getCurrentDate(), projectIdNumerator);
+        projectIdNumerator++;
+        return new Project(timeServer.getCurrentDate(), getProjectId(), name);
+    }
+
+    private int getProjectId() {
+        WeekBasedCalendar date = timeServer.getCurrentDate();
+        return (date.getYear()%100)*1000 + projectIdNumerator;
     }
 
     public int getProjectIdNumerator() {
