@@ -10,6 +10,11 @@ import io.cucumber.java.en.When;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDate;
+import java.time.temporal.IsoFields;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class ProjectStepDefs {
     public String user;
     public String date;
@@ -27,15 +32,29 @@ public class ProjectStepDefs {
     public void a_user_is_logged_in() {
         user = "huba";
     }
+
     @Given("the date is {string}")
     public void the_date_is(String string) {
-        date =  string;
+        String[] splitString = string.split("-");
+        int day = Integer.parseInt(splitString[0]);
+        int month = Integer.parseInt(splitString[1]);
+        int year = Integer.parseInt(splitString[2]);
+        LocalDate date = LocalDate.of(year, month, day);
+        
+        int week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        WeekBasedCalendar cal = new WeekBasedCalendar(week, year);
+        MockTimeHolder mth = new MockTimeHolder(myApp);
+        mth.setDate(cal);
     }
+
+
+
     @When("there are no projects created this year")
     public void there_are_no_project_created_this_year() {
         int projectCount = myApp.getProjectIdNumerator();
         assert projectCount == 0;
     }
+
     @When("the user creates a project")
     public void the_user_creates_a_project() {
         try {
@@ -45,14 +64,17 @@ public class ProjectStepDefs {
         }
 
     }
+
     @Then("there is a project")
     public void there_is_a_project() {
         assertNotEquals(null, project);
     }
+
     @Then("project has the id {int}")
     public void projects_has_the_id(Integer expectedId) {
         assertEquals(expectedId, project.getId());
     }
+
     @Then("the project has no Project leader")
     public void the_projects_has_no_project_leader() {
         assertNull(project.getProjectLeader());
