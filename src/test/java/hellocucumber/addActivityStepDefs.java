@@ -3,6 +3,8 @@ package hellocucumber;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.*;
 
+import java.util.List;
+
 public class addActivityStepDefs {
 
     @When("an employee tries to add activity {string} with expected time {int} weeks")
@@ -19,6 +21,12 @@ public class addActivityStepDefs {
 
     @And("the user is not the project leader")
     public void theUserIsNotTheProjectLeader() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @And("the project has the activities with the names and expected times")
+    public void theProjectHasTheActivitiesWithTheNamesAndExpectedTimes(List<List<String>> activities) {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }

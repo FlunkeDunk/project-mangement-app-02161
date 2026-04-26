@@ -56,23 +56,23 @@ Feature: View Project details
 
   Scenario: View the project activities with no activities
     Given 1 project exists
-    And the project has these activities
+    And the project has activities with the names
 
     When the user views the details of the project
     Then "no activities" is shown for the field "activities"
 
   Scenario: View the project activities with 1 activity
     Given 1 project exists
-    And the project has these activities
+    And the project has activities with the names
       | Invade Mordor |
     When the user views the details of the project
-    Then these activities are shown
+    Then activities with these names are shown
       | Invade Mordor |
 
   # Projektbeskrivelse siger at 30 er et typisk antal aktiviteter for et projekt.
   Scenario: View the project activities with 30 activities
     Given 1 project exists
-    And the project has these activities
+    And the project has activities with the names
       | Invade Mordor                        |
       | Defend Gondor                        |
       | Defeat Smaug                         |
@@ -105,7 +105,7 @@ Feature: View Project details
       | Recruit Aragorn, son of Arathorn     |
       | Mash potatoes and put them in a stew |
     When the user views the details of the project
-    Then these activities are shown
+    Then activities with these names are shown
       | Invade Mordor                        |
       | Defend Gondor                        |
       | Defeat Smaug                         |
@@ -141,7 +141,7 @@ Feature: View Project details
   # Projektbeskrivelse siger projekter kan have "næsten 100", derfor også brug for understøttelse for mere end 30
   Scenario: View the project activities with 35 activities
     Given 1 project exists
-    And the project has these activities
+    And the project has activities with the names
       | Invade Mordor                        |
       | Defend Gondor                        |
       | Defeat Smaug                         |
@@ -187,7 +187,7 @@ Feature: View Project details
       | Invite Bofur to party                |
       | Invite Bombur to party               |
     When the user views the details of the project
-    Then these activities are shown
+    Then activities with these names are shown
       | Invade Mordor                        |
       | Defend Gondor                        |
       | Defeat Smaug                         |
