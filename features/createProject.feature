@@ -1,6 +1,5 @@
 Feature: Create project
-    A user can create a project with or without a duration
-    and the user will then be the first Employee added to the project.
+    A user can create a project with or without a name.
 
     Actor: Employee
 
