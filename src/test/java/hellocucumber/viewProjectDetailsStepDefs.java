@@ -47,4 +47,10 @@ public class viewProjectDetailsStepDefs {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
+
+    @And("the project has no activties")
+    public void theProjectHasNoActivties() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
 }

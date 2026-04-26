@@ -1,0 +1,59 @@
+Feature: Assign employee to activity
+  An employee with Project-Leader permissions (Project leader or any employee when no project leader exists)
+  can assign another employee (including themselves) to an activity
+
+  Actor: Employee
+
+  Background:
+    Given a user is logged in
+    And 1 project exists
+    And the project has activities with the names
+      | Invade Mordor |
+      | Defend Gondor |
+      | Defeat Smaug  |
+
+  Scenario: Employee assigns themselves to an activity in project with no project leader
+    Given the project has no Project leader
+    And "gagr" is not assigned to "Defeat Smaug"
+    When "gagr" assigns "gagr" to "Defeat Smaug"
+    Then "gagr" is assigned to "Defeat Smaug"
+
+  Scenario: Employee fails to assign themselves to an activity in project with a project leader
+    Given the project has a Project leader
+    And "gagr" is not assigned to "Defend Gondor"
+    When "gagr" assigns "gagr" to "Defend Gondor"
+    Then "gagr" is not assigned to "Defend Gondor"
+    And An error is thrown "Only the project leader can assign employees to activities"
+
+  Scenario: Employee assigns another employee to an activity in project with no project leader
+    Given the project has no Project leader
+    And "sawh" is not assigned to "Invade Mordor"
+    When "gagr" assigns "sawh" to "Invade Mordor"
+    Then "sawh" is assigned to "Invade Mordor"
+
+  Scenario: Employee fails to assign another employee to an activity in project with a project leader
+    Given the project has a Project leader
+    And "sawh" is not assigned to "Invade Mordor"
+    When "gagr" assigns "sawh" to "Invade Mordor"
+    Then "sawh" is not assigned to "Invade Mordor"
+    
+  Scenario: Employee fails to assign an employee to an activity they are already assigned to
+    Given the project has no Project leader
+    And "sawh" is assigned to "Invade Mordor"
+    When "gagr" assigns "sawh" to "Invade Mordor"
+    Then An error is thrown "Employee is already added to the activity"
+    And "sawh" is assigned to "Invade Mordor"
+
+  Scenario: Employee assigns themselves to an activity in a project they are the project leader of
+    Given the project has a Project leader
+    And "gagr" is the Project Leader
+    And "gagr" is not assigned to "Defend Gondor"
+    When "gagr" assigns "gagr" to "Defend Gondor"
+    Then "gagr" is assigned to "Defend Gondor"
+
+  Scenario: Employee assigns another employee to an activity in a project they are the project leader of
+    Given the project has a Project leader
+    And "gagr" is the Project Leader
+    And "sawh" is not assigned to "Defend Gondor"
+    When "gagr" assigns "sawh" to "Defend Gondor"
+    Then "sawh" is assigned to "Defend Gondor"

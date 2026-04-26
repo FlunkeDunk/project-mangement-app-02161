@@ -56,8 +56,7 @@ Feature: View Project details
 
   Scenario: View the project activities with no activities
     Given 1 project exists
-    And the project has activities with the names
-
+    And the project has no activties
     When the user views the details of the project
     Then "no activities" is shown for the field "activities"
 
