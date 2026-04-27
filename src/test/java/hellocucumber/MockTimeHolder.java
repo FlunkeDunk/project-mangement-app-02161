@@ -1,5 +1,8 @@
 package hellocucumber;
 
+import java.time.LocalDate;
+import java.time.temporal.IsoFields;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +17,11 @@ public class MockTimeHolder {
     public MockTimeHolder(ProjectManagementApp pma){
         pma.setTimeServer(timeServer);
     }
-    public void setDate(WeekBasedCalendar date){
+
+    public void setDate(LocalDate date){
         when(this.timeServer.getCurrentDate()).thenReturn(date);
+        int week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        int year = date.get(IsoFields.WEEK_BASED_YEAR);
+        when(this.timeServer.getCurrentWeekDate()).thenReturn(new WeekBasedCalendar(week, year));
     }
 }
