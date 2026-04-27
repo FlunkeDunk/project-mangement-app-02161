@@ -3,8 +3,8 @@ Feature: Change Project Name
   Actor: User, Project Leader
 
   Background:
-    Given an user that is logged in
-    And a project with name "Calculator"
+    Given a user is logged in
+    And the project has the name "Calculator"
 
   Scenario: Change project name without project leader
     Given the project has no project leader
@@ -13,13 +13,13 @@ Feature: Change Project Name
 
   Scenario: Change project name with project leader as non-project leader
     Given the project has a project leader
-    And the user is not a project leader
+    And the user is not the project leader
     When the user changes the project name to "Create Calculator"
     Then the project has the name "Calculator"
-    And an unsuccessful rename notification is given to the user
+    And an error is thrown "Only the project leader can rename the activities"
 
   Scenario: Change project name with project leader as project leader
     Given the project has a project leader
-    And the user is a project leader
+    And the user is the project leader
     When the user changes the project name to "Make calculator"
     Then the project has the name "Make calculator"
