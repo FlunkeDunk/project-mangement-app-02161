@@ -5,7 +5,7 @@ import io.cucumber.java.en.*;
 
 import java.util.List;
 
-public class viewProjectDetailsStepDefs {
+public class ViewProjectDetailsStepDefs {
     @When("the user views the details of the project")
     public void the_user_views_the_details_of_the_project() {
         // Write code here that turns the phrase above into concrete actions

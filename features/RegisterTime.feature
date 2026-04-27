@@ -1,11 +1,10 @@
 Feature: Register Time
-  A user can register time for themselves on an activity, even if they are not assigned.
-
+  Description: A user can register time for themselves on an activity, even if they are not assigned.
   Actor: Employee
 
   Background:
     Given a user is logged in
-    And 1 project exists
+    And a project exists
     And the project has activities with the names
       | Invade Mordor |
       | Defend Gondor |

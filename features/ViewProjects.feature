@@ -1,13 +1,12 @@
 Feature: View Projects
-  A user can view the currently existing projects in the system
-
+  Description: A user can view the currently existing projects in the system
   Actor: Employee
 
   Background:
     Given a user is logged in
 
   Scenario: View 1 existing project
-    Given 1 project exists
+    Given a project exists
     When the user views the list of projects
     Then the project is shown
 
@@ -20,4 +19,4 @@ Feature: View Projects
   Scenario: View 0 projects
     Given 0 projects exist
     When the user views the list of projects
-    Then the user is told no projects exist
+    Then null is returned

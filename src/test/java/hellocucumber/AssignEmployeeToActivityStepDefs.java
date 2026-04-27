@@ -3,7 +3,7 @@ package hellocucumber;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.*;
 
-public class assignMembersStepDefs {
+public class AssignEmployeeToActivityStepDefs {
     @When("{string} assigns {string} to {string}")
     public void theEmployeeAssignsTo(String assigner, String assignee, String activity) {
         // Write code here that turns the phrase above into concrete actions

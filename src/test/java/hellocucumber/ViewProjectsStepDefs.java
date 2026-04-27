@@ -3,7 +3,7 @@ package hellocucumber;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.*;
 
-public class viewProjectStepDefs {
+public class ViewProjectsStepDefs {
 
     @Given("{int} project(s) exist(s)")
     public void project_exists(Integer int1) {
@@ -27,8 +27,8 @@ public class viewProjectStepDefs {
         throw new PendingException();
     }
 
-    @Then("the user is told no projects exist")
-    public void theUserIsToldNoProjectsExist() {
+    @Then("null is returned")
+    public void nullIsReturned() {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
