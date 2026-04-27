@@ -13,7 +13,7 @@ public class CreateActivityStepDefs {
         throw new io.cucumber.java.PendingException();
     }
 
-    @And("the project has a Project leader")
+    @And("the project has a project leader")
     public void theProjectHasAProjectLeader() {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();

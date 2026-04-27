@@ -100,7 +100,7 @@ public class ProjectStepDefs {
         assertEquals(myApp.getProjectIdNumerator(), int1);
     }
 
-    @Then("An error is thrown {string}")
+    @Then("an error is thrown {string}")
     public void an_error_is_thrown(String string) {
         assertEquals(string, errorHolder.getError());
     }

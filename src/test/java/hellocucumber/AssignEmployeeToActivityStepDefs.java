@@ -22,7 +22,7 @@ public class AssignEmployeeToActivityStepDefs {
         throw new PendingException();
     }
 
-    @And("{string} is the Project Leader")
+    @And("{string} is the project Leader")
     public void isTheProjectLeader(String arg0) {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
