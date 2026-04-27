@@ -18,16 +18,3 @@ Feature: Create report
     Then a report is created
     And the report indicates the time budget is 10 hours
     And the report indicates the time spent is 7 hours
-
-#Scenario: Reports contain the expected time to completion
-#    Given the project has a project leader
-#    And the project has the activity "Design"
-#    And 10 hours have been budgeted for "Design"
-#    And 7 hours have been spent on "Design"
-#    And the project has the activity "Analysis"
-#    And 3 hours have been budgeted for "Analysis"
-#    And 3 hours have been spent on "Analysis"
-#    And "Analysis" is done
-#    When the project leader creates a report
-#    Then a report is created
-#    And the report indicates the expected time to completion is 3 hours

@@ -1,5 +1,5 @@
 Feature: Add activity
-  Description: A user can add an activity to a project with an expected time
+  Description: A user can add an activity to a project with an budgeted time
   Actor: Employee
 
   Background:
@@ -8,19 +8,19 @@ Feature: Add activity
   Scenario: Add activity to a project with no project leader and no projects
     Given 1 project exists
     And the project has no Project leader
-    And the project has the activities with the names and expected times
+    And the project has the activities with the names and budgeted times
 
-    When an employee tries to add activity "Visit MiniTrue" with expected time 12 weeks
-    Then the project has the activities with the names and expected times
+    When an employee tries to add activity "Visit MiniTrue" with budgeted time 12 weeks
+    Then the project has the activities with the names and budgeted times
       | Visit MiniTrue | 12 weeks |
 
   Scenario: Add activity to a project with no project leader and existing projects
     Given 1 project exists
     And the project has no Project leader
-    And the project has the activities with the names and expected times
+    And the project has the activities with the names and budgeted times
       | Practice Newspeak | 5 weeks |
-    When an employee tries to add activity "Attend 2 minutes of hate" with expected time 8 weeks
-    Then the project has the activities with the names and expected times
+    When an employee tries to add activity "Attend 2 minutes of hate" with budgeted time 8 weeks
+    Then the project has the activities with the names and budgeted times
       | Practice Newspeak | 5 weeks |
       | Attend 2 minutes of hate | 8 weeks |
 
@@ -28,9 +28,9 @@ Feature: Add activity
     Given 1 project exists
     And the project has a Project leader
     And the user is not the project leader
-    And the project has the activities with the names and expected times
+    And the project has the activities with the names and budgeted times
       | Practice Newspeak | 5 weeks |
-    When an employee tries to add activity "Attend 2 minutes of hate" with expected time 8 weeks
-    Then the project has the activities with the names and expected times
+    When an employee tries to add activity "Attend 2 minutes of hate" with budgeted time 8 weeks
+    Then the project has the activities with the names and budgeted times
       | Practice Newspeak | 8 weeks |
     And An error is thrown "Only the project leader can create activities"
