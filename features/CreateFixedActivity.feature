@@ -4,7 +4,7 @@ Feature: Add fixed activity
   Actor: Employee
 
   Scenario Outline: Employee successfully sets fixed activity
-    Given an employee
+    Given a user is logged in
     When the employee sets the fixed activity "Vacation" to start in year <start year>
     And sets "Vacation" to end in year <end year>
     And sets "Vacation" to start in week <start week>
@@ -21,7 +21,7 @@ Feature: Add fixed activity
       | 2026       | 2027     | 51         | 1        |
 
   Scenario Outline: Employee fails in setting fixed activity
-    Given an employee
+    Given a user is logged in
     And a fixed activity "Sick"
     And "Sick" is set to start in year <start year>
     And "Sick" is set to end in year <end year>
