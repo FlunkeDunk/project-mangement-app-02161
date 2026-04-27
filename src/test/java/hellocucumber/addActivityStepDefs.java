@@ -7,7 +7,7 @@ import java.util.List;
 
 public class addActivityStepDefs {
 
-    @When("an employee tries to add activity {string} with expected time {int} weeks")
+    @When("an employee tries to add activity {string} with budgeted time {int} weeks")
     public void an_employee_tries_to_add_activity(String string, int weeks) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
@@ -25,8 +25,8 @@ public class addActivityStepDefs {
         throw new PendingException();
     }
 
-    @And("the project has the activities with the names and expected times")
-    public void theProjectHasTheActivitiesWithTheNamesAndExpectedTimes(List<List<String>> activities) {
+    @And("the project has the activities with the names and budgeted times")
+    public void theProjectHasTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> activities) {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }

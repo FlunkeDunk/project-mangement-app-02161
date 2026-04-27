@@ -1,7 +1,6 @@
 Feature: Assign employee to activity
-  An employee with Project-Leader permissions (Project leader or any employee when no project leader exists)
+  Description: An employee with Project-Leader permissions (Project leader or any employee when no project leader exists)
   can assign another employee (including themselves) to an activity
-
   Actor: Employee
 
   Background:
@@ -36,7 +35,7 @@ Feature: Assign employee to activity
     And "sawh" is not assigned to "Invade Mordor"
     When "gagr" assigns "sawh" to "Invade Mordor"
     Then "sawh" is not assigned to "Invade Mordor"
-    
+
   Scenario: Employee fails to assign an employee to an activity they are already assigned to
     Given the project has no Project leader
     And "sawh" is assigned to "Invade Mordor"

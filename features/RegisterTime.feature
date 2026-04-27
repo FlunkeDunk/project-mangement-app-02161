@@ -1,6 +1,5 @@
 Feature: Register Time
-  A user can register time for themselves on an activity, even if they are not assigned.
-
+  Description: A user can register time for themselves on an activity, even if they are not assigned.
   Actor: Employee
 
   Background:
