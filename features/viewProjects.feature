@@ -1,6 +1,5 @@
 Feature: View Projects
-  A user can view the currently existing projects in the system
-
+  Description: A user can view the currently existing projects in the system
   Actor: Employee
 
   Background:

@@ -1,6 +1,5 @@
 Feature: Add activity
-  A user can add an activity to a project with an expected time
-
+  Description: A user can add an activity to a project with an expected time
   Actor: Employee
 
   Background:

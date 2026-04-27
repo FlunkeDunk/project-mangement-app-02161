@@ -1,6 +1,5 @@
 Feature: View Project details
-  A user can click on a project and view details about it
-
+  Description: A user can click on a project and view details about it
   Actor: Employee
 
   Background:
