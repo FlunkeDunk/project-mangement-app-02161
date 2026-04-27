@@ -3,11 +3,11 @@ Feature: Change Registered Time
   Actor: User
 
   Background:
-    Given an user that is logged in
-    And a project
+    Given a user is logged in
+    And a project exists
     And the project contains an activity "Run tests" with 2 hours worked
 
-    Scenario: Change registered time to posetive
+    Scenario: Change registered time to positive
         When the user changes the registered time on the activity "Run tests" to 5 hours
         Then the activity "Run tests" has 5 hours worked
 
