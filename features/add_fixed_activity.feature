@@ -1,0 +1,41 @@
+Feature: Add fixed activity
+    Description: When adding a fixed activity to an employee that fixed activity will exists to show others when
+    the employee is available for regular activities. A fixed activity could be things such as a holiday or sick days.
+    Actor: Employee
+
+    Scenario Outline: Employee successfully sets fixed activity
+    Given an employee
+    When the employee sets the fixed activity "Vacation" to start in year <start year> 
+    And sets "Vacation" to end in year <end year>
+    And sets "Vacation" to start in week <start week>
+    And sets "Vacation" to end in week <end week>
+    Then the fixed activity starts in year <start year> 
+    And the fixed activity starts in week <start week> 
+    And the fixed activity ends in year <end year> 
+    And the fixed activity ends in week <end week>
+
+  Examples:
+    | start year | end year | start week | end week |
+    |      2027  |     2027 |          1 |        4 |
+    |      2027  |     2027 |          5 |        8 |
+    |      2026  |     2027 |         51 |        1 |
+
+    Scenario Outline: Employee fails in setting fixed activity
+    Given an employee
+    And a fixed activity "Sick"
+    And "Sick" is set to start in year <start year>
+    And "Sick" is set to end in year <end year>
+    And "Sick" is set to start in week <start week>
+    And "Sick" is set to end in week <end week>
+    When the employee sets the fixed activity "Sick" to start the year <start year> 
+    And sets "Sick" to end in year <end year>
+    And sets "Sick" to start in week <start week>
+    And sets "Sick" to end in week <end week>
+    Then the fixed activity is not added
+    And the message "The fixed activity \"Sick\" already exists for that time period" is shown
+
+  Examples:
+    | start year | end year | start week | end week |
+    |      2027  |     2027 |          1 |        4 |
+    |      2027  |     2027 |          5 |        8 |
+    |      2026  |     2027 |         51 |        1 |
