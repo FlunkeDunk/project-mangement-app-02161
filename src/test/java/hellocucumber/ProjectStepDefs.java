@@ -1,7 +1,6 @@
 package hellocucumber;
 
 import java.time.LocalDate;
-import java.time.temporal.IsoFields;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,7 +17,7 @@ import io.cucumber.java.en.When;
 
 public class ProjectStepDefs {
     public String user;
-    public String date;
+    // public String date;
     public ProjectManagementApp myApp;
     public Project project;
     private ErrorMessageHolder errorHolder;
@@ -41,11 +40,10 @@ public class ProjectStepDefs {
         int month = Integer.parseInt(splitString[1]);
         int year = Integer.parseInt(splitString[2]);
         LocalDate date = LocalDate.of(year, month, day);
+        System.out.println("Parsed date: " + date);
 
-        int week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-        WeekBasedCalendar cal = new WeekBasedCalendar(week, year);
         MockTimeHolder mth = new MockTimeHolder(myApp);
-        mth.setDate(cal);
+        mth.setDate(date);
     }
 
     @When("there are no projects created this year")

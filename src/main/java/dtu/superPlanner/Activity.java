@@ -17,6 +17,10 @@ public class Activity extends AbstractActivity {
         throw new UnsupportedOperationException("Not implemented");
     }
 
+    public TimeLedger getTimeLedger(String employeeInitials) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
     public void editTime(String initials, LocalDate date, double newTime) {
         throw new UnsupportedOperationException("Not implemented");
     }

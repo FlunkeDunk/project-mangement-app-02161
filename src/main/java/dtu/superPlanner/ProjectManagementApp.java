@@ -17,11 +17,11 @@ public class ProjectManagementApp {
             throw new RuntimeException("Cannot create more than 999 projects a year");
         }
         projectIdNumerator++;
-        return new Project(timeServer.getCurrentDate(), getProjectId(), name);
+        return new Project(timeServer.getCurrentWeekDate(), getProjectId(), name);
     }
 
     private int getProjectId() {
-        WeekBasedCalendar date = timeServer.getCurrentDate();
+        WeekBasedCalendar date = timeServer.getCurrentWeekDate();
         return (date.getYear()%100)*1000 + projectIdNumerator;
     }
 
