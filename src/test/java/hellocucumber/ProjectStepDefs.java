@@ -40,7 +40,6 @@ public class ProjectStepDefs {
         int month = Integer.parseInt(splitString[1]);
         int year = Integer.parseInt(splitString[2]);
         LocalDate date = LocalDate.of(year, month, day);
-        System.out.println("Parsed date: " + date);
 
         MockTimeHolder mth = new MockTimeHolder(myApp);
         mth.setDate(date);

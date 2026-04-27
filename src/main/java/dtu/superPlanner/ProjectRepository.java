@@ -1,13 +1,12 @@
 package dtu.superPlanner;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class ProjectRepository {
-    private List<Project> projectList = new ArrayList<>();
+    private Set<Project> projectSet;
 
-    public List<Project> getProjectList() {
-        return projectList;
+    public Set<Project> getProjectSet() {
+        return projectSet;
     }
 
     public Project getProject() {
