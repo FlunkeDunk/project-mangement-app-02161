@@ -5,7 +5,7 @@ import io.cucumber.java.en.*;
 
 import java.util.List;
 
-public class addActivityStepDefs {
+public class CreateActivityStepDefs {
 
     @When("an employee tries to add activity {string} with budgeted time {int} weeks")
     public void an_employee_tries_to_add_activity(String string, int weeks) {

@@ -71,7 +71,7 @@ public class ProjectStepDefs {
         assertEquals(expectedId, project.getId());
     }
 
-    @Then("the project has no Project leader")
+    @Then("the project has no project leader")
     public void the_projects_has_no_project_leader() {
         assertNull(project.getProjectLeader());
     }

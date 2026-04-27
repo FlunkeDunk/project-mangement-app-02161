@@ -12,7 +12,7 @@ Feature: Create project
     Then there is a project
     And the project starts in week 3 and year 2027
     And the project has the id 27001
-    And the project has no Project leader
+    And the project has no project leader
 
   Scenario: User try creating the 1000th
     When there are 999 projects created this year
@@ -27,7 +27,7 @@ Feature: Create project
     Then there is a project
     And the project starts in week 5 and year 2028
     And the project has the id 28001
-    And the project has no Project leader
+    And the project has no project leader
 
 
   Scenario: Create 2 projects with different names
@@ -38,10 +38,10 @@ Feature: Create project
     And the project has the name "First project"
     And the project starts in week 3 and year 2027
     And the project has the id 27001
-    And the project has no Project leader
+    And the project has no project leader
     When the user creates a project "Second project"
     Then there is a project
     And the project has the name "Second project"
     And the project starts in week 3 and year 2027
     And the project has the id 27002
-    And the project has no Project leader
+    And the project has no project leader

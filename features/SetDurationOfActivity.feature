@@ -3,7 +3,7 @@ Feature: Set duration of activity
   Actor: Project leader
 
   Background:
-    Given a project
+    Given a project exists
     And an activity "Design" for the project
 
   Scenario Outline: A project leader sets duration of an activity successfully

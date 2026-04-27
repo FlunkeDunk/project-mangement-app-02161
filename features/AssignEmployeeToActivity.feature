@@ -5,14 +5,14 @@ Feature: Assign employee to activity
 
   Background:
     Given a user is logged in
-    And 1 project exists
+    And a project exists
     And the project has activities with the names
       | Invade Mordor |
       | Defend Gondor |
       | Defeat Smaug  |
 
   Scenario: Employee assigns themselves to an activity in project with no project leader
-    Given the project has no Project leader
+    Given the project has no project leader
     And "gagr" is not assigned to "Defeat Smaug"
     When "gagr" assigns "gagr" to "Defeat Smaug"
     Then "gagr" is assigned to "Defeat Smaug"
@@ -25,7 +25,7 @@ Feature: Assign employee to activity
     And An error is thrown "Only the project leader can assign employees to activities"
 
   Scenario: Employee assigns another employee to an activity in project with no project leader
-    Given the project has no Project leader
+    Given the project has no project leader
     And "sawh" is not assigned to "Invade Mordor"
     When "gagr" assigns "sawh" to "Invade Mordor"
     Then "sawh" is assigned to "Invade Mordor"
@@ -37,7 +37,7 @@ Feature: Assign employee to activity
     Then "sawh" is not assigned to "Invade Mordor"
 
   Scenario: Employee fails to assign an employee to an activity they are already assigned to
-    Given the project has no Project leader
+    Given the project has no project leader
     And "sawh" is assigned to "Invade Mordor"
     When "gagr" assigns "sawh" to "Invade Mordor"
     Then An error is thrown "Employee is already added to the activity"

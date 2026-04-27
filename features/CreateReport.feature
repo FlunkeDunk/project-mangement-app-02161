@@ -3,7 +3,7 @@ Feature: Create report
   Actor: Project leader
 
   Background: There is a project
-    Given a project
+    Given a project exists
     And a user is logged in
 
   Scenario: Project leader creates report
