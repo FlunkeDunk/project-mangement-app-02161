@@ -10,5 +10,5 @@ Feature: User Login
   Scenario: Unsuccessful login
     Given a user that is logged out with username "DW"
     When the user enters "cookie" into the username box
-    Then then the user is not logged in
-    And a unsuccessful login notification is given to the user
+    Then the user is not logged in
+    And an unsuccessful login notification is given to the user
