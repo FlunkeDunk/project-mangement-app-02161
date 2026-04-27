@@ -1,6 +1,12 @@
 package dtu.superPlanner;
 
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.Set;
+
 public class ProjectManagementApp {
+    private Map<Integer, Project> projects;
+    private String userInitials;
     private int projectIdNumerator;
     private TimeServer timeServer;
 
@@ -22,13 +28,62 @@ public class ProjectManagementApp {
 
     private int getProjectId() {
         WeekBasedCalendar date = timeServer.getCurrentWeekDate();
-        return (date.getYear()%100)*1000 + projectIdNumerator;
+        return (date.getYear() % 100) * 1000 + projectIdNumerator;
     }
 
     public int getProjectIdNumerator() {
         return projectIdNumerator;
     }
-    public void setTimeServer(TimeServer timeServer){
+
+    public void setTimeServer(TimeServer timeServer) {
         this.timeServer = timeServer;
+    }
+
+    public Activity createActivity(int projectId, String name, TimeFrame timeFrame) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void registerTime(int projectId, int activityId, LocalDate date, double time) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void editTime(int projectId, int activityId, LocalDate date, double newTime) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void setProjectLeader(int projectId, String employeeInitials) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Report createReport(int projectId) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public FixedActivity createFixedActivity(String employeeInitials, String name, TimeFrame timeFrame) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void setExpectedTime(int projectId, int activityId, double expectedTime) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void setActivityTimeFrame(int projectId, int activityId, TimeFrame timeFrame) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void setProjectName(int projectId, String name) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public boolean login(String employeeInitials) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Set<Employee> getAvailableEmployees(String employeeInitials, int projectId, int activityId) {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }

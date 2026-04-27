@@ -1,9 +1,14 @@
 package dtu.superPlanner;
 
+import java.time.LocalDate;
+import java.util.Map;
+
 public class Project {
+    private Map<Integer, Activity> activities;
     private WeekBasedCalendar startDate;
-    private final int ID;
     private String name;
+    private String projectLeader;
+    private final int ID;
 
     public Project(WeekBasedCalendar startDate, int ID) {
         this.startDate = startDate;
@@ -13,6 +18,46 @@ public class Project {
     public Project(WeekBasedCalendar startDate, int ID, String name) {
         this(startDate, ID);
         this.name = name;
+    }
+
+    public void editTime(String employeeInitials, LocalDate date, double newTime) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Activity createActivity(String name, TimeFrame timeFrame) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void registerTime(String employeeInitials, LocalDate date, double time) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Report createReport() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void setExpectedTime(int activityId, double expectedTime) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void setActivityTimeFrame(int activityId, TimeFrame timeFrame) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void addEmployeeToActivity(int activityId, String employeeInitials) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void getActivityTimeFrame(int activityId) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public boolean isLeader(String employeeInitials) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Activity getActivityById(int activityId) {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     public WeekBasedCalendar getStartDate() {
