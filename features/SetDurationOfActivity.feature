@@ -34,7 +34,7 @@ Feature: Set duration of activity
     And the activity starts in week <start week>
     And the activity ends in year <start year>
     And the activity ends in week <start week>
-    And the user is notified that the start week
+    And the user is notified that the start week is after end week
     # Having both set to start year and start week is intentional
 
     Examples:
