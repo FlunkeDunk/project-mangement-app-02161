@@ -1,7 +1,10 @@
 package hellocucumber;
 
 import io.cucumber.java.PendingException;
-import io.cucumber.java.en.*;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class RegisterTimeStepDefs {
     @Given("the employee is assigned to the activity {string}")
@@ -42,12 +45,6 @@ public class RegisterTimeStepDefs {
 
     @And("the employee's total time for {string} is {int} hours")
     public void theEmployeeSTotalTimeForIsHours(String arg0, int arg1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @And("a project exists")
-    public void aProjectExists() {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }

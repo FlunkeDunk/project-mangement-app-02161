@@ -1,15 +1,10 @@
 package hellocucumber;
 
 import io.cucumber.java.PendingException;
-import io.cucumber.java.en.*;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class ViewProjectsStepDefs {
-
-    @Given("{int} project(s) exist(s)")
-    public void project_exists(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
     @When("the user views the list of projects")
     public void the_user_views_the_list_of_projects() {
         // Write code here that turns the phrase above into concrete actions
@@ -27,8 +22,8 @@ public class ViewProjectsStepDefs {
         throw new PendingException();
     }
 
-    @Then("null is returned")
-    public void nullIsReturned() {
+    @Then("an empty set is returned")
+    public void anEmptySetIsReturned() {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }

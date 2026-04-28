@@ -1,6 +1,7 @@
 package hellocucumber;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -10,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.WeekBasedCalendar;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -29,7 +29,7 @@ public class ProjectStepDefs {
     }
 
     @Given("a user is logged in")
-    public void a_user_is_logged_in() {
+    public void aUserIsLoggedIn() {
         user = "huba";
     }
 
@@ -46,13 +46,18 @@ public class ProjectStepDefs {
     }
 
     @When("there are no projects created this year")
-    public void there_are_no_project_created_this_year() {
+    public void thereAreNoProjectCreatedThisYear() {
         int projectCount = myApp.getProjectIdNumerator();
         assert projectCount == 0;
     }
 
+    @Given("a project")
+    public void aProject() {
+        theUserCreatesAProject();
+    }
+
     @When("the user creates a project")
-    public void the_user_creates_a_project() {
+    public void theUserCreatesAProject() {
         try {
             project = myApp.createProject();
         } catch (Exception e) {
@@ -62,7 +67,7 @@ public class ProjectStepDefs {
     }
 
     @Then("there is a project")
-    public void there_is_a_project() {
+    public void thereIsAProject() {
         assertNotNull(project);
     }
 
@@ -76,7 +81,7 @@ public class ProjectStepDefs {
         assertNull(project.getProjectLeader());
     }
 
-    @And("the project starts in week {int} and year {int}")
+    @Then("the project starts in week {int} and year {int}")
     public void theProjectStartsInWeekAndYear(int weekInput, int yearInput) {
         WeekBasedCalendar startDate = project.getStartDate();
         int week = startDate.getWeek();
@@ -110,6 +115,11 @@ public class ProjectStepDefs {
         assertTrue(myApp.getProjectIdNumerator() < int1);
     }
 
+    @Given("no projects have been created")
+    public void noProjectsHaveBeenCreated() {
+        assertEquals(0, myApp.getAllProjects().size());
+    }
+
     @When("the user creates a project {string}")
     public void theUserCreatesAProject(String string) {
         project = myApp.createProject(string);
@@ -118,5 +128,18 @@ public class ProjectStepDefs {
     @Then("the project has the name {string}")
     public void theProjectHasTheName(String string) {
         assertEquals(string, project.getName());
+    }
+
+    @When("the user creates {int} project(s)")
+    public void theUserCreatesProject(Integer int1) {
+        for (int i = 0; i < int1; i++) {
+            myApp.createProject();
+        }
+    }
+
+    @Then("{int} project(s) exist(s)")
+    public void projectExists(Integer int1) {
+        Set<Project> projects = myApp.getAllProjects();
+        assertEquals(int1, projects.size());
     }
 }
