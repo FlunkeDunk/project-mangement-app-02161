@@ -17,7 +17,7 @@ Feature: Create project
   Scenario: User try creating the 1000th
     When there are 999 projects created this year
     And the user creates a project
-    Then An error is thrown "Cannot create more than 999 projects a year"
+    Then an error is thrown "Cannot create more than 999 projects a year"
     And under 1000 projects have been created this year
 
   Scenario: Creates a project 2

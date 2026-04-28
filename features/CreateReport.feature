@@ -11,9 +11,9 @@ Feature: Create report
     Then a report is created
 
   Scenario: Project leader creates report with budgeted time
-    Given an activity "Design" for the project
-    And 10 hours have been budgeted for "Design"
-    And 7 hours have been spent on "Design"
+    Given the project has the activity "Design"
+    And the activity "Design" has 10 hours budgeted
+    And the activity "Design" has 7 hours spent
     When the project leader creates a report
     Then a report is created
     And the report indicates the time budget is 10 hours

@@ -3,23 +3,27 @@ Feature: Change Activity Name
   Actor: User, Project Leader
 
   Background:
-    Given a user that is logged in
-    And a project with an activity named "Fix bugs"
+    Given a user is logged in
+    And a project exists
+    And the project has the activity "Fix bugs"
 
   Scenario: Change activity name without project leader
     Given the project has no project leader
     When the user changes the activity name to "Solve bugs"
-    Then the activity has the name "Solve bugs"
+    Then the project has activities with the names
+      | Solve bugs |
 
   Scenario: Change activity name with project leader as non-project leader
     Given the project has a project leader
-    And the user is not a project leader
+    And the user is not the project leader
     When the user changes the activity name to "Fix glitches"
-    Then the activity has the name "Fix bugs"
-    And an unsuccessful rename notification is given to the user
+    Then the project has activities with the names
+      | Fix bugs |
+    And an error is thrown "Only the project leader can change activity names"
 
   Scenario: Change activity name with project leader as project leader
     Given the project has a project leader
-    And the user is a project leader
+    And the user is the project leader
     When the user changes the activity name to "Fix the program"
-    Then the activity has the name "Fix the program"
+    Then the project has activities with the names
+      | Fix the program |
