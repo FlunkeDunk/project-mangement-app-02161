@@ -27,9 +27,15 @@ public class ActivityItem extends TitledPane {
     @FXML
     private Label IdLabel;
 
-    @FXML private Label nameLabel;
+    @FXML
+    private Label nameLabel;
 
-    @FXML private GridPane graphicGridPane;
+    @FXML
+    private GridPane graphicGridPane;
+
+    @FXML
+    private Runnable onRegisterTimeRequested;
+
 
     public ActivityItem(Activity activity, int id) {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("activity_item.fxml"));
@@ -43,7 +49,20 @@ public class ActivityItem extends TitledPane {
         }
 
         setActivity(activity, id);
-        graphicGridPane.prefWidthProperty().bind(this.widthProperty().subtract(30));
+        graphicGridPane.prefWidthProperty().bind(this.widthProperty().subtract(42));
+    }
+
+    
+
+    @FXML
+    public void onRegisterTime() {
+        if (onRegisterTimeRequested != null) {
+            onRegisterTimeRequested.run();
+        }
+    }
+
+    public void setOnRegisterTimeRequested(Runnable handler) {
+        this.onRegisterTimeRequested = handler;
     }
 
 

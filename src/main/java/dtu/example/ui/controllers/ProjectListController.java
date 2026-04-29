@@ -103,6 +103,20 @@ public class ProjectListController extends ProjectManagementAwareController {
         for (Map.Entry<Integer, Activity> entry : activities.entrySet()) {
             ActivityItem activityItem = new ActivityItem(entry.getValue(), entry.getKey());
             activityListAccordion.getPanes().add(activityItem);
+            activityItem.setOnRegisterTimeRequested(() -> {
+                handleRegisterTime(entry.getKey(), entry.getValue());
+            });
+        }
+    }
+
+    private void handleRegisterTime(int activityId, Activity activity){
+        try {
+            navigator.changeScene("register_time", controller -> {
+            ((RegisterTimeController) controller).setProjectId(selectedProjectId);
+            ((RegisterTimeController) controller).setActivityId(activityId);
+        });
+        } catch (IOException e) {
+            System.err.println("Failed loading register_time: " + e.getMessage());
         }
     }
 
