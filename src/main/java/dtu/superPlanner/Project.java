@@ -72,7 +72,6 @@ public class Project {
     }
 
     public Map<Integer, Activity> getActivityMap() {
-        activities.put(1, new Activity("activity", new TimeFrame(startDate, startDate), 1));
         return activities;
     }
 
