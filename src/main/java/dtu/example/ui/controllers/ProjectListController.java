@@ -39,9 +39,12 @@ public class ProjectListController extends ProjectManagementAwareController {
     private Button editProjectButton;
     @FXML
     private Button editActivityButton;
+    @FXML
+    private Button addProjectButton;
 
     @FXML
     private void initialize() {
+        setSelectedProjectButtonsDisabled(true);
         clearProjectDetails();
         clearProjectList();
         clearActivityList();
@@ -49,10 +52,16 @@ public class ProjectListController extends ProjectManagementAwareController {
 
     }
 
+    private void setSelectedProjectButtonsDisabled(Boolean enabled) {
+        addActivityButton.setDisable(enabled);
+        editProjectButton.setDisable(enabled);
+        editActivityButton.setDisable(enabled);
+    }
+
     // --- Public method to update UI when a project is selected ---
     public void setProjectDetails(String name, String id, String startDate, String leader) {
         String displayName = name != null ? name : "none";
-        String displayLeader = leader != null ?  leader : "none";
+        String displayLeader = leader != null ? leader : "none";
         selectedProjectNameLabel.setText(displayName);
         selectedProjectIdLabel.setText(id);
         selectedProjectStartDateLabel.setText(startDate);
@@ -80,6 +89,7 @@ public class ProjectListController extends ProjectManagementAwareController {
         String projectStartDate = project.getStartDate().toString();
         setProjectDetails(project.getName(), projectId, projectStartDate, project.getProjectLeader());
         loadActivities(project.getAllActivities());
+        setSelectedProjectButtonsDisabled(false);
     }
 
     private void loadActivities(Set<Activity> activities) throws IOException {
@@ -116,9 +126,10 @@ public class ProjectListController extends ProjectManagementAwareController {
 
     // --- Button Handlers ---
     @FXML
-    private void handleAddActivity() {
-        System.out.println("Add Activity clicked");
-        // TODO: open dialog / create activity
+    private void handleAddActivity() throws IOException{
+        navigator.changeScene("create_activity", controller -> {
+            ((CreateActivityController) controller).setProjectId(selectedProjectId);
+        });
     }
 
     @FXML

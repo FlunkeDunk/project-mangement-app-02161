@@ -1,15 +1,15 @@
 package dtu.example.ui.controllers;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeFrame;
+import dtu.superPlanner.WeekBasedCalendar;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
-public class createActivityController extends ProjectManagementAwareController {
+public class CreateActivityController extends ProjectManagementAwareController {
 
     @FXML
     TextField activityNameTextField;
@@ -22,14 +22,19 @@ public class createActivityController extends ProjectManagementAwareController {
 
 
     @FXML
-    private void createActivity() throws IOException {
-        LocalDate startDate = startDatePicker.getValue();
-        LocalDate endDate = endDatePicker.getValue().get;
-        TimeFrame timeFrame = new TimeFrame();
+    private void onCreateActivity() throws IOException {
+        WeekBasedCalendar startDate = new WeekBasedCalendar(startDatePicker.getValue());
+        WeekBasedCalendar endDate = new WeekBasedCalendar(endDatePicker.getValue());
+        TimeFrame timeFrame = new TimeFrame(startDate, endDate);
         Activity activity = app.createActivity(projectId, activityNameTextField.getText(), timeFrame);
-        System.out.println("The activity \"" + activity.getName() + "\" (id: " + activity.getId()
-                + ") has the timeframe: " + activity.getTimeFrame());
+        System.out.println("The activity \"" + activity.getName() + "\" with the timeframe: " + activity.getTimeFrame());
         
         navigator.changeScene("project_list");
     }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+
 }

@@ -24,4 +24,6 @@ public abstract class AbstractActivity {
     public void setTimeFrame(TimeFrame timeFrame) {
         this.timeFrame = timeFrame;
     }
+
+
 }
