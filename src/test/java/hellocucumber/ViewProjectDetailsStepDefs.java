@@ -7,6 +7,7 @@ import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -61,12 +62,6 @@ public class ViewProjectDetailsStepDefs {
 
     @And("an option to cycle shown activities is given")
     public void anOptionToCycleShownActivitiesIsGiven() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @And("the project has no activties")
-    public void theProjectHasNoActivties() {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }

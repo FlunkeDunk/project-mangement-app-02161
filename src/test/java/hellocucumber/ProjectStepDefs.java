@@ -25,7 +25,6 @@ public class ProjectStepDefs {
     public ProjectStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
         this.myApp = myApp;
         this.errorHolder = errorHolder;
-
     }
 
     @Given("a user is logged in")

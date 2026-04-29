@@ -1,6 +1,9 @@
 package dtu.superPlanner;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.WeekFields;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,5 +40,29 @@ public class Activity extends AbstractActivity {
 
     public Set<String> getEmployees() {
         return employees;
+    }
+
+    public int getId() {
+        return ID;
+    }
+
+    public Integer getDuration() {
+        WeekFields wf = WeekFields.ISO;
+        TimeFrame timeFrame = this.getTimeFrame();
+        WeekBasedCalendar startDate = timeFrame.getStartDate();
+        WeekBasedCalendar endDate = timeFrame.getEndDate();
+
+        LocalDate startDateLocal = LocalDate
+                .now()
+                .with(wf.weekBasedYear(), startDate.getYear())
+                .with(wf.weekOfWeekBasedYear(), startDate.getWeek())
+                .with(ChronoField.DAY_OF_WEEK, 1);
+        LocalDate endDateLocal = LocalDate
+                .now()
+                .with(wf.weekBasedYear(), endDate.getYear())
+                .with(wf.weekOfWeekBasedYear(), endDate.getWeek())
+                .with(ChronoField.DAY_OF_WEEK, 1);
+
+        return (int) ChronoUnit.WEEKS.between(startDateLocal, endDateLocal);
     }
 }

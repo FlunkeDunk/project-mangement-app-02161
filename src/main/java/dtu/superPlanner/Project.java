@@ -1,12 +1,13 @@
 package dtu.superPlanner;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class Project {
-    private Map<Integer, Activity> activities;
+    private Map<Integer, Activity> activities = new HashMap<Integer, Activity>();
     private WeekBasedCalendar startDate;
     private String name;
     private String projectLeader;
@@ -26,8 +27,12 @@ public class Project {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public Activity createActivity(String name, TimeFrame timeFrame) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void createActivity(String name, TimeFrame timeFrame, String userID) throws IllegalAccessException {
+        //if (projectLeader != null || projectLeader != userID) {
+        //    throw new IllegalAccessException("Only the project leader can create activities");
+        //}
+        Activity myActivity = new Activity(name, timeFrame, activities.size()+1);
+        activities.put(myActivity.getId(), myActivity);
     }
 
     public void registerTime(String employeeInitials, LocalDate date, double time) {
@@ -83,5 +88,9 @@ public class Project {
 
     public String getName() {
         return name;
+    }
+
+    public void setProjectLeader(String userIdentifier) {
+        projectLeader = userIdentifier;
     }
 }
