@@ -45,7 +45,7 @@ public class CreateActivityStepDefs {
 
     @Then("the project should have the activities with the names and budgeted times")
     public void theProjectShouldHaveTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> expectedActivities) {
-        Set<Activity> actualActivities = myProject.getAllActivities();
+        Set<Activity> actualActivities = myProject.getActivitySet();
         List<String> actual = actualActivities.stream()
                 .map(a -> a.getName() + ":-:" + a.getDuration())
                 .toList();
@@ -59,7 +59,7 @@ public class CreateActivityStepDefs {
 
     @Given("the project has no activities")
     public void theProjectHasNoActivities() {
-        assertEquals(0, myProject.getAllActivities().size());
+        assertEquals(0, myProject.getActivitySet().size());
     }
 
 

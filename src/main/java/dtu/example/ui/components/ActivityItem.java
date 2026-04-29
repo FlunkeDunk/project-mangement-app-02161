@@ -1,14 +1,19 @@
-package dtu.example.ui.controllers;
+package dtu.example.ui.components;
 
+import java.io.IOException;
 import java.util.Set;
 
+import dtu.example.ui.App;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeFrame;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-public class ActivityItemController {
+public class ActivityItem extends TitledPane {
 
     @FXML
     private VBox employeListVBox;
@@ -22,22 +27,31 @@ public class ActivityItemController {
     @FXML
     private Label IdLabel;
 
-    @FXML
-    private Label titleLabel; // optional if you later give "Activity name" an fx:id
+    @FXML private Label nameLabel;
 
-    @FXML
-    public void initialize() {
-        // Runs automatically after FXML is loaded
-        // You can put setup logic here if needed
+    @FXML private GridPane graphicGridPane;
+
+    public ActivityItem(Activity activity, int id) {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("activity_item.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+
+        try {
+            loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load ActivityItem FXML", e);
+        }
+
+        setActivity(activity, id);
+        graphicGridPane.prefWidthProperty().bind(this.widthProperty().subtract(30));
     }
 
-    // --- Setters for activity data ---
 
-    public void setActivity(Activity activity) {
+    public void setActivity(Activity activity, int id) {
         TimeFrame timeFrame = activity.getTimeFrame();
         setStartDate(timeFrame.getStartDate().toString());
         setEndDate(timeFrame.getEndDate().toString());
-        setId(""+ 1);
+        setTextId(""+ id);
         setName(activity.getName());
         setEmployees(activity.getEmployees());
     }
@@ -50,20 +64,20 @@ public class ActivityItemController {
         endDateLabel.setText(endDate);
     }
 
-    public void setId(String id) {
+    public void setTextId(String id) {
         IdLabel.setText(id);
     }
 
     public void setName(String title) {
-        if (titleLabel != null) {
-            titleLabel.setText(title);
-        }
+        nameLabel.setText(title);
     }
 
     // --- Employee list handling ---
     public void setEmployees(Set<String> employees) {
-        employeListVBox.getChildren().clear();
-
+        clearEmployees();
+        if (employees == null || employees.isEmpty()) {
+            return;
+        }
         for (String name : employees) {
             Label label = new Label(name);
             employeListVBox.getChildren().add(label);

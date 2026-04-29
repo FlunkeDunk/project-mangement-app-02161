@@ -1,16 +1,15 @@
 package dtu.example.ui.controllers;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.Map;
 
+import dtu.example.ui.components.ActivityItem;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
@@ -84,27 +83,26 @@ public class ProjectListController extends ProjectManagementAwareController {
     }
 
     private void onProjectClicked(Project project) throws IOException {
+        if (selectedProjectId == project.getId()) {
+            return;
+        }
         selectedProjectId = project.getId();
         String projectId = "" + project.getId();
         String projectStartDate = project.getStartDate().toString();
         setProjectDetails(project.getName(), projectId, projectStartDate, project.getProjectLeader());
-        loadActivities(project.getAllActivities());
+        loadActivities(project.getActivityMap());
         setSelectedProjectButtonsDisabled(false);
     }
 
-    private void loadActivities(Set<Activity> activities) throws IOException {
+    private void loadActivities(Map<Integer, Activity> activities) throws IOException {
         clearActivityList();
         if (activities == null) {
             return;
         }
-        for (Activity activity : activities) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_item.fxml"));
-            TitledPane activity_item = loader.load();
 
-            ActivityItemController controller = loader.getController();
-            controller.setActivity(activity);
-
-            activityListAccordion.getPanes().add(activity_item);
+        for (Map.Entry<Integer, Activity> entry : activities.entrySet()) {
+            ActivityItem activityItem = new ActivityItem(entry.getValue(), entry.getKey());
+            activityListAccordion.getPanes().add(activityItem);
         }
     }
 

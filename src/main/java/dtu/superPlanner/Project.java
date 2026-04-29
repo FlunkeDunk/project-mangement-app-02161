@@ -67,11 +67,15 @@ public class Project {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public Set<Activity> getAllActivities() {
+    public Set<Activity> getActivitySet() {
         if (activities == null) {
             return null;
         }
         return new HashSet<>(activities.values());
+    }
+
+    public Map<Integer, Activity> getActivityMap() {
+        return activities;
     }
 
     public WeekBasedCalendar getStartDate() {
