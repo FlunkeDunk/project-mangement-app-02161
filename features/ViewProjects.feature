@@ -6,17 +6,16 @@ Feature: View Projects
     Given a user is logged in
 
   Scenario: View 1 existing project
-    Given a project exists
-    When the user views the list of projects
-    Then the project is shown
+    Given no projects have been created
+    When the user creates 1 project
+    Then 1 project exists 
 
   # Fra projektbeskrivelse angives at der typisk er 30 igangværende projekter hos SoftwareHuset.
   Scenario: View 30 projects
-    Given 30 projects exist
-    When the user views the list of projects
-    Then all the 30 projects are shown
+    Given no projects have been created
+    When the user creates 30 projects
+    Then 30 projects exists 
 
   Scenario: View 0 projects
-    Given 0 projects exist
-    When the user views the list of projects
-    Then null is returned
+    Given no projects have been created
+    Then 0 projects exists

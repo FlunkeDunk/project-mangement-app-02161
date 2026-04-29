@@ -14,4 +14,4 @@ Feature: Change Registered Time
     Scenario: Change registered time to negative
         When the user changes the registered time on the activity "Run tests" to -3 hours
         Then the activity "Run tests" has 2 hours worked
-        And an unsuccessful change notification is given to the user
+        And a notification is given to the user

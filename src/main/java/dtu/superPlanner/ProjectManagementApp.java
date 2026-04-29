@@ -1,6 +1,8 @@
 package dtu.superPlanner;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ public class ProjectManagementApp {
     private TimeServer timeServer;
 
     public ProjectManagementApp() {
+        projects = new HashMap<>();
         timeServer = new TimeServer();
     }
 
@@ -23,7 +26,11 @@ public class ProjectManagementApp {
             throw new RuntimeException("Cannot create more than 999 projects a year");
         }
         projectIdNumerator++;
-        return new Project(timeServer.getCurrentWeekDate(), getProjectId(), name);
+        int id = getProjectId();
+        Project project = new Project(timeServer.getCurrentWeekDate(), id, name);
+        projects.put(id, project);
+
+        return project;
     }
 
     private int getProjectId() {
@@ -37,6 +44,14 @@ public class ProjectManagementApp {
 
     public void setTimeServer(TimeServer timeServer) {
         this.timeServer = timeServer;
+    }
+
+    public Project getProject(int projectId) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Set<Project> getAllProjects() {
+        return new HashSet<>(projects.values());
     }
 
     public Activity createActivity(int projectId, String name, TimeFrame timeFrame) {
