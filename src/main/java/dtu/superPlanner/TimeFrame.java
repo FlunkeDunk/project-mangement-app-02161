@@ -4,6 +4,11 @@ public class TimeFrame {
     private WeekBasedCalendar startDate;
     private WeekBasedCalendar endDate;
 
+    public TimeFrame(WeekBasedCalendar startDate, WeekBasedCalendar endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public WeekBasedCalendar getStartDate() {
         return startDate;
     }
@@ -22,5 +27,10 @@ public class TimeFrame {
 
     public static boolean overlaps(TimeFrame timeFrame1, TimeFrame timeFrame2) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public String toString() {
+        return "(" + startDate.toString() + " to " + endDate.toString() + ")";
     }
 }

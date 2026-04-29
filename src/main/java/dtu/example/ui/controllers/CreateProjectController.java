@@ -1,4 +1,4 @@
-package dtu.example.ui;
+package dtu.example.ui.controllers;
 
 import java.io.IOException;
 

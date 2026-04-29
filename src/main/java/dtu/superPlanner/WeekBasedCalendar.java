@@ -1,5 +1,8 @@
 package dtu.superPlanner;
 
+import java.time.LocalDate;
+import java.time.temporal.IsoFields;
+
 public class WeekBasedCalendar {
     private int week;
     private int year;
@@ -7,6 +10,11 @@ public class WeekBasedCalendar {
     public WeekBasedCalendar(int week, int year) {
         this.week = week;
         this.year = year;
+    }
+
+    public WeekBasedCalendar(LocalDate localDate) {
+        this.week = localDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        this.year = localDate.get(IsoFields.WEEK_BASED_YEAR);
     }
 
     public int getWeek() {
