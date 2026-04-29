@@ -30,6 +30,7 @@ public class ProjectStepDefs {
     @Given("a user is logged in")
     public void aUserIsLoggedIn() {
         user = "huba";
+        myApp.login(user);
     }
 
     @Given("the date is {string}")

@@ -1,10 +1,7 @@
 package dtu.superPlanner;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Project {
     private Map<Integer, Activity> activities = new HashMap<Integer, Activity>();
@@ -28,9 +25,9 @@ public class Project {
     }
 
     public void createActivity(String name, TimeFrame timeFrame, String userID) throws IllegalAccessException {
-        //if (projectLeader != null || projectLeader != userID) {
-        //    throw new IllegalAccessException("Only the project leader can create activities");
-        //}
+        if (projectLeader != null && !projectLeader.equals(userID)) {
+            throw new IllegalAccessException("Only the project leader can create activities");
+        }
         Activity myActivity = new Activity(name, timeFrame, activities.size()+1);
         activities.put(myActivity.getId(), myActivity);
     }
