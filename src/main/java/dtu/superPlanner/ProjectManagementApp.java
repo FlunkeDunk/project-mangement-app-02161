@@ -95,10 +95,19 @@ public class ProjectManagementApp {
     }
 
     public boolean login(String employeeInitials) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (userInitials == null) {
+            return false;
+        } else {
+            userInitials = employeeInitials;
+            return true;
+        }
     }
 
     public Set<Employee> getAvailableEmployees(String employeeInitials, int projectId, int activityId) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public String getUserInitials() {
+        return userInitials;
     }
 }

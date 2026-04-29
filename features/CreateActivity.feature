@@ -32,4 +32,4 @@ Feature: Add activity
     When an employee tries to add activity "Attend 2 minutes of hate" with budgeted time 8 weeks
     Then the project has the activities with the names and budgeted times
       | Practice Newspeak | 8 |
- #   And an error is thrown "Only the project leader can create activities"
+    And an error is thrown "Only the project leader can create activities"

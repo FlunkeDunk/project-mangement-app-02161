@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class CreateActivityStepDefs {
     private final ProjectManagementApp myApp;
     private final ErrorMessageHolder errorHolder;
     private final Project myProject;
-    private final String user = "placeholder";
+    private String user;
 
     public CreateActivityStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
         this.myApp = myApp;
@@ -26,6 +27,8 @@ public class CreateActivityStepDefs {
             throw new IllegalStateException("Expected exactly one project");
         }
         myProject = projects.iterator().next();
+
+        user = myApp.getUserInitials();
     }
 
     @When("an employee tries to add activity {string} with budgeted time {int} weeks")
@@ -46,12 +49,15 @@ public class CreateActivityStepDefs {
     @Then("the project should have the activities with the names and budgeted times")
     public void theProjectShouldHaveTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> expectedActivities) {
         Set<Activity> actualActivities = myProject.getActivitySet();
-        List<String> actual = actualActivities.stream()
+        List<String> actual = new ArrayList<>(actualActivities.stream()
                 .map(a -> a.getName() + ":-:" + a.getDuration())
-                .toList();
-        List<String> expected = expectedActivities.stream()
+                .toList());
+        List<String> expected = new ArrayList<>(expectedActivities.stream()
                 .map(row -> row.getFirst() + ":-:" + row.getLast())
-                .toList();
+                .toList());
+
+        Collections.sort(actual);
+        Collections.sort(expected);
 
         assertEquals(expected, actual, "Activities did not match");
 
