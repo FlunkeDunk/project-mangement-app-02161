@@ -16,4 +16,9 @@ public class WeekBasedCalendar {
     public int getYear() {
         return year;
     }
+
+    @Override
+    public String toString() {
+        return "" + year + "-W" + week;
+    }
 }

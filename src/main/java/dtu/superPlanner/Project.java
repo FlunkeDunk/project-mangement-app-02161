@@ -1,7 +1,9 @@
 package dtu.superPlanner;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Project {
     private Map<Integer, Activity> activities;
@@ -58,6 +60,13 @@ public class Project {
 
     public Activity getActivityById(int activityId) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Set<Activity> getAllActivities() {
+        if (activities == null) {
+            return null;
+        }
+        return new HashSet<>(activities.values());
     }
 
     public WeekBasedCalendar getStartDate() {

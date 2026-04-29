@@ -16,6 +16,6 @@ public class CreateProjectController extends ProjectManagementAwareController {
         Project project = app.createProject(projectNameTextField.getText());
         WeekBasedCalendar wbc = project.getStartDate();
         System.out.println("The project \"" + project.getName() + "\" (id: " + project.getId() + ") was created and starts: Week " + wbc.getWeek() + " of " + wbc.getYear());
-        navigator.changeScene("secondary");
+        navigator.changeScene("project_list");
     }
 }

@@ -46,6 +46,7 @@ public class Navigator {
         if (resource == null) {
             throw new IllegalArgumentException("FXML file not found: " + fxml);
         }
+        
         FXMLLoader fxmlLoader = new FXMLLoader(resource);
         if (controllerFactory != null) {
             fxmlLoader.setControllerFactory(controllerFactory);

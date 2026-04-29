@@ -34,4 +34,8 @@ public class Activity extends AbstractActivity {
     public void addEmployee(String initials) {
         throw new UnsupportedOperationException("Not implemented");
     }
+
+    public Set<String> getEmployees() {
+        return employees;
+    }
 }

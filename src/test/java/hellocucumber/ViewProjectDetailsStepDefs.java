@@ -1,11 +1,28 @@
 package hellocucumber;
 
-import io.cucumber.java.PendingException;
-import io.cucumber.java.en.*;
-
 import java.util.List;
 
+import dtu.example.ui.App;
+import dtu.superPlanner.Project;
+import dtu.superPlanner.ProjectManagementApp;
+import io.cucumber.java.PendingException;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
 public class ViewProjectDetailsStepDefs {
+
+    public String user;
+    // public String date;
+    public ProjectManagementApp myApp;
+    public Project project;
+    private ErrorMessageHolder errorHolder;
+
+    public ViewProjectDetailsStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder, App ui) {
+        this.myApp = myApp;
+        this.errorHolder = errorHolder;
+    }
+
     @When("the user views the details of the project")
     public void the_user_views_the_details_of_the_project() {
         // Write code here that turns the phrase above into concrete actions
