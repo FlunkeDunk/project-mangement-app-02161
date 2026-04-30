@@ -22,7 +22,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <HBox layoutX="10.0" layoutY="30.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <HBox layoutX="10.0" layoutY="30.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                <children>
                   <ScrollPane focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" HBox.hgrow="ALWAYS">
                      <content>
@@ -32,6 +32,21 @@
                            </padding>
                            <children>
                               <Label text="huba" />
+                              <Label layoutX="15.0" layoutY="15.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="32.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="49.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="66.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="83.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="100.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="117.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="134.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="151.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="168.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="185.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="202.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="219.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="236.0" text="huba" />
+                              <Label layoutX="15.0" layoutY="253.0" text="huba" />
                            </children>
                         </VBox>
                      </content>
