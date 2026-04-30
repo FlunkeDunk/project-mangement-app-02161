@@ -1,15 +1,21 @@
 package hellocucumber;
 
-import dtu.superPlanner.*;
-import io.cucumber.java.PendingException;
-import io.cucumber.java.en.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import dtu.superPlanner.Activity;
+import dtu.superPlanner.Project;
+import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.TimeFrame;
+import dtu.superPlanner.WeekBasedCalendar;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class CreateActivityStepDefs {
 
