@@ -70,6 +70,7 @@ public class ProjectListController extends ProjectManagementAwareController {
     private void loadProjects() {
         app.getAllProjects().forEach((project) -> {
             Label label = new Label(project.getName());
+            label.setMaxWidth(Double.MAX_VALUE);
             label.setOnMouseClicked((MouseEvent event) -> {
                 try {
                     onProjectClicked(project);
