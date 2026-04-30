@@ -24,12 +24,10 @@ public class Project {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void createActivity(String name, TimeFrame timeFrame, String userID) throws IllegalAccessException {
-        if (projectLeader != null && !projectLeader.equals(userID)) {
-            throw new IllegalAccessException("Only the project leader can create activities");
-        }
+    public Activity createActivity(String name, TimeFrame timeFrame) {
         Activity myActivity = new Activity(name, timeFrame, activities.size()+1);
         activities.put(myActivity.getId(), myActivity);
+        return myActivity;
     }
 
     public void registerTime(String employeeInitials, LocalDate date, double time) {
@@ -84,7 +82,7 @@ public class Project {
     }
 
     public String getProjectLeader() {
-        return null;
+        return projectLeader;
     }
 
     public String getName() {

@@ -15,10 +15,4 @@ public class ChangeActivityNameStepDefs {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
-
-    @And("the user is the project leader")
-    public void theUserIsTheProjectLeader() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
 }

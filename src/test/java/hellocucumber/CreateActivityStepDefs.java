@@ -33,17 +33,12 @@ public class CreateActivityStepDefs {
 
     @When("an employee tries to add activity {string} with budgeted time {int} weeks")
     public void an_employee_tries_to_add_activity(String name, int weeks) {
-        addActivityWithNameAndDuration(name, weeks);
+        addActivityWithNameAndDuration(name, weeks, false);
     }
 
     @Given("the project has a project leader")
     public void theProjectHasAProjectLeader() {
-        myProject.setProjectLeader("SomeOtherGuy");
-    }
-
-    @And("the user is not the project leader")
-    public void theUserIsNotTheProjectLeader() {
-        theProjectHasAProjectLeader();
+        myApp.setProjectLeader(myProject.getId(),"PROJECT_LEADER");
     }
 
     @Then("the project should have the activities with the names and budgeted times")
@@ -74,18 +69,33 @@ public class CreateActivityStepDefs {
         for (int i = 0; i < expectedActivities.size(); i++) {
             String name = expectedActivities.get(i).get(0);
             int duration = Integer.parseInt(expectedActivities.get(i).get(1));
-            addActivityWithNameAndDuration(name, duration);
+            addActivityWithNameAndDuration(name, duration, true);
         }
     }
 
-    private void addActivityWithNameAndDuration(String name, int weeks) {
+    @And("the user is the project leader")
+    public void theUserIsTheProjectLeader() {
+        myApp.setProjectLeader(myProject.getId(),myApp.getUserInitials());
+    }
+
+    private void addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
         WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 2026);
         WeekBasedCalendar endWeek = new WeekBasedCalendar(1+weeks, 2026);
         TimeFrame myTimeFrame = new TimeFrame(startWeek, endWeek);
+        String priorUser = myApp.getUserInitials();
+        if (force) {
+            myApp.login(myProject.getProjectLeader());
+        }
+
         try {
-            myProject.createActivity(name, myTimeFrame, user);
+            myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
+            //System.out.println(e.getMessage());
+        } finally {
+            if (force) {
+                myApp.login(priorUser);
+            }
         }
 
     }

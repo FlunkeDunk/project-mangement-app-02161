@@ -22,7 +22,7 @@ public class CreateActivityController extends ProjectManagementAwareController {
 
 
     @FXML
-    private void onCreateActivity() throws IOException {
+    private void onCreateActivity() throws IOException, IllegalAccessException {
         WeekBasedCalendar startDate = new WeekBasedCalendar(startDatePicker.getValue());
         WeekBasedCalendar endDate = new WeekBasedCalendar(endDatePicker.getValue());
         TimeFrame timeFrame = new TimeFrame(startDate, endDate);

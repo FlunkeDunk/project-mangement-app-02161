@@ -47,15 +47,22 @@ public class ProjectManagementApp {
     }
 
     public Project getProject(int projectId) {
-        throw new UnsupportedOperationException("Not implemented");
+        return projects.get(projectId);
     }
 
     public Set<Project> getAllProjects() {
         return new HashSet<>(projects.values());
     }
 
-    public Activity createActivity(int projectId, String name, TimeFrame timeFrame) {
-        throw new UnsupportedOperationException("Not implemented");
+    public Activity createActivity(int projectId, String name, TimeFrame timeFrame) throws IllegalAccessException {
+        //System.out.println("\nCreating activity for project " + projectId + "\nUser:" + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
+        Project myProject = getProject(projectId);
+        String projectLeader = myProject.getProjectLeader();
+        if (projectLeader != null && !projectLeader.equals(userInitials)) {
+            throw new IllegalAccessException("Only the project leader can create activities");
+        }
+
+        return myProject.createActivity(name, timeFrame);
     }
 
     public void registerTime(int projectId, int activityId, LocalDate date, double time) {
@@ -67,7 +74,11 @@ public class ProjectManagementApp {
     }
 
     public void setProjectLeader(int projectId, String employeeInitials) {
-        throw new UnsupportedOperationException("Not implemented");
+        //String projectLeader = projects.get(projectId).getProjectLeader();
+        //if (projectLeader != null && !projectLeader.equals(userInitials)) {
+        //    throw new IllegalAccessException("Only the project leader can set a new project leader");
+        //}
+        projects.get(projectId).setProjectLeader(employeeInitials);
     }
 
     public Report createReport(int projectId) {
@@ -94,13 +105,8 @@ public class ProjectManagementApp {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public boolean login(String employeeInitials) {
-        if (userInitials == null) {
-            return false;
-        } else {
-            userInitials = employeeInitials;
-            return true;
-        }
+    public void login(String employeeInitials) {
+        userInitials = employeeInitials;
     }
 
     public Set<Employee> getAvailableEmployees(String employeeInitials, int projectId, int activityId) {
