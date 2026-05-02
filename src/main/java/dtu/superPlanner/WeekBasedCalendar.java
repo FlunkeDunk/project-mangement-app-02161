@@ -25,6 +25,14 @@ public class WeekBasedCalendar {
         return year;
     }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setWeek(int week) {
+        this.week = week;
+    }
+
     @Override
     public String toString() {
         return "" + year + "-W" + week;

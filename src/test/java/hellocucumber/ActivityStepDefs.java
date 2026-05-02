@@ -6,25 +6,28 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class CreateActivityStepDefs {
+public class ActivityStepDefs {
 
     private final ProjectManagementApp myApp;
     private final ErrorMessageHolder errorHolder;
     private final Project myProject;
     private String user;
+    private Activity myActivity;
 
-    public CreateActivityStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
+    public ActivityStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
         this.myApp = myApp;
         this.errorHolder = errorHolder;
 
@@ -84,6 +87,59 @@ public class CreateActivityStepDefs {
         myApp.setProjectLeader(myProject.getId(),myApp.getUserInitials());
     }
 
+    @Given("the project has the activity {string}")
+    public void the_project_has_the_activity(String name) {
+        addActivityWithNameAndDuration(name, 1, true);
+        myActivity = getActivitybyName(name);
+    }
+
+    @When("the user changes the activity name to {string}")
+    public void theUserChangesTheActivityNameTo(String arg0) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("the project leader sets the activity {string} to start in year {int}")
+    public void the_project_leader_sets_the_activity_to_start_in_year(String activityName, Integer year) {
+        Activity activityToModify = getActivitybyName(activityName);
+        activityToModify.setStartYear(year);
+
+    }
+    @When("sets {string} to end in year {int}")
+    public void sets_to_end_in_year(String activityName, Integer year) {
+        Activity activityToModify = getActivitybyName(activityName);
+        activityToModify.setEndYear(year);
+    }
+    @When("sets {string} to start in week {int}")
+    public void sets_to_start_in_week(String activityName, Integer week) {
+        Activity activityToModify = getActivitybyName(activityName);
+        activityToModify.setStartWeek(week);
+    }
+    @When("sets {string} to end in week {int}")
+    public void sets_to_end_in_week(String activityName, Integer week) {
+        Activity activityToModify = getActivitybyName(activityName);
+        activityToModify.setEndWeek(week);
+    }
+
+
+    @Then("the activity starts in year {int}")
+    public void the_activity_starts_in_year(Integer year) {
+        assertEquals(year, myActivity.getTimeFrame().getStartDate().getYear());
+    }
+    @Then("the activity starts in week {int}")
+    public void the_activity_starts_in_week(Integer week) {
+        assertEquals(week, myActivity.getTimeFrame().getStartDate().getWeek());
+    }
+    @Then("the activity ends in year {int}")
+    public void the_activity_ends_in_year(Integer year) {
+        //System.out.println(myActivity.getTimeFrame().getEndDate().getYear());
+        assertEquals(year, myActivity.getTimeFrame().getEndDate().getYear());
+    }
+    @Then("the activity ends in week {int}")
+    public void the_activity_ends_in_week(Integer week) {
+        assertEquals(week, myActivity.getTimeFrame().getEndDate().getWeek());
+    }
+
     private void addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
         WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 2026);
         WeekBasedCalendar endWeek = new WeekBasedCalendar(1+weeks, 2026);
@@ -103,6 +159,20 @@ public class CreateActivityStepDefs {
                 myApp.login(priorUser);
             }
         }
+    }
 
+    private Activity getActivitybyName(String activityName) {
+        Set<Activity> activities = null;
+        activities = myApp.getProject(myProject.getId()).getActivitySet();
+        Activity activityToModify = null;
+
+        for (Activity activity : activities) {
+            if (activity.getName().equals(activityName)) {
+                activityToModify = activity;
+                break;
+            }
+        }
+        assertNotNull(activityToModify);
+        return activityToModify;
     }
 }
