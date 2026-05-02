@@ -20,6 +20,15 @@ public class Project {
         this.name = name;
     }
 
+    public void editName(String employeeInitials, String newName) {
+        if(employeeInitials != projectLeader && projectLeader != null) {
+            throw new Exception("Only the project leader can rename the activities");
+        }
+
+        name = newName;
+        //Update UI?
+    }
+
     public void editTime(String employeeInitials, LocalDate date, double newTime) {
         throw new UnsupportedOperationException("Not implemented");
     }
