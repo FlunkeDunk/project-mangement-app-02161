@@ -44,11 +44,11 @@ public class Project {
     }
 
     public Report createReport() {
-        throw new UnsupportedOperationException("Not implemented");
+        return new Report(this);
     }
 
-    public void setExpectedTime(int activityId, double expectedTime) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void setBudgetedTime(int activityId, double budgetedTime) {
+        activities.get(activityId).setBudgetedTime(budgetedTime);
     }
 
     public void setActivityTimeFrame(int activityId, TimeFrame timeFrame) {
@@ -56,7 +56,7 @@ public class Project {
     }
 
     public void addEmployeeToActivity(int activityId, String employeeInitials) {
-        throw new UnsupportedOperationException("Not implemented");
+        activities.get(activityId).addEmployee(employeeInitials);
     }
 
     public void getActivityTimeFrame(int activityId) {

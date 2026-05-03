@@ -13,7 +13,7 @@ public class TimeLedger {
     }
 
     public void registerTime(LocalDate date, double time) {
-        throw new UnsupportedOperationException("Not implemented");
+        entries.put(date, new Entry(date, time));
     }
 
     public void editTime(LocalDate date, double newTime) {
@@ -25,7 +25,11 @@ public class TimeLedger {
     }
 
     public double getTotalTime() {
-        throw new UnsupportedOperationException("Not implemented");
+        double totalTime = 0;
+        for (Entry entry : entries.values()) {
+            totalTime += entry.getTime();
+        }
+        return totalTime;
     }
 
     private class Entry {
@@ -39,6 +43,10 @@ public class TimeLedger {
 
         private void update(double newValue) {
             time = newValue;
+        }
+
+        private double getTime() {
+            return time;
         }
     }
 }

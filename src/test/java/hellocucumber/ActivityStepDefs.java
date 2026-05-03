@@ -1,5 +1,6 @@
 package hellocucumber;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -128,7 +129,6 @@ public class ActivityStepDefs {
     }
     @Then("the activity ends in year {int}")
     public void the_activity_ends_in_year(Integer year) {
-        //System.out.println(myActivity.getTimeFrame().getEndDate().getYear());
         assertEquals(year, myActivity.getTimeFrame().getEndDate().getYear());
     }
     @Then("the activity ends in week {int}")
@@ -154,7 +154,6 @@ public class ActivityStepDefs {
             myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
-            //System.out.println(e.getMessage());
         } finally {
             if (force) {
                 myApp.login(priorUser);
@@ -194,5 +193,23 @@ public class ActivityStepDefs {
                 myApp.login(priorUser);
             }
         }
+    }
+
+    @Given("the activity {string} gets {double} hours budgeted")
+    public void theActivityGetsHoursBudgeted(String name, double hours) {
+        Activity currentActivity = getActivitybyName(name);
+        myApp.setBudgetedTime(myProject.getId(), currentActivity.getId(), hours);
+    }
+
+
+    @Given("an employee has spent {double} hours on the activity {string}")
+    public void anEmployeeHasSpentHoursOnTheActivity(double hours, String name) {
+        Activity currentActivity = getActivitybyName(name);
+        assertEquals(name, currentActivity.getName());
+        System.out.println(currentActivity.getName());
+        String debugUser = "Gandalf";
+
+        myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
+        currentActivity.getTimeLedger(debugUser).registerTime(LocalDate.now(), hours);
     }
 }

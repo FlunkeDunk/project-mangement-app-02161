@@ -82,15 +82,16 @@ public class ProjectManagementApp {
     }
 
     public Report createReport(int projectId) {
-        throw new UnsupportedOperationException("Not implemented");
+        Project myProject = getProject(projectId);
+        return myProject.createReport();
     }
 
     public FixedActivity createFixedActivity(String employeeInitials, String name, TimeFrame timeFrame) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void setExpectedTime(int projectId, int activityId, double expectedTime) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void setBudgetedTime(int projectId, int activityId, double budgetedTime) {
+        projects.get(projectId).setBudgetedTime(activityId, budgetedTime);
     }
 
     public void setActivityTimeFrame(int projectId, int activityId, TimeFrame timeFrame) {
@@ -98,7 +99,7 @@ public class ProjectManagementApp {
     }
 
     public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) {
-        throw new UnsupportedOperationException("Not implemented");
+        projects.get(projectId).addEmployeeToActivity(activityId, employeeInitials);
     }
 
     public void setProjectName(int projectId, String name) {

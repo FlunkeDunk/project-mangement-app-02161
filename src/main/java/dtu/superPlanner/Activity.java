@@ -4,13 +4,15 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class Activity extends AbstractActivity {
-    private Set<String> employees;
-    private Map<String, TimeLedger> employeeTimeLedgers;
-    private double expectedTime;
+    private final Set<String> employees = new HashSet<>();
+    private Map<String, TimeLedger> employeeTimeLedgers = new HashMap<>();
+    private double budgetedTime;
     private final int ID;
 
     public Activity(String name, TimeFrame timeFrame, int ID) {
@@ -23,11 +25,15 @@ public class Activity extends AbstractActivity {
     }
 
     public double getTotalTimeSpent() {
-        throw new UnsupportedOperationException("Not implemented");
+        double totalTimeSpent = 0;
+        for (String employee : employees) {
+            totalTimeSpent += employeeTimeLedgers.get(employee).getTotalTime();
+        }
+        return totalTimeSpent;
     }
 
     public TimeLedger getTimeLedger(String employeeInitials) {
-        throw new UnsupportedOperationException("Not implemented");
+        return employeeTimeLedgers.get(employeeInitials);
     }
 
     public void editTime(String initials, LocalDate date, double newTime) {
@@ -35,7 +41,8 @@ public class Activity extends AbstractActivity {
     }
 
     public void addEmployee(String initials) {
-        throw new UnsupportedOperationException("Not implemented");
+        employees.add(initials);
+        employeeTimeLedgers.put(initials, new TimeLedger());
     }
 
     public Set<String> getEmployees() {
@@ -64,5 +71,13 @@ public class Activity extends AbstractActivity {
                 .with(ChronoField.DAY_OF_WEEK, 1);
 
         return (int) ChronoUnit.WEEKS.between(startDateLocal, endDateLocal);
+    }
+
+    public void setBudgetedTime(double budgetedTime) {
+        this.budgetedTime = budgetedTime;
+    }
+
+    public double getBudgetedTime() {
+        return budgetedTime;
     }
 }
