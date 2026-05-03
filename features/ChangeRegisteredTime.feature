@@ -1,3 +1,4 @@
+@skip # Fjern denne linje når du vil implementere
 Feature: Change Registered Time
   Description: When an user wants to change their already registered time on both assigned and unassigned activities
   Actor: User

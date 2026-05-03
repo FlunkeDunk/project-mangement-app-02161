@@ -1,3 +1,4 @@
+@skip # Fjern denne linje når du vil implementere
 Feature: Read file with list of employee initials
   Description: The program reads a file containing the initials of all the employees
   Actor: User

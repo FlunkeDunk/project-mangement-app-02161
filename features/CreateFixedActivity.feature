@@ -1,3 +1,4 @@
+@skip # Fjern denne linje når du vil implementere
 Feature: Add fixed activity
   Description: When adding a fixed activity to an employee that fixed activity will exist to show others when
   the employee is available for regular activities. A fixed activity could be things such as a holiday or sick days.

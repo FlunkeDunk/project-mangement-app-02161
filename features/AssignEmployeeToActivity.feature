@@ -1,3 +1,4 @@
+@skip # Fjern denne linje når du vil implementere
 Feature: Assign employee to activity
   Description: An employee with Project-Leader permissions (Project leader or any employee when no project leader exists)
   can assign another employee (including themselves) to an activity

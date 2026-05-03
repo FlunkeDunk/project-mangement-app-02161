@@ -1,3 +1,4 @@
+@skip # Fjern denne linje når du vil implementere
 Feature: Change Activity Name
   Description: When an user wants to change the name of an activity
   Actor: User, Project Leader

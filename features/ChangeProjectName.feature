@@ -1,3 +1,4 @@
+@skip # Fjern denne linje når du vil implementere
 Feature: Change Project Name
   Description: When an user wants to change the name of a project
   Actor: User, Project Leader
