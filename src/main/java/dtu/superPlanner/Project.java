@@ -20,9 +20,9 @@ public class Project {
         this.name = name;
     }
 
-    public void editName(String employeeInitials, String newName) {
-        if(employeeInitials != projectLeader && projectLeader != null) {
-            //throw new Exception("Only the project leader can rename the activities");
+    public void editName(String editorInitials, String newName) {
+        if(!projectLeader.equals(editorInitials) && projectLeader != null) {
+            //throw new IllegalStateException("Only the project leader can rename the activities");
         }
 
         name = newName;

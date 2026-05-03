@@ -40,9 +40,19 @@ public class Activity extends AbstractActivity {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void addEmployee(String initials) {
-        employees.add(initials);
-        employeeTimeLedgers.put(initials, new TimeLedger());
+    public void addEmployee(String assignerInitials, String assignedInitials) {
+        // Needs project leader reference
+        /*
+        if(!projectLeader.equals(assignerInitials) && projectLeader != null) {
+            throw new IllegalStateException("Only the project leader can assign employees to activities");
+        }
+        */
+        if(employees.contains(assignedInitials)) {
+            //throw new IllegalStateException("Employee is already added to the activity");
+        }
+
+        employees.add(assignedInitials);
+        employeeTimeLedgers.put(assignedInitials, new TimeLedger());
     }
 
     public Set<String> getEmployees() {

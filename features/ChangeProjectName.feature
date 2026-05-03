@@ -5,7 +5,7 @@ Feature: Change Project Name
 
   Background:
     Given a user is logged in
-    And the project has the name "Calculator"
+    And a project with the name "Calculator"
 
   Scenario: Change project name without project leader
     Given the project has no project leader
