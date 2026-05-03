@@ -1,7 +1,9 @@
 package dtu.superPlanner;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
+import java.time.temporal.WeekFields;
 
 public class WeekBasedCalendar {
     private int week;
@@ -31,6 +33,15 @@ public class WeekBasedCalendar {
 
     public void setWeek(int week) {
         this.week = week;
+    }
+
+    public LocalDate toLocalDate() {
+        WeekFields weekFields = WeekFields.ISO;
+        return LocalDate
+                .now()
+                .withYear(year)
+                .with(weekFields.weekOfWeekBasedYear(), week)
+                .with(weekFields.dayOfWeek(), DayOfWeek.MONDAY.getValue());
     }
 
     @Override

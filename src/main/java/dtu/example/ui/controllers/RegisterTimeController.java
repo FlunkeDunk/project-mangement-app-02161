@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import dtu.example.ui.ActivityAware;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,7 +13,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 
-public class RegisterTimeController extends ProjectManagementAwareController {
+public class RegisterTimeController extends ProjectManagementAwareController implements ActivityAware{
 
     @FXML
     private TextField initialsTextField;
@@ -63,10 +64,12 @@ public class RegisterTimeController extends ProjectManagementAwareController {
         app.registerTime(projectId, activityId, datePicker.getValue(), hours);
     }
 
+    @Override
     public void setActivityId(int id) {
         activityId = id;
     }
-
+    
+    @Override
     public void setProjectId(int id) {
         projectId = id;
     }

@@ -30,6 +30,15 @@ public class TimeFrame {
         }
     }
 
+    public void setStartDate(WeekBasedCalendar date) {
+        setStartDate(date.getYear(), date.getWeek());
+    }
+
+    public void setEndDate(WeekBasedCalendar date) {
+        setEndDate(date.getYear(), date.getWeek());
+    }
+
+
     public void setEndDate(int yearEnd, int weekEnd) {
         int yearStart = getStartDate().getYear();
         int weekStart = getStartDate().getWeek();

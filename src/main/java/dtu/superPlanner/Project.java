@@ -68,7 +68,7 @@ public class Project {
     }
 
     public Activity getActivityById(int activityId) {
-        throw new UnsupportedOperationException("Not implemented");
+        return activities.get(activityId);
     }
 
     public Set<Activity> getActivitySet() {
@@ -100,5 +100,10 @@ public class Project {
 
     public void setProjectLeader(String userIdentifier) {
         projectLeader = userIdentifier;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

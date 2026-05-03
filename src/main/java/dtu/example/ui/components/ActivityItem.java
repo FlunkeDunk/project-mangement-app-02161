@@ -34,8 +34,14 @@ public class ActivityItem extends TitledPane {
     private GridPane graphicGridPane;
 
     @FXML
-    private Runnable onRegisterTimeRequested;
+    private Label timeSpentLabel;
 
+    @FXML
+    private Label budgetetTimeLabel;
+
+    private Runnable onRegisterTimeRequested;
+    private Runnable onEditActivityRequested;
+    private Runnable onAssignToAcitvityRequested;
 
     public ActivityItem(Activity activity, int id) {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("activity_item.fxml"));
@@ -52,8 +58,6 @@ public class ActivityItem extends TitledPane {
         graphicGridPane.prefWidthProperty().bind(this.widthProperty().subtract(42));
     }
 
-    
-
     @FXML
     public void onRegisterTime() {
         if (onRegisterTimeRequested != null) {
@@ -61,18 +65,41 @@ public class ActivityItem extends TitledPane {
         }
     }
 
+    @FXML
+    public void onEditActivity() {
+        if (onEditActivityRequested != null) {
+            onEditActivityRequested.run();
+        }
+    }
+
+    @FXML
+    public void onAssignToActivity() {
+        if (onAssignToAcitvityRequested != null) {
+            onAssignToAcitvityRequested.run();
+        }
+    }
+
     public void setOnRegisterTimeRequested(Runnable handler) {
         this.onRegisterTimeRequested = handler;
     }
 
+    public void setOnEditActivityRequested(Runnable handler) {
+        this.onEditActivityRequested = handler;
+    }
+
+    public void setOnAssignToActivityRequested(Runnable handler) {
+        this.onAssignToAcitvityRequested = handler;
+    }
 
     public void setActivity(Activity activity, int id) {
         TimeFrame timeFrame = activity.getTimeFrame();
         setStartDate(timeFrame.getStartDate().toString());
         setEndDate(timeFrame.getEndDate().toString());
-        setTextId(""+ id);
+        setTextId("" + id);
         setName(activity.getName());
         setEmployees(activity.getEmployees());
+        setBudgetetTime(activity.getBudgetedTime());
+        setTimeSpent(activity.getTotalTimeSpent());
     }
 
     public void setStartDate(String startDate) {
@@ -103,12 +130,20 @@ public class ActivityItem extends TitledPane {
         }
     }
 
-    public void addEmployee(String name) {
+    private void addEmployee(String name) {
         Label label = new Label(name);
         employeListVBox.getChildren().add(label);
     }
 
-    public void clearEmployees() {
+    private void clearEmployees() {
         employeListVBox.getChildren().clear();
+    }
+
+    private void setTimeSpent(double timeSpent) {
+        timeSpentLabel.setText(String.format("%.1f h", timeSpent));
+    }
+
+    private void setBudgetetTime(double budgetetTime) {
+        budgetetTimeLabel.setText(String.format("%.1f h", budgetetTime));
     }
 }
