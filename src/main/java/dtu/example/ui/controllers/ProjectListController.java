@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.Map;
 
 import dtu.example.ui.ActivityAware;
+import dtu.example.ui.ReportAware;
 import dtu.example.ui.components.ActivityItem;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
+import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
@@ -38,6 +40,8 @@ public class ProjectListController extends ProjectManagementAwareController {
     private Button editProjectButton;
     @FXML
     private Button addProjectButton;
+    @FXML
+    private Button viewReportButton;
 
     @FXML
     private void initialize() {
@@ -56,9 +60,10 @@ public class ProjectListController extends ProjectManagementAwareController {
 
     }
 
-    private void setSelectedProjectButtonsDisabled(Boolean enabled) {
-        addActivityButton.setDisable(enabled);
-        editProjectButton.setDisable(enabled);
+    private void setSelectedProjectButtonsDisabled(Boolean disabled) {
+        addActivityButton.setDisable(disabled);
+        editProjectButton.setDisable(disabled);
+        viewReportButton.setDisable(disabled);
     }
 
     
@@ -129,6 +134,20 @@ public class ProjectListController extends ProjectManagementAwareController {
         }
     }
 
+    private <T extends ReportAware> void changeSceneWithReport(
+            String sceneName,
+            Class<T> controllerClass,
+            Report report) {
+        try {
+            navigator.changeScene(sceneName, controller -> {
+                T typedController = controllerClass.cast(controller);
+                typedController.setReport(report);
+            });
+        } catch (IOException e) {
+            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
+        }
+    }
+
     // --- Clear UI ---
     private void clearProjectDetails() {
         selectedProjectNameLabel.setText("—");
@@ -156,13 +175,12 @@ public class ProjectListController extends ProjectManagementAwareController {
     }
 
     @FXML
-    private void handleEditActivity() {
-        System.out.println("Edit Activity clicked");
-        // TODO: open edit activity dialog
+    private void handleAddProject() throws IOException {
+        navigator.changeScene("create_project");
     }
 
     @FXML
-    private void handleAddProject() throws IOException {
-        navigator.changeScene("create_project");
+    private void handleViewReport() {
+        changeSceneWithReport("view_report", ViewReportController.class, app.getProject(selectedProjectId).createReport());
     }
 }
