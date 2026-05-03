@@ -3,6 +3,7 @@ package dtu.superPlanner;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -110,7 +111,7 @@ public class ProjectManagementApp {
         userInitials = employeeInitials;
     }
 
-    public Set<Employee> getAvailableEmployees(String employeeInitials, int projectId, int activityId) {
+    public List<Employee> getAvailableEmployees(String employeeInitials, int projectId, int activityId) {
         throw new UnsupportedOperationException("Not implemented");
     }
 

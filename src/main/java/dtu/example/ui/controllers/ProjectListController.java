@@ -107,7 +107,7 @@ public class ProjectListController extends ProjectManagementAwareController {
                     () -> changeSceneWithActivity("register_time", RegisterTimeController.class, activityId));
 
             activityItem.setOnEditActivityRequested(
-                    () -> changeSceneWithActivity("edit_activity", EditAcitvityController.class, activityId));
+                    () -> changeSceneWithActivity("edit_activity", EditActivityController.class, activityId));
 
             activityItem.setOnAssignToActivityRequested(
                     () -> changeSceneWithActivity("assign_to_activity", AssignToActivityController.class, activityId));
