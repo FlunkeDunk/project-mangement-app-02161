@@ -44,36 +44,11 @@ public abstract class AbstractActivity {
         return timeFrame.getEndDate().getYear();
     }
 
-
     public void setStartDate(int year, int week) {
-        int weeksInGivenYear = LocalDate.of(year, 12, 28).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-
-        if (week < 1 || week > weeksInGivenYear) {
-            throw new IllegalArgumentException(String.format("DateError: Invalid start week: %d", week));
-        }
-        timeFrame.getStartDate().setYear(year);
-        timeFrame.getStartDate().setWeek(week);
+        timeFrame.setStartDate(year, week);
     }
 
     public void setEndDate(int year, int week) {
-        if (week == 0) {
-            throw new IllegalArgumentException(String.format("DateError: Invalid end week: %d", week));
-        }
-        else if (week < 0) {
-            // Since no week 0 exists, we take negative weeks to mean weeks before first week of a given year
-            week++;
-        }
-
-        LocalDate endDate = LocalDate.of(year, 1, 4).plusWeeks(week-1);
-
-        if (endDate.getYear() < getStartYear() ||
-                (endDate.getYear() == getStartYear() &&  getStartWeek() > endDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR))) {
-            timeFrame.getEndDate().setYear(getStartYear());
-            timeFrame.getEndDate().setWeek(getStartWeek());
-            throw new IllegalArgumentException("DateError: End date must be after start date");
-        } else {
-            timeFrame.getEndDate().setYear(endDate.getYear());
-            timeFrame.getEndDate().setWeek(endDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
-        }
+        timeFrame.setEndDate(year, week);
     }
 }
