@@ -15,14 +15,14 @@
 
 <fx:root animated="false" type="TitledPane" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="220.0" prefWidth="200.0">
          <children>
             <Label text="Employees" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <HBox layoutX="10.0" layoutY="30.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+            <HBox layoutX="10.0" layoutY="30.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                <children>
                   <ScrollPane focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" HBox.hgrow="ALWAYS">
                      <content>
@@ -53,11 +53,13 @@
                   </ScrollPane>
                   <VBox spacing="5.0">
                      <children>
-                        <Button fx:id="registimerTimeButton" minWidth="86.0" mnemonicParsing="false" onAction="#onRegisterTime" text="Register time" />
+                        <Button fx:id="registimerTimeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRegisterTime" text="Register time" />
+                        <Button fx:id="editButton" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditActivity" text="Edit" />
                      </children>
                   </VBox>
                </children>
             </HBox>
+            <Button fx:id="assignButton" maxWidth="1.7976931348623157E308" minWidth="0.0" mnemonicParsing="false" onAction="#onAssignToActivity" text="Assign employee" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
          </children>
       </AnchorPane>
    </content>

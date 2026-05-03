@@ -101,4 +101,9 @@ public class Project {
     public void setProjectLeader(String userIdentifier) {
         projectLeader = userIdentifier;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

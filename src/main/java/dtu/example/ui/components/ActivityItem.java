@@ -33,8 +33,9 @@ public class ActivityItem extends TitledPane {
     @FXML
     private GridPane graphicGridPane;
 
-    @FXML
     private Runnable onRegisterTimeRequested;
+    private Runnable onEditActivityRequested;
+    private Runnable onAssignToAcitvityRequested;
 
 
     public ActivityItem(Activity activity, int id) {
@@ -61,8 +62,31 @@ public class ActivityItem extends TitledPane {
         }
     }
 
+    @FXML
+    public void onEditActivity() {
+        if (onEditActivityRequested != null) {
+            onEditActivityRequested.run();
+        }
+    }
+
+    @FXML
+    public void onAssignToActivity() {
+        if (onAssignToAcitvityRequested != null) {
+            onAssignToAcitvityRequested.run();
+        }
+    }
+
+    
     public void setOnRegisterTimeRequested(Runnable handler) {
         this.onRegisterTimeRequested = handler;
+    }
+    
+    public void setOnEditActivityRequested(Runnable handler) {
+        this.onEditActivityRequested = handler;
+    }
+
+    public void setOnAssignToActivityRequested(Runnable handler) {
+        this.onAssignToAcitvityRequested = handler;
     }
 
 

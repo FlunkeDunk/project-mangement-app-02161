@@ -3,6 +3,7 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.util.Map;
 
+import dtu.example.ui.ActivityAware;
 import dtu.example.ui.components.ActivityItem;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
@@ -10,8 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.ListView;
 
 public class ProjectListController extends ProjectManagementAwareController {
 
@@ -27,9 +27,9 @@ public class ProjectListController extends ProjectManagementAwareController {
     @FXML
     private Label selectedProjectLeaderLabel;
     @FXML
-    private VBox projectListVBox;
-    @FXML
     private Accordion activityListAccordion;
+    @FXML
+    private ListView<Project> projectList;
 
     // --- Buttons ---
     @FXML
@@ -37,26 +37,51 @@ public class ProjectListController extends ProjectManagementAwareController {
     @FXML
     private Button editProjectButton;
     @FXML
-    private Button editActivityButton;
-    @FXML
     private Button addProjectButton;
 
     @FXML
     private void initialize() {
         setSelectedProjectButtonsDisabled(true);
         clearProjectDetails();
-        clearProjectList();
         clearActivityList();
         loadProjects();
+        projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            try {
+                onProjectSelected();
+            } catch (IOException ex) {
+                System.getLogger(ProjectListController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
+
 
     }
 
     private void setSelectedProjectButtonsDisabled(Boolean enabled) {
         addActivityButton.setDisable(enabled);
         editProjectButton.setDisable(enabled);
-        editActivityButton.setDisable(enabled);
     }
 
+    
+    private void loadProjects() {
+        projectList.getItems().addAll(app.getAllProjects());
+    }
+    
+    @FXML
+    private void onProjectSelected() throws IOException {
+        Project project = projectList.getSelectionModel().getSelectedItem();
+        
+        if (project == null || selectedProjectId == project.getId()) {
+            return;
+        }
+        
+        selectedProjectId = project.getId();
+        String projectId = "" + project.getId();
+        String projectStartDate = project.getStartDate().toString();
+        setProjectDetails(project.getName(), projectId, projectStartDate, project.getProjectLeader());
+        loadActivities(project.getActivityMap());
+        setSelectedProjectButtonsDisabled(false);
+    }
+    
     // --- Public method to update UI when a project is selected ---
     public void setProjectDetails(String name, String id, String startDate, String leader) {
         String displayName = name != null ? name : "none";
@@ -67,34 +92,6 @@ public class ProjectListController extends ProjectManagementAwareController {
         selectedProjectLeaderLabel.setText(displayLeader);
     }
 
-    private void loadProjects() {
-        app.getAllProjects().forEach((project) -> {
-            Label label = new Label(project.getName());
-            label.setMaxWidth(Double.MAX_VALUE);
-            label.setOnMouseClicked((MouseEvent event) -> {
-                try {
-                    onProjectClicked(project);
-                } catch (IOException ex) {
-                    System.getLogger(ProjectListController.class.getName()).log(System.Logger.Level.ERROR,
-                            (String) null, ex);
-                }
-            });
-            projectListVBox.getChildren().add(label);
-        });
-    }
-
-    private void onProjectClicked(Project project) throws IOException {
-        if (selectedProjectId == project.getId()) {
-            return;
-        }
-        selectedProjectId = project.getId();
-        String projectId = "" + project.getId();
-        String projectStartDate = project.getStartDate().toString();
-        setProjectDetails(project.getName(), projectId, projectStartDate, project.getProjectLeader());
-        loadActivities(project.getActivityMap());
-        setSelectedProjectButtonsDisabled(false);
-    }
-
     private void loadActivities(Map<Integer, Activity> activities) throws IOException {
         clearActivityList();
         if (activities == null) {
@@ -102,22 +99,33 @@ public class ProjectListController extends ProjectManagementAwareController {
         }
 
         for (Map.Entry<Integer, Activity> entry : activities.entrySet()) {
-            ActivityItem activityItem = new ActivityItem(entry.getValue(), entry.getKey());
+            int activityId = entry.getKey();
+            Activity activity = entry.getValue();
+            ActivityItem activityItem = new ActivityItem(activity, activityId);
             activityListAccordion.getPanes().add(activityItem);
-            activityItem.setOnRegisterTimeRequested(() -> {
-                handleRegisterTime(entry.getKey(), entry.getValue());
-            });
+            activityItem.setOnRegisterTimeRequested(
+                    () -> changeSceneWithActivity("register_time", RegisterTimeController.class, activityId));
+
+            activityItem.setOnEditActivityRequested(
+                    () -> changeSceneWithActivity("edit_activity", EditAcitvityController.class, activityId));
+
+            activityItem.setOnAssignToActivityRequested(
+                    () -> changeSceneWithActivity("assign_to_activity", AssignToActivityController.class, activityId));
         }
     }
 
-    private void handleRegisterTime(int activityId, Activity activity){
+    private <T extends ActivityAware> void changeSceneWithActivity(
+            String sceneName,
+            Class<T> controllerClass,
+            int activityId) {
         try {
-            navigator.changeScene("register_time", controller -> {
-            ((RegisterTimeController) controller).setProjectId(selectedProjectId);
-            ((RegisterTimeController) controller).setActivityId(activityId);
-        });
+            navigator.changeScene(sceneName, controller -> {
+                T typedController = controllerClass.cast(controller);
+                typedController.setProjectId(selectedProjectId);
+                typedController.setActivityId(activityId);
+            });
         } catch (IOException e) {
-            System.err.println("Failed loading register_time: " + e.getMessage());
+            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
         }
     }
 
@@ -129,17 +137,13 @@ public class ProjectListController extends ProjectManagementAwareController {
         selectedProjectLeaderLabel.setText("—");
     }
 
-    private void clearProjectList() {
-        projectListVBox.getChildren().clear();
-    }
-
     private void clearActivityList() {
         activityListAccordion.getPanes().clear();
     }
 
     // --- Button Handlers ---
     @FXML
-    private void handleAddActivity() throws IOException{
+    private void handleAddActivity() throws IOException {
         navigator.changeScene("create_activity", controller -> {
             ((CreateActivityController) controller).setProjectId(selectedProjectId);
         });
