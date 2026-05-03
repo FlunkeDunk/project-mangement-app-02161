@@ -2,7 +2,6 @@ package dtu.superPlanner;
 
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
-import java.time.temporal.WeekFields;
 
 public abstract class AbstractActivity {
     private String name;
@@ -29,45 +28,39 @@ public abstract class AbstractActivity {
         this.timeFrame = timeFrame;
     }
 
-    public void setStartYear(int startYear) {
-        timeFrame.getStartDate().setYear(startYear);
+    private int getStartWeek() {
+        return timeFrame.getStartDate().getWeek();
     }
 
-    public void setEndYear(int endYear) {
-        timeFrame.getEndDate().setYear(endYear);
+    private int getEndWeek() {
+        return timeFrame.getEndDate().getWeek();
     }
 
-    public void setStartWeek(int startWeek) {
-
-        if (getTimeFrame().getStartDate().getYear() == getTimeFrame().getEndDate().getYear()
-        && startWeek > getTimeFrame().getEndDate().getWeek()) {
-
-        }
-
-        timeFrame.getStartDate().setWeek(startWeek);
+    private int getStartYear() {
+        return timeFrame.getStartDate().getYear();
     }
 
-    public void setEndWeek(int endWeek) {
-        // We find the number of weeks in the year we are working in to make sure roll-over works nicely
-        // Due to how ISO calendars work we check Dec28.
-        LocalDate lastDay = LocalDate.of(timeFrame.getEndDate().getYear(), 12, 28);
-        int weeksInGivenYear = lastDay.get(WeekFields.ISO.weekOfWeekBasedYear());
+    private int getEndYear() {
+        return timeFrame.getEndDate().getYear();
+    }
 
-        if (endWeek > 100) {
-            throw new IllegalArgumentException("Too many weeks, ISO weeks are hard ):");
-        } else if (endWeek > weeksInGivenYear) {
-            setEndYear(getTimeFrame().getEndDate().getYear() + 1);
-            LocalDate nextDate = lastDay
-                    .minusWeeks(weeksInGivenYear)
-                    .minusYears(getTimeFrame().getEndDate().getYear() - getTimeFrame().getStartDate().getYear())
-                    .plusWeeks(endWeek);
-            int nextWeek = nextDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
 
-            timeFrame.getEndDate().setWeek(nextWeek);
+    public void setStartDate(int year, int week) {
+        timeFrame.getStartDate().setYear(year);
+        timeFrame.getStartDate().setWeek(week);
+    }
+
+    public void setEndDate(int year, int week) {
+        LocalDate endDate = LocalDate.of(year, 1, 4).plusWeeks(week-1);
+
+        if (endDate.getYear() < getStartYear() ||
+                (endDate.getYear() == getStartYear() &&  getStartWeek() > endDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR))) {
+            timeFrame.getEndDate().setYear(getStartYear());
+            timeFrame.getEndDate().setWeek(getStartWeek());
+            throw new IllegalArgumentException("End date must be after start date");
         } else {
-            timeFrame.getEndDate().setWeek(endWeek);
+            timeFrame.getEndDate().setYear(endDate.getYear());
+            timeFrame.getEndDate().setWeek(endDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
         }
     }
-
-
 }

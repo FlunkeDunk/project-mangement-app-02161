@@ -1,6 +1,7 @@
 package hellocucumber;
 
 import dtu.superPlanner.Project;
+import dtu.superPlanner.ProjectManagementApp;
 import io.cucumber.java.en.*;
 
 public class ChangeProjectNameStepDefs {
@@ -9,15 +10,9 @@ public class ChangeProjectNameStepDefs {
     public Project project;
     private ErrorMessageHolder errorHolder;
 
-    public ProjectStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
+    public ChangeProjectNameStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
         this.myApp = myApp;
         this.errorHolder = errorHolder;
-    }
-
-    @Given("a user is logged in")
-    public void aUserIsLoggedIn() {
-        user = "";
-        myApp.login(user);
     }
 
     @When("the user changes the project name to {string}")

@@ -89,7 +89,7 @@ public class ActivityStepDefs {
 
     @Given("the project has the activity {string}")
     public void the_project_has_the_activity(String name) {
-        addActivityWithNameAndDuration(name, 1, true);
+        addActivityWithNameAndDuration(name, 0, true);
         myActivity = getActivitybyName(name);
     }
 
@@ -99,28 +99,22 @@ public class ActivityStepDefs {
         throw new PendingException();
     }
 
-    @When("the project leader sets the activity {string} to start in year {int}")
-    public void the_project_leader_sets_the_activity_to_start_in_year(String activityName, Integer year) {
+    @When("the project leader sets the activity {string} to start in week {int}, year {int}")
+    public void theProjectLeaderSetsTheActivityStringToStartInWeekStartWeekYearStartYear(String activityName, int week, int year) {
         Activity activityToModify = getActivitybyName(activityName);
-        activityToModify.setStartYear(year);
-
-    }
-    @When("sets {string} to end in year {int}")
-    public void sets_to_end_in_year(String activityName, Integer year) {
-        Activity activityToModify = getActivitybyName(activityName);
-        activityToModify.setEndYear(year);
-    }
-    @When("sets {string} to start in week {int}")
-    public void sets_to_start_in_week(String activityName, Integer week) {
-        Activity activityToModify = getActivitybyName(activityName);
-        activityToModify.setStartWeek(week);
-    }
-    @When("sets {string} to end in week {int}")
-    public void sets_to_end_in_week(String activityName, Integer week) {
-        Activity activityToModify = getActivitybyName(activityName);
-        activityToModify.setEndWeek(week);
+        activityToModify.setStartDate(year, week);
     }
 
+    @When("the project leader sets the activity {string} to end in week {int}, year {int}")
+    public void theProjectLeaderSetsTheActivityStringToEndInWeekEndWeekYearEndYear(String activityName, int week, int year) {
+        Activity activityToModify = getActivitybyName(activityName);
+        try {
+            activityToModify.setEndDate(year, week);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            errorHolder.setError(e.getMessage());
+        }
+    }
 
     @Then("the activity starts in year {int}")
     public void the_activity_starts_in_year(Integer year) {
@@ -139,10 +133,14 @@ public class ActivityStepDefs {
     public void the_activity_ends_in_week(Integer week) {
         assertEquals(week, myActivity.getTimeFrame().getEndDate().getWeek());
     }
+    @And("the user is notified that the start week is after end week")
+    public void theUserIsNotifiedThatTheStartWeekIsAfterEndWeek() {
+        assertEquals("End date must be after start date", errorHolder.getError());
+    }
 
     private void addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
-        WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 2026);
-        WeekBasedCalendar endWeek = new WeekBasedCalendar(1+weeks, 2026);
+        WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 1);
+        WeekBasedCalendar endWeek = new WeekBasedCalendar(1+weeks, 1);
         TimeFrame myTimeFrame = new TimeFrame(startWeek, endWeek);
         String priorUser = myApp.getUserInitials();
         if (force) {
@@ -174,5 +172,24 @@ public class ActivityStepDefs {
         }
         assertNotNull(activityToModify);
         return activityToModify;
+    }
+
+    private void addActivityWithName(String projectName, Boolean force) {
+        TimeFrame myTimeFrame = new TimeFrame(null, null);
+        String priorUser = myApp.getUserInitials();
+        if (force) {
+            myApp.login(myProject.getProjectLeader());
+        }
+
+        try {
+            myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
+        } catch (IllegalAccessException e) {
+            errorHolder.setError(e.getMessage());
+            //System.out.println(e.getMessage());
+        } finally {
+            if (force) {
+                myApp.login(priorUser);
+            }
+        }
     }
 }

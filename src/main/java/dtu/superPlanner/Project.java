@@ -22,7 +22,7 @@ public class Project {
 
     public void editName(String employeeInitials, String newName) {
         if(employeeInitials != projectLeader && projectLeader != null) {
-            throw new Exception("Only the project leader can rename the activities");
+            //throw new Exception("Only the project leader can rename the activities");
         }
 
         name = newName;
