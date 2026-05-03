@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import dtu.example.ui.ActivityAware;
+import dtu.example.ui.ProjectAware;
 import dtu.example.ui.ReportAware;
 import dtu.example.ui.components.ActivityItem;
 import dtu.superPlanner.Activity;
@@ -148,6 +149,20 @@ public class ProjectListController extends ProjectManagementAwareController {
         }
     }
 
+    private <T extends ProjectAware> void changeSceneWithProject(
+            String sceneName,
+            Class<T> controllerClass,
+            int projectId) {
+        try {
+            navigator.changeScene(sceneName, controller -> {
+                T typedController = controllerClass.cast(controller);
+                typedController.setProjectId(projectId);
+            });
+        } catch (IOException e) {
+            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
+        }
+    }
+
     // --- Clear UI ---
     private void clearProjectDetails() {
         selectedProjectNameLabel.setText("—");
@@ -170,8 +185,7 @@ public class ProjectListController extends ProjectManagementAwareController {
 
     @FXML
     private void handleEditProject() {
-        System.out.println("Edit Project clicked");
-        // TODO: open edit project dialog
+        changeSceneWithProject("edit_project", EditProjectController.class, selectedProjectId);
     }
 
     @FXML

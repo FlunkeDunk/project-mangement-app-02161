@@ -21,7 +21,7 @@ public class Project {
     }
 
     public void editName(String editorInitials, String newName) {
-        if(!projectLeader.equals(editorInitials) && projectLeader != null) {
+        if(isProjectLeader(editorInitials)) {
             //throw new IllegalStateException("Only the project leader can rename the activities");
         }
 
@@ -92,6 +92,10 @@ public class Project {
 
     public String getProjectLeader() {
         return projectLeader;
+    }
+
+    public boolean isProjectLeader(String initials) {
+        return projectLeader == null || projectLeader.equals(initials);
     }
 
     public String getName() {
