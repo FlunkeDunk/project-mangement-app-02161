@@ -12,7 +12,7 @@ public class Employee {
     }
 
     public Set<Activity> getActivities() {
-        throw new UnsupportedOperationException("Not implemented");
+        return activities;
     }
     
     public Set<FixedActivity> getFixedActivities() {
