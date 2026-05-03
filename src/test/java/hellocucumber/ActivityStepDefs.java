@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
@@ -18,6 +15,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ActivityStepDefs {
 
@@ -102,7 +101,11 @@ public class ActivityStepDefs {
     @When("the project leader sets the activity {string} to start in week {int}, year {int}")
     public void theProjectLeaderSetsTheActivityStringToStartInWeekStartWeekYearStartYear(String activityName, int week, int year) {
         Activity activityToModify = getActivitybyName(activityName);
-        activityToModify.setStartDate(year, week);
+        try {
+            activityToModify.setStartDate(year, week);
+        } catch (IllegalArgumentException e) {
+            errorHolder.setError(e.getMessage());
+        }
     }
 
     @When("the project leader sets the activity {string} to end in week {int}, year {int}")
@@ -111,7 +114,6 @@ public class ActivityStepDefs {
         try {
             activityToModify.setEndDate(year, week);
         } catch (Exception e){
-            System.out.println(e.getMessage());
             errorHolder.setError(e.getMessage());
         }
     }
@@ -133,9 +135,10 @@ public class ActivityStepDefs {
     public void the_activity_ends_in_week(Integer week) {
         assertEquals(week, myActivity.getTimeFrame().getEndDate().getWeek());
     }
-    @And("the user is notified that the start week is after end week")
-    public void theUserIsNotifiedThatTheStartWeekIsAfterEndWeek() {
-        assertEquals("End date must be after start date", errorHolder.getError());
+
+    @Then("an exception is thrown {string}")
+    public void an_exception_is_thrown(String exception) {
+        assertTrue(errorHolder.getError().contains(exception));
     }
 
     private void addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
