@@ -24,9 +24,9 @@ public class Report {
 
             budgetedTime += thisBudget;
             timeSpent += spent;
-            timeLeft += spent > thisBudget ? 0 : budgetedTime - timeSpent;
-            
+            timeLeft += budgetedTime - timeSpent;
         }
+        timeLeft = timeLeft < 0 ? 0 : timeLeft;
 
     }
 

@@ -26,6 +26,7 @@ public class ActivityStepDefs {
     private final Project myProject;
     private String user;
     private Activity myActivity;
+    private LocalDate currentDate;
 
     public ActivityStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
         this.myApp = myApp;
@@ -38,6 +39,41 @@ public class ActivityStepDefs {
         myProject = projects.iterator().next();
 
         user = myApp.getUserInitials();
+    }
+
+    private void addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
+        WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 1);
+        WeekBasedCalendar endWeek = new WeekBasedCalendar(1+weeks, 1);
+        TimeFrame myTimeFrame = new TimeFrame(startWeek, endWeek);
+        String priorUser = myApp.getUserInitials();
+        if (force) {
+            myApp.login(myProject.getProjectLeader());
+        }
+
+        try {
+            myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
+        } catch (IllegalAccessException e) {
+            errorHolder.setError(e.getMessage());
+        } finally {
+            if (force) {
+                myApp.login(priorUser);
+            }
+        }
+    }
+
+    private Activity getActivitybyName(String activityName) {
+        Set<Activity> activities = null;
+        activities = myApp.getProject(myProject.getId()).getActivitySet();
+        Activity activityToModify = null;
+
+        for (Activity activity : activities) {
+            if (activity.getName().equals(activityName)) {
+                activityToModify = activity;
+                break;
+            }
+        }
+        assertNotNull(activityToModify);
+        return activityToModify;
     }
 
     @When("an employee tries to add activity {string} with budgeted time {int} weeks")
@@ -141,75 +177,76 @@ public class ActivityStepDefs {
         assertTrue(errorHolder.getError().contains(exception));
     }
 
-    private void addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
-        WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 1);
-        WeekBasedCalendar endWeek = new WeekBasedCalendar(1+weeks, 1);
-        TimeFrame myTimeFrame = new TimeFrame(startWeek, endWeek);
-        String priorUser = myApp.getUserInitials();
-        if (force) {
-            myApp.login(myProject.getProjectLeader());
-        }
-
-        try {
-            myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
-        } catch (IllegalAccessException e) {
-            errorHolder.setError(e.getMessage());
-        } finally {
-            if (force) {
-                myApp.login(priorUser);
-            }
-        }
-    }
-
-    private Activity getActivitybyName(String activityName) {
-        Set<Activity> activities = null;
-        activities = myApp.getProject(myProject.getId()).getActivitySet();
-        Activity activityToModify = null;
-
-        for (Activity activity : activities) {
-            if (activity.getName().equals(activityName)) {
-                activityToModify = activity;
-                break;
-            }
-        }
-        assertNotNull(activityToModify);
-        return activityToModify;
-    }
-
-    private void addActivityWithName(String projectName, Boolean force) {
-        TimeFrame myTimeFrame = new TimeFrame(null, null);
-        String priorUser = myApp.getUserInitials();
-        if (force) {
-            myApp.login(myProject.getProjectLeader());
-        }
-
-        try {
-            myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
-        } catch (IllegalAccessException e) {
-            errorHolder.setError(e.getMessage());
-            //System.out.println(e.getMessage());
-        } finally {
-            if (force) {
-                myApp.login(priorUser);
-            }
-        }
-    }
-
     @Given("the activity {string} gets {double} hours budgeted")
     public void theActivityGetsHoursBudgeted(String name, double hours) {
         Activity currentActivity = getActivitybyName(name);
         myApp.setBudgetedTime(myProject.getId(), currentActivity.getId(), hours);
     }
 
-
     @Given("an employee has spent {double} hours on the activity {string}")
     public void anEmployeeHasSpentHoursOnTheActivity(double hours, String name) {
         Activity currentActivity = getActivitybyName(name);
-        assertEquals(name, currentActivity.getName());
         System.out.println(currentActivity.getName());
         String debugUser = "Gandalf";
 
-        myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
-        currentActivity.getTimeLedger(debugUser).registerTime(LocalDate.now(), hours);
+        String prevUser = myApp.getUserInitials();
+        myApp.login(myProject.getProjectLeader());
+
+        try {
+            myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
+            currentActivity.registerTime(debugUser, hours);
+        } catch (IllegalAccessException e) {
+            errorHolder.setError(e.getMessage());
+        } finally {
+            myApp.login(prevUser);
+        }
+    }
+
+    @Given("the user has registered {double} hours on {string}")
+    public void theUserHasRegisteredHoursOn(double hours, String activityName) {
+        myActivity.registerTime(user, hours);
+        currentDate = LocalDate.now();
+    }
+    @When("the user changes the time of the prior registration on activity {string} to {double}")
+    public void theUserChangesTheRegisteredHoursOnTheActivityInWeek(String activityName, Double hours) {
+        try {
+            myActivity.editTime(user, currentDate, hours);
+        } catch (IllegalArgumentException e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
+    @Then("the activity {string} has {double} hours worked")
+    public void theActivityHasHoursWorked(String activityName, Double hours) {
+        assertEquals(hours, getActivitybyName(activityName).getTotalTimeSpent());
+    }
+
+    @When("{string} assigns {string} to {string}")
+    public void theEmployeeAssignsTo(String assigner, String assignee, String activityName) {
+        String prevUser = myApp.getUserInitials();
+
+        myApp.login(assigner);
+        try {
+            myApp.addEmployeeToActivity(myProject.getId(), myActivity.getId(), assignee);
+        } catch (Exception e){
+            errorHolder.setError(e.getMessage());
+        }
+        myApp.login(prevUser);
+    }
+
+    @Then("{string} is not assigned to {string}")
+    public void isNotAssignedTo(String assignee, String activityName) {
+        assertFalse(myActivity.getEmployees().contains(assignee));
+    }
+
+    @Then("{string} is assigned to {string}")
+    public void isAssignedTo(String assignee, String activityName) {
+        assertTrue(myActivity.getEmployees().contains(assignee));
+    }
+
+    @And("{string} is the project Leader")
+    public void isTheProjectLeader(String projectLeader) {
+        // Project leader reference needed below
+        //assertEquals(projectLeader, myActivity.);
     }
 }

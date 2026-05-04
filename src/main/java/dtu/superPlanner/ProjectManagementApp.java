@@ -99,8 +99,15 @@ public class ProjectManagementApp {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) {
-        projects.get(projectId).addEmployeeToActivity(activityId, employeeInitials);
+    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) throws IllegalAccessException {
+        Project proj = projects.get(projectId);
+        if (proj.getProjectLeader() == null || proj.getProjectLeader().equals(userInitials)) {
+            projects.get(projectId).addEmployeeToActivity(activityId, employeeInitials);
+        } else {
+            throw new IllegalAccessException("Only the Project Leader can add employees to an activity");
+        }
+
+
     }
 
     public void setProjectName(int projectId, String name) {

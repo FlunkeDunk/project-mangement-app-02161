@@ -21,13 +21,16 @@ public class Activity extends AbstractActivity {
     }
 
     public void registerTime(String employeeInitials, double time) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (!employeeTimeLedgers.containsKey(employeeInitials)) {
+            employeeTimeLedgers.put(employeeInitials, new TimeLedger());
+        }
+        employeeTimeLedgers.get(employeeInitials).registerTime(LocalDate.now(), time);
     }
 
     public double getTotalTimeSpent() {
         double totalTimeSpent = 0;
-        for (String employee : employees) {
-            totalTimeSpent += employeeTimeLedgers.get(employee).getTotalTime();
+        for (TimeLedger timeLedger : employeeTimeLedgers.values()) {
+            totalTimeSpent = timeLedger.getTotalTime();
         }
         return totalTimeSpent;
     }
@@ -37,22 +40,14 @@ public class Activity extends AbstractActivity {
     }
 
     public void editTime(String initials, LocalDate date, double newTime) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (newTime < 0) {
+            throw new IllegalArgumentException("Negative time not allowed for activities");
+        }
+        employeeTimeLedgers.get(initials).editTime(date, newTime);
     }
 
-    public void addEmployee(String assignerInitials, String assignedInitials) {
-        // Needs project leader reference
-        /*
-        if(!projectLeader.equals(assignerInitials) && projectLeader != null) {
-            throw new IllegalStateException("Only the project leader can assign employees to activities");
-        }
-        */
-        if(employees.contains(assignedInitials)) {
-            //throw new IllegalStateException("Employee is already added to the activity");
-        }
-
+    public void addEmployee(String assignedInitials) {
         employees.add(assignedInitials);
-        employeeTimeLedgers.put(assignedInitials, new TimeLedger());
     }
 
     public Set<String> getEmployees() {

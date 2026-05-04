@@ -17,7 +17,7 @@ public class TimeLedger {
     }
 
     public void editTime(LocalDate date, double newTime) {
-        throw new UnsupportedOperationException("Not implemented");
+        registerTime(date, newTime);
     }
 
     public double getTime(LocalDate date) {

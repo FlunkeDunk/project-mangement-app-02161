@@ -3,17 +3,14 @@ package hellocucumber;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.WeekBasedCalendar;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProjectStepDefs {
     public String user;
@@ -141,5 +138,20 @@ public class ProjectStepDefs {
     public void projectExists(Integer int1) {
         Set<Project> projects = myApp.getAllProjects();
         assertEquals(int1, projects.size());
+    }
+
+    @Given("the user is a project leader")
+    public void the_user_is_a_project_leader(String employeeInitials) {
+        assertEquals(employeeInitials, project.getProjectLeader());
+    }
+
+    @Given("the user is not a project leader")
+    public void the_user_is_not_a_project_leader(String employeeInitials) {
+        assertNotEquals(employeeInitials, project.getProjectLeader());
+    }
+
+    @When("the user changes the project name to {string}")
+    public void the_user_changes_the_project_name_to(String employeeInitials, String newProjectName) {
+        project.editName(employeeInitials, newProjectName);
     }
 }
