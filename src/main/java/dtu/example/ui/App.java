@@ -23,7 +23,7 @@ public class App extends Application {
         navigator = new Navigator(stage, app);
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
-        navigator.changeScene("create_project");
+        navigator.changeScene("login");
     }
 
     public static void main(String[] args) {
