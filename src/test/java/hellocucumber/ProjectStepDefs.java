@@ -6,6 +6,7 @@ import java.util.Set;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.WeekBasedCalendar;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -103,7 +104,7 @@ public class ProjectStepDefs {
     }
 
     @Then("an error is thrown {string}")
-    public void an_error_is_thrown(String string) {
+    public void anErrorIsThrown(String string) {
         assertEquals(string, errorHolder.getError());
     }
 
@@ -140,9 +141,10 @@ public class ProjectStepDefs {
         assertEquals(int1, projects.size());
     }
 
-    @Given("the user is a project leader")
-    public void the_user_is_a_project_leader(String employeeInitials) {
-        assertEquals(employeeInitials, project.getProjectLeader());
+    @Given("the user is the project leader")
+    public void the_user_is_a_project_leader() {
+        myApp.setProjectLeader(project.getId(), myApp.getUserInitials());
+        assertEquals(user, project.getProjectLeader());
     }
 
     @Given("the user is not a project leader")

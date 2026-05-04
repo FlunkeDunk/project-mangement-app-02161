@@ -20,11 +20,11 @@ public class Activity extends AbstractActivity {
         this.ID = ID;
     }
 
-    public void registerTime(String employeeInitials, double time) {
+    public void registerTime(String employeeInitials, LocalDate date, double time) {
         if (!employeeTimeLedgers.containsKey(employeeInitials)) {
             employeeTimeLedgers.put(employeeInitials, new TimeLedger());
         }
-        employeeTimeLedgers.get(employeeInitials).registerTime(LocalDate.now(), time);
+        employeeTimeLedgers.get(employeeInitials).registerTime(date, time);
     }
 
     public double getTotalTimeSpent() {

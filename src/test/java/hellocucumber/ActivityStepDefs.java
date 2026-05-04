@@ -41,49 +41,50 @@ public class ActivityStepDefs {
         user = myApp.getUserInitials();
     }
 
-    private void addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
+    private Activity addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
         WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 1);
-        WeekBasedCalendar endWeek = new WeekBasedCalendar(1+weeks, 1);
+        WeekBasedCalendar endWeek = new WeekBasedCalendar(1 + weeks, 1);
         TimeFrame myTimeFrame = new TimeFrame(startWeek, endWeek);
-        String priorUser = myApp.getUserInitials();
         if (force) {
             myApp.login(myProject.getProjectLeader());
         }
 
+        Activity activity = null;
+
         try {
-            myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
+            activity = myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         } finally {
             if (force) {
-                myApp.login(priorUser);
+                myApp.login(user);
             }
         }
+
+        return activity;
     }
 
     private Activity getActivitybyName(String activityName) {
         Set<Activity> activities = null;
         activities = myApp.getProject(myProject.getId()).getActivitySet();
-        Activity activityToModify = null;
 
         for (Activity activity : activities) {
             if (activity.getName().equals(activityName)) {
-                activityToModify = activity;
-                break;
+                return activity;
             }
         }
-        assertNotNull(activityToModify);
-        return activityToModify;
+        assertNotNull(null);
+        return null; // Has to have a return
     }
 
     @When("an employee tries to add activity {string} with budgeted time {int} weeks")
-    public void an_employee_tries_to_add_activity(String name, int weeks) {
+    public void anEmployeeTriesToAddActivity(String name, int weeks) {
         addActivityWithNameAndDuration(name, weeks, false);
     }
 
     @Given("the project has a project leader")
     public void theProjectHasAProjectLeader() {
-        myApp.setProjectLeader(myProject.getId(),"PROJECT_LEADER");
+        myApp.setProjectLeader(myProject.getId(), "PROJECT_LEADER");
     }
 
     @Then("the project should have the activities with the names and budgeted times")
@@ -105,28 +106,21 @@ public class ActivityStepDefs {
 
     @Given("the project has no activities")
     public void theProjectHasNoActivities() {
-        assertEquals(0, myProject.getActivitySet().size());
+        assertTrue(myProject.getActivitySet().isEmpty());
     }
 
-
     @And("the project has the activities with the names and budgeted times")
-    public void theProjectHasTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> expectedActivities) {
-        for (int i = 0; i < expectedActivities.size(); i++) {
-            String name = expectedActivities.get(i).get(0);
-            int duration = Integer.parseInt(expectedActivities.get(i).get(1));
+    public void theProjectHasTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> activities) {
+        for (int i = 0; i < activities.size(); i++) {
+            String name = activities.get(i).get(0);
+            int duration = Integer.parseInt(activities.get(i).get(1));
             addActivityWithNameAndDuration(name, duration, true);
         }
     }
 
-    @And("the user is the project leader")
-    public void theUserIsTheProjectLeader() {
-        myApp.setProjectLeader(myProject.getId(),myApp.getUserInitials());
-    }
-
     @Given("the project has the activity {string}")
-    public void the_project_has_the_activity(String name) {
-        addActivityWithNameAndDuration(name, 0, true);
-        myActivity = getActivitybyName(name);
+    public void theProjectHasTheActivity(String name) {
+        myActivity = addActivityWithNameAndDuration(name, 0, true);
     }
 
     @When("the user changes the activity name to {string}")
@@ -135,58 +129,76 @@ public class ActivityStepDefs {
         throw new PendingException();
     }
 
-    @When("the project leader sets the activity {string} to start in week {int}, year {int}")
-    public void theProjectLeaderSetsTheActivityStringToStartInWeekStartWeekYearStartYear(String activityName, int week, int year) {
+    @When("the project leader sets the timeframe of activity {string} to")
+    public void theProjectLeaderSetsTheTimeframeOfActivityTo(String activityName, List<List<Integer>> dates) {
         Activity activityToModify = getActivitybyName(activityName);
+        List<Integer> tempDate = dates.get(0);
+        TimeFrame timeFrame = null;
         try {
-            activityToModify.setStartDate(year, week);
-        } catch (IllegalArgumentException e) {
+            WeekBasedCalendar startDate = new WeekBasedCalendar(tempDate.get(0), tempDate.get(1));
+            tempDate = dates.get(1);
+            WeekBasedCalendar endDate = new WeekBasedCalendar(tempDate.get(0), tempDate.get(1));
+            timeFrame = new TimeFrame(startDate, endDate);
+        } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
+
+        if (timeFrame == null)
+            return;
+        myApp.setActivityTimeFrame(myProject.getId(), activityToModify.getId(), timeFrame);
     }
 
     @When("the project leader sets the activity {string} to end in week {int}, year {int}")
-    public void theProjectLeaderSetsTheActivityStringToEndInWeekEndWeekYearEndYear(String activityName, int week, int year) {
+    public void theProjectLeaderSetsTheActivityToEndInWeekYear(String activityName, int week,
+            int year) {
         Activity activityToModify = getActivitybyName(activityName);
+        TimeFrame timeFrame = null;
         try {
-            activityToModify.setEndDate(year, week);
-        } catch (Exception e){
+            WeekBasedCalendar startDate = activityToModify.getTimeFrame().getStartDate();
+            WeekBasedCalendar endDate = new WeekBasedCalendar(week, year);
+            timeFrame = new TimeFrame(startDate, endDate);
+        } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
+
+        if (timeFrame == null)
+            return;
+        myApp.setActivityTimeFrame(myProject.getId(), activityToModify.getId(), timeFrame);
     }
 
-    @Then("the activity starts in year {int}")
-    public void the_activity_starts_in_year(Integer year) {
-        assertEquals(year, myActivity.getTimeFrame().getStartDate().getYear());
+    @Then("the activity starts in year {int} and week {int}")
+    public void theActivityStartsInYearAndWeek(Integer year, Integer week) {
+        WeekBasedCalendar expected = new WeekBasedCalendar(week, year);
+        WeekBasedCalendar startDate = myProject.getActivityTimeFrame(myActivity.getId()).getStartDate();
+        assertEquals(expected, startDate);
     }
-    @Then("the activity starts in week {int}")
-    public void the_activity_starts_in_week(Integer week) {
-        assertEquals(week, myActivity.getTimeFrame().getStartDate().getWeek());
-    }
-    @Then("the activity ends in year {int}")
-    public void the_activity_ends_in_year(Integer year) {
-        assertEquals(year, myActivity.getTimeFrame().getEndDate().getYear());
-    }
-    @Then("the activity ends in week {int}")
-    public void the_activity_ends_in_week(Integer week) {
-        assertEquals(week, myActivity.getTimeFrame().getEndDate().getWeek());
+
+    @Then("the activity ends in year {int} and week {int}")
+    public void theActivityEndsInYearAndWeek(Integer year, Integer week) {
+        WeekBasedCalendar endDate = myProject.getActivityTimeFrame(myActivity.getId()).getEndDate();
+        assertEquals(year, endDate.getYear());
+        assertEquals(week, endDate.getWeek());
     }
 
     @Then("an exception is thrown {string}")
-    public void an_exception_is_thrown(String exception) {
-        assertTrue(errorHolder.getError().contains(exception));
+    public void anExceptionIsThrown(String exception) {
+        assertNotNull(errorHolder.getError());
+        assert (errorHolder.getError().contains(exception));
     }
 
     @Given("the activity {string} gets {double} hours budgeted")
     public void theActivityGetsHoursBudgeted(String name, double hours) {
         Activity currentActivity = getActivitybyName(name);
-        myApp.setBudgetedTime(myProject.getId(), currentActivity.getId(), hours);
+        try {
+            myApp.setBudgetedTime(myProject.getId(), currentActivity.getId(), hours);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
     }
 
     @Given("an employee has spent {double} hours on the activity {string}")
     public void anEmployeeHasSpentHoursOnTheActivity(double hours, String name) {
         Activity currentActivity = getActivitybyName(name);
-        System.out.println(currentActivity.getName());
         String debugUser = "Gandalf";
 
         String prevUser = myApp.getUserInitials();
@@ -194,7 +206,8 @@ public class ActivityStepDefs {
 
         try {
             myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
-            currentActivity.registerTime(debugUser, hours);
+            myApp.login(debugUser);
+            myApp.registerTime(myProject.getId(), currentActivity.getId(), hours);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         } finally {
@@ -204,13 +217,14 @@ public class ActivityStepDefs {
 
     @Given("the user has registered {double} hours on {string}")
     public void theUserHasRegisteredHoursOn(double hours, String activityName) {
-        myActivity.registerTime(user, hours);
+        myApp.registerTime(myProject.getId(), myActivity.getId(), hours);
         currentDate = LocalDate.now();
     }
-    @When("the user changes the time of the prior registration on activity {string} to {double}")
-    public void theUserChangesTheRegisteredHoursOnTheActivityInWeek(String activityName, Double hours) {
+
+    @When("the user changes the registered time on activity {string} to {double}")
+    public void theUserChangesTheRegisteredTimeOnActivityTo(String activityName, Double hours) {
         try {
-            myActivity.editTime(user, currentDate, hours);
+            myApp.editTime(myProject.getId(), myActivity.getId(), currentDate, hours);
         } catch (IllegalArgumentException e) {
             errorHolder.setError(e.getMessage());
         }
@@ -228,7 +242,7 @@ public class ActivityStepDefs {
         myApp.login(assigner);
         try {
             myApp.addEmployeeToActivity(myProject.getId(), myActivity.getId(), assignee);
-        } catch (Exception e){
+        } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
         myApp.login(prevUser);
@@ -236,7 +250,8 @@ public class ActivityStepDefs {
 
     @Then("{string} is not assigned to {string}")
     public void isNotAssignedTo(String assignee, String activityName) {
-        assertFalse(myActivity.getEmployees().contains(assignee));
+        Activity activity = getActivitybyName(activityName);
+        assertFalse(activity.getEmployees().contains(assignee));
     }
 
     @Then("{string} is assigned to {string}")
@@ -244,9 +259,37 @@ public class ActivityStepDefs {
         assertTrue(myActivity.getEmployees().contains(assignee));
     }
 
-    @And("{string} is the project Leader")
+    @And("{string} is the project leader") // Is this supposed to be a then or a given??? This is why we use @Given,
+                                           // @When or @Then and not @And
     public void isTheProjectLeader(String projectLeader) {
         // Project leader reference needed below
-        //assertEquals(projectLeader, myActivity.);
+        // assertEquals(projectLeader, myActivity.);
+    }
+
+    @Given("an activity {string} with a duration of {int} week(s)")
+    public void anActivityWithADurationOfWeeks(String string, Integer int1) {
+        WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 2049);
+        WeekBasedCalendar endWeek = new WeekBasedCalendar(1 + int1, 2049);
+        TimeFrame timeFrame = new TimeFrame(startWeek, endWeek);
+
+        try {
+            myActivity = myApp.createActivity(myProject.getId(), string, timeFrame);
+        } catch (IllegalAccessException e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
+    @When("the user sets the budgeted time of the activity to {double} hour(s)")
+    public void theUserSetsTheBudgetedTimeOfTheActivityToHours(double d) {
+        try {
+            myApp.setBudgetedTime(myProject.getId(), myActivity.getId(), d);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
+    @Then("the activity has a budgeted time of {double} hour(s)")
+    public void theActivityHasABudgetedTimeOfHours(double d) {
+        assertEquals(d, myActivity.getBudgetedTime());
     }
 }

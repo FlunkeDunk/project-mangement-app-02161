@@ -29,8 +29,8 @@ public class Project {
         //Update UI?
     }
 
-    public void editTime(String employeeInitials, LocalDate date, double newTime) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void editTime(int activityId, String employeeInitials, LocalDate date, double newTime) {
+        getActivityById(activityId).editTime(employeeInitials, date, newTime);
     }
 
     public Activity createActivity(String name, TimeFrame timeFrame) {
@@ -39,8 +39,8 @@ public class Project {
         return myActivity;
     }
 
-    public void registerTime(String employeeInitials, LocalDate date, double time) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void registerTime(int activityId, String employeeInitials, LocalDate date, double time) {
+        getActivityById(activityId).registerTime(employeeInitials, date, time);
     }
 
     public Report createReport() {
@@ -52,19 +52,19 @@ public class Project {
     }
 
     public void setActivityTimeFrame(int activityId, TimeFrame timeFrame) {
-        throw new UnsupportedOperationException("Not implemented");
+        getActivityById(activityId).setTimeFrame(timeFrame);
     }
 
     public void addEmployeeToActivity(int activityId, String employeeInitials) {
         activities.get(activityId).addEmployee(employeeInitials);
     }
 
-    public void getActivityTimeFrame(int activityId) {
-        throw new UnsupportedOperationException("Not implemented");
+    public TimeFrame getActivityTimeFrame(int activityId) {
+        return getActivityById(activityId).getTimeFrame();
     }
 
     public boolean isLeader(String employeeInitials) {
-        throw new UnsupportedOperationException("Not implemented");
+        return projectLeader == null ? true : projectLeader.equals(employeeInitials);
     }
 
     public Activity getActivityById(int activityId) {

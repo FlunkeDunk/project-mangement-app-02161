@@ -5,19 +5,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TimeLedger {
-    private Map<LocalDate, Entry> entries;
+    private Map<LocalDate, Double> entries;
     private double totalTime;
 
     public TimeLedger() {
         entries = new HashMap<>();
+        totalTime = 0;
     }
 
     public void registerTime(LocalDate date, double time) {
-        entries.put(date, new Entry(date, time));
+        totalTime += time;
+        entries.put(date, time);
     }
 
     public void editTime(LocalDate date, double newTime) {
-        registerTime(date, newTime);
+        if (!entries.containsKey(date)) return;
+        
+        totalTime += newTime;
+        totalTime -= entries.replace(date, newTime);
     }
 
     public double getTime(LocalDate date) {
@@ -26,27 +31,9 @@ public class TimeLedger {
 
     public double getTotalTime() {
         double totalTime = 0;
-        for (Entry entry : entries.values()) {
-            totalTime += entry.getTime();
+        for (double time : entries.values()) {
+            totalTime += time;
         }
         return totalTime;
-    }
-
-    private class Entry {
-        private LocalDate date;
-        private double time;
-
-        private Entry(LocalDate date, double time) {
-            this.date = date;
-            this.time = time;
-        }
-
-        private void update(double newValue) {
-            time = newValue;
-        }
-
-        private double getTime() {
-            return time;
-        }
     }
 }

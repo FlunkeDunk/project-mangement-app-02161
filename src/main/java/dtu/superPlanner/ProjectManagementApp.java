@@ -58,20 +58,19 @@ public class ProjectManagementApp {
     public Activity createActivity(int projectId, String name, TimeFrame timeFrame) throws IllegalAccessException {
         //System.out.println("\nCreating activity for project " + projectId + "\nUser:" + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
         Project myProject = getProject(projectId);
-        String projectLeader = myProject.getProjectLeader();
-        if (projectLeader != null && !projectLeader.equals(userInitials)) {
+        if (!myProject.isLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can create activities");
         }
 
         return myProject.createActivity(name, timeFrame);
     }
 
-    public void registerTime(int projectId, int activityId, LocalDate date, double time) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void registerTime(int projectId, int activityId, double time) {
+        getProject(projectId).registerTime(activityId, userInitials, timeServer.getCurrentDate(), time);
     }
 
     public void editTime(int projectId, int activityId, LocalDate date, double newTime) {
-        throw new UnsupportedOperationException("Not implemented");
+        getProject(projectId).editTime(activityId, userInitials, date, newTime);
     }
 
     public void setProjectLeader(int projectId, String employeeInitials) {
@@ -91,17 +90,19 @@ public class ProjectManagementApp {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void setBudgetedTime(int projectId, int activityId, double budgetedTime) {
+    public void setBudgetedTime(int projectId, int activityId, double budgetedTime) throws IllegalAccessException {
+        Project project = getProject(projectId);
+        if (!project.isLeader(userInitials)) throw new IllegalAccessException("Only the project leader can set budgeted time for activities");
         projects.get(projectId).setBudgetedTime(activityId, budgetedTime);
     }
 
     public void setActivityTimeFrame(int projectId, int activityId, TimeFrame timeFrame) {
-        throw new UnsupportedOperationException("Not implemented");
+        getProject(projectId).setActivityTimeFrame(activityId, timeFrame);
     }
 
     public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) throws IllegalAccessException {
         Project proj = projects.get(projectId);
-        if (proj.getProjectLeader() == null || proj.getProjectLeader().equals(userInitials)) {
+        if (proj.isLeader(userInitials)) {
             projects.get(projectId).addEmployeeToActivity(activityId, employeeInitials);
         } else {
             throw new IllegalAccessException("Only the Project Leader can add employees to an activity");
