@@ -1,5 +1,6 @@
 package dtu.example.ui.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import dtu.example.ui.ActivityAware;
@@ -7,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.stage.Stage;
 
 public class AssignToActivityController extends ProjectManagementAwareController implements ActivityAware{
 
@@ -51,10 +51,8 @@ public class AssignToActivityController extends ProjectManagementAwareController
         employeeListView.refresh();
     }
     @FXML
-    private void handleExit() {
-        // Close the window
-        Stage stage = (Stage) exitButton.getScene().getWindow();
-        stage.close();
+    private void handleExit() throws  IOException{
+        navigator.changeScene("project_list");
     }
 
     @Override

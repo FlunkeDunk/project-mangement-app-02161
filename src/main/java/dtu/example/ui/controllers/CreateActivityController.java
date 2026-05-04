@@ -28,12 +28,18 @@ public class CreateActivityController extends ProjectManagementAwareController {
     private void onCreateActivity() throws IOException, IllegalAccessException {
         WeekBasedCalendar startDate = new WeekBasedCalendar(startDatePicker.getValue());
         WeekBasedCalendar endDate = new WeekBasedCalendar(endDatePicker.getValue());
-        TimeFrame timeFrame = new TimeFrame(startDate, endDate);
-        Activity activity = app.createActivity(projectId, activityNameTextField.getText(), timeFrame);
-        if (budgetSpinner.valueProperty().getValue() > 0) {
-            activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
+        try {
+            TimeFrame timeFrame = new TimeFrame(startDate, endDate);
+            Activity activity = app.createActivity(projectId, activityNameTextField.getText(), timeFrame);
+            if (budgetSpinner.valueProperty().getValue() > 0) {
+                activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
+            }
+            navigator.changeScene("project_list");
+        } catch (IllegalArgumentException e ) {
+            showAlert("Invalid date", e.getMessage());
+        } catch (IllegalAccessException e) {
+            showAlert("Invalid acces", e.getMessage());
         }
-        navigator.changeScene("project_list");
     }
 
     public void setProjectId(int projectId) {

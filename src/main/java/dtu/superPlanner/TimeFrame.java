@@ -7,9 +7,9 @@ public class TimeFrame {
     private WeekBasedCalendar startDate;
     private WeekBasedCalendar endDate;
 
-    public TimeFrame(WeekBasedCalendar startDate, WeekBasedCalendar endDate) {
+    public TimeFrame(WeekBasedCalendar startDate, WeekBasedCalendar endDate) throws IllegalArgumentException{
         this.startDate = startDate;
-        this.endDate = endDate;
+        setEndDate(endDate);
     }
 
     public WeekBasedCalendar getStartDate() {
@@ -30,7 +30,7 @@ public class TimeFrame {
         }
     }
 
-    public void setStartDate(WeekBasedCalendar date) {
+    public void setStartDate(WeekBasedCalendar date) throws IllegalArgumentException {
         setStartDate(date.getYear(), date.getWeek());
     }
 
@@ -39,7 +39,7 @@ public class TimeFrame {
     }
 
 
-    public void setEndDate(int yearEnd, int weekEnd) {
+    public void setEndDate(int yearEnd, int weekEnd){
         int yearStart = getStartDate().getYear();
         int weekStart = getStartDate().getWeek();
 
