@@ -12,12 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
 
-public class RegisterTimeController extends ProjectManagementAwareController implements ActivityAware{
-
-    @FXML
-    private TextField initialsTextField;
+public class RegisterTimeController extends ProjectManagementAwareController implements ActivityAware {
 
     @FXML
     private Spinner<LocalTime> timeSpinner;
@@ -38,10 +34,6 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
         datePicker.valueProperty().addListener(((observableValue, oldDate, newDate) -> {
             updateButtonState();
         }));
-        initialsTextField.textProperty().addListener(((observableValue, oldText,
-                newText) -> {
-            updateButtonState();
-        }));
 
         List<LocalTime> times = new ArrayList<>();
         times.add(LocalTime.of(0, 30));
@@ -55,14 +47,13 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
     }
 
     @FXML
-    public void onRegisterTime() throws IOException{
-        if (datePicker.getValue() == null || initialsTextField.getText() == null
-                || initialsTextField.getText().isBlank()) {
+    public void onRegisterTime() throws IOException {
+        if (datePicker.getValue() == null) {
             return;
         }
 
         double hours = (double) timeSpinner.getValue().getHour() + (double) timeSpinner.getValue().getMinute() / 60.0;
-        app.registerTime(projectId, activityId, hours);
+        app.registerTime(projectId, activityId, hours, datePicker.getValue());
         navigator.changeScene("project_list");
     }
 
@@ -70,17 +61,14 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
     public void setActivityId(int id) {
         activityId = id;
     }
-    
+
     @Override
     public void setProjectId(int id) {
         projectId = id;
     }
 
     private void updateButtonState() {
-        boolean valid = datePicker.getValue() != null &&
-                initialsTextField.getText() != null &&
-                !initialsTextField.getText().isBlank();
-
+        boolean valid = datePicker.getValue() != null;
         registerTimeButton.setDisable(!valid);
     }
 

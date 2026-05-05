@@ -44,7 +44,11 @@ public class AssignToActivityController extends ProjectManagementAwareController
         List<String> selectedEmployees = employeeListView.getSelectionModel().getSelectedItems();
         for (String selectedEmployee : selectedEmployees) {
             if (selectedEmployee != null) {
-                System.out.println("Assigned employee: " + selectedEmployee);
+                try {
+                    app.addEmployeeToActivity(projectId, activityId, selectedEmployee);
+                } catch (IllegalAccessException e) {
+                    showAlert("Not allowed", e.getMessage());
+                }
             }
         }
         employeeListView.getItems().removeAll(selectedEmployees);
