@@ -4,7 +4,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -26,15 +25,12 @@
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="initialsTextField" prefWidth="165.0" GridPane.columnIndex="1" />
-            <Label text="Initials:" />
-            <Spinner fx:id="timeSpinner" editable="false" prefWidth="174.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Time:" GridPane.rowIndex="1" />
-            <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="Date:" GridPane.rowIndex="2" />
+            <Spinner fx:id="timeSpinner" editable="false" prefWidth="174.0" GridPane.columnIndex="1" />
+            <Label text="Time:" />
+            <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Date:" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <Button fx:id="registerTimeButton" mnemonicParsing="false" onAction="#onRegisterTime" text="Register" />

@@ -26,7 +26,6 @@ public class Project {
         }
 
         name = newName;
-        //Update UI?
     }
 
     public void editTime(int activityId, String employeeInitials, LocalDate date, double newTime) {

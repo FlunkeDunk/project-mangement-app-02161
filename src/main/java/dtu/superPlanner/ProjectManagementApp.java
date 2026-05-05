@@ -65,6 +65,10 @@ public class ProjectManagementApp {
         return myProject.createActivity(name, timeFrame);
     }
 
+    public void registerTime(int projectId, int activityId, double time, LocalDate date) {
+        getProject(projectId).registerTime(activityId, userInitials, date, time);
+    }
+
     public void registerTime(int projectId, int activityId, double time) {
         getProject(projectId).registerTime(activityId, userInitials, timeServer.getCurrentDate(), time);
     }

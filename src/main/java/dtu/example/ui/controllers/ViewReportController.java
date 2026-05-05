@@ -1,5 +1,6 @@
 package dtu.example.ui.controllers;
 
+import java.io.IOException;
 import java.util.Map;
 
 import dtu.example.ui.ReportAware;
@@ -59,5 +60,10 @@ public class ViewReportController extends ProjectManagementAwareController imple
         setChartData(report);
         setBarChart(report);
         setReportName(report.getProjectName());
+    }
+
+    @FXML
+    public void onExit() throws IOException{
+        navigator.changeScene("project_list");
     }
 }

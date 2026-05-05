@@ -1,5 +1,6 @@
 package dtu.example.ui.controllers;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,14 +55,15 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
     }
 
     @FXML
-    public void onRegisterTime() {
+    public void onRegisterTime() throws IOException{
         if (datePicker.getValue() == null || initialsTextField.getText() == null
                 || initialsTextField.getText().isBlank()) {
             return;
         }
 
         double hours = (double) timeSpinner.getValue().getHour() + (double) timeSpinner.getValue().getMinute() / 60.0;
-        app.registerTime(projectId, activityId, datePicker.getValue(), hours);
+        app.registerTime(projectId, activityId, hours);
+        navigator.changeScene("project_list");
     }
 
     @Override

@@ -1,6 +1,7 @@
 package dtu.example.ui.controllers;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeFrame;
@@ -26,8 +27,14 @@ public class CreateActivityController extends ProjectManagementAwareController {
 
     @FXML
     private void onCreateActivity() throws IOException, IllegalAccessException {
-        WeekBasedCalendar startDate = new WeekBasedCalendar(startDatePicker.getValue());
-        WeekBasedCalendar endDate = new WeekBasedCalendar(endDatePicker.getValue());
+        LocalDate startPickerDate = startDatePicker.getValue();
+        LocalDate endPickerDate = endDatePicker.getValue();
+        if (startPickerDate == null || endPickerDate == null) {
+            showAlert("Invalid date", "Must choose both dates");
+        }
+        WeekBasedCalendar startDate = new WeekBasedCalendar(startPickerDate);
+        WeekBasedCalendar endDate = new WeekBasedCalendar(endPickerDate);
+
         try {
             TimeFrame timeFrame = new TimeFrame(startDate, endDate);
             Activity activity = app.createActivity(projectId, activityNameTextField.getText(), timeFrame);

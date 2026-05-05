@@ -10,17 +10,44 @@ Feature: Register Time
       | Defend Gondor |
       | Defeat Smaug  |
 
-  # Scenario: Employee registers 5 hours on an assigned activity
-  #   Given the employee is assigned to the activity "Invade Mordor"
-  #   And the employee's total time on "Invade Mordor" is 2 hours
-  #   When the employee registers 5 hours on "Invade Mordor"
-  #   Then the employee's timeLedger for "Invade Mordor" has an entry for 5 hours
-  #   And the employee's total time on "Invade Mordor" is 7 hours
+  Scenario: Employee registers 5 hours on an assigned activity
+    Given the employee is assigned to the activity "Invade Mordor"
+    And the employee's total time on "Invade Mordor" is 2 hours
+    When the employee registers 5 hours on "Invade Mordor"
+    Then the employee's timeLedger for "Invade Mordor" has an entry for 5 hours
+    And the employee's total time on "Invade Mordor" is 7 hours
 
-  # Scenario: Employee registers 3 hours on an unassigned activity
-  #   Given the employee is not assigned to the activity "Defend Gondor"
-  #   And the employee has no time registered on the activity "Defend Gondor"
-  #   When the employee registers 3 hours on "Defend Gondor"
-  #   Then the employee's timeLedger for "Defend Gondor" has an entry for 3 hours
-  #   And the employee's total time for "Defend Gondor" is 3 hours
-  #   And the employee is not assigned to the activity "Defend Gondor"
+  Scenario: Employee registers 5 hours on an assigned activity
+    Given the employee's total time on "Invade Mordor" is 0 hours
+    And the date is "24-12-2027"
+    When the employee registers 5 hours on "Invade Mordor"
+    Then the employee's timeLedger for "Invade Mordor" has an entry with the date "24-12-2027" for 5 hours
+    Given the employee's total time on "Invade Mordor" is 5 hours
+    When the employee registers 4 hours on "Invade Mordor"
+    Then the employee's timeLedger for "Invade Mordor" has an entry with the date "24-12-2027" for 9 hours
+    And the employee's total time on "Invade Mordor" is 9 hours
+
+  Scenario: Employee registers 5 hours on an assigned activity
+    Given the employee's total time on "Invade Mordor" is 0 hours
+    And the date is "1-1-2027"
+    When the employee registers 5 hours on "Invade Mordor"
+    Then the employee's timeLedger for "Invade Mordor" has an entry with the date "1-1-2027" for 5 hours
+    And the employee's total time on "Invade Mordor" is 5 hours
+    Given the date is "2-2-2027"
+    When the employee registers 4 hours on "Invade Mordor"
+    Then the employee's timeLedger for "Invade Mordor" has an entry with the date "2-2-2027" for 4 hours
+    And the employee's total time on "Invade Mordor" is 9 hours
+  
+  Scenario: Employee registers 5 hours on an assigned activity
+    Given the date is "1-1-2027"
+    When the employee registers 5 hours on "Invade Mordor" for the date "2-2-2027
+    Then an error is thrown "Cannot register time in the future"
+
+
+  Scenario: Employee registers 3 hours on an unassigned activity
+    Given the employee is not assigned to the activity "Defend Gondor"
+    And the employee has no time registered on the activity "Defend Gondor"
+    When the employee registers 3 hours on "Defend Gondor"
+    Then the employee's timeLedger for "Defend Gondor" has an entry for 3 hours
+    And the employee's total time for "Defend Gondor" is 3 hours
+    And the employee is not assigned to the activity "Defend Gondor"
