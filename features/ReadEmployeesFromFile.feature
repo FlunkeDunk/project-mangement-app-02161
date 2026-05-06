@@ -1,4 +1,4 @@
-
+@skip # FJERN DEN HER NÅR DU VIL IMPLEMENTERE
 Feature: Read file with list of employee initials
   Description: The program reads a file containing the initials of all the employees
   Actor: User

@@ -1,5 +1,6 @@
 package dtu.superPlanner;
 
+import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,5 +43,16 @@ public class Employee {
 
     public String getInitials() {
         return initials;
+    }
+
+    public boolean isOnFixedAcitivity(TimeFrame activityDuration) {
+        Set<FixedActivity> fixedActivities = getFixedActivities();
+
+        for (FixedActivity fixedActivity : fixedActivities) {
+            if (TimeFrame.overlaps(activityDuration, fixedActivity.getTimeFrame())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

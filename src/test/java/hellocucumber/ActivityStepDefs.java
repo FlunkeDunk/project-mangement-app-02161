@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static dtu.superPlanner.FixedActivityType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,6 +30,7 @@ public class ActivityStepDefs {
     private final Project myProject;
     private Activity myActivity;
     private LocalDate currentDate;
+    private List<String> availableEmployees;
 
     public ActivityStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
         this.myApp = myApp;
@@ -282,12 +284,15 @@ public class ActivityStepDefs {
     @Then("{string} is not assigned to {string}")
     public void isNotAssignedTo(String assignee, String activityName) {
         Activity activity = getActivitybyName(activityName);
-        assertFalse(activity.getEmployees().contains(assignee));
+        assertNotNull(activity, "That activity does not exist");
+        assertFalse(activity.getEmployees().contains(assignee), "Employee " + assignee + " not on activity " + activityName);
     }
 
     @Then("{string} is assigned to {string}")
     public void isAssignedTo(String assignee, String activityName) {
-        assertTrue(myActivity.getEmployees().contains(assignee));
+        Activity activity = getActivitybyName(activityName);
+        assertNotNull(activity, "That activity does not exist");
+        assertTrue(activity.getEmployees().contains(assignee), "Employee " + assignee + " not on activity " + activityName);
     }
 
     @And("{string} is the project leader") // Is this supposed to be a then or a given??? This is why we use @Given,
@@ -322,5 +327,71 @@ public class ActivityStepDefs {
     @Then("the activity has a budgeted time of {double} hour(s)")
     public void theActivityHasABudgetedTimeOfHours(double d) {
         assertEquals(d, myActivity.getBudgetedTime());
+    }
+
+    @Given("the following employees exist")
+    public void the_following_employees_exist(List<String> employees) {
+        for (String employee : employees) {
+            addEmployee(employee);
+        }
+    }
+
+    @Given("the project has the activities with the names, start and end weeks")
+    public void the_project_has_the_activities_with_the_names_start_and_end_weeks(List<List<String>> activities) {
+        for (List<String> activity : activities) {
+            String activityName = activity.getFirst();
+            WeekBasedCalendar startTime = new WeekBasedCalendar(Integer.parseInt(activity.get(1)), 2026);
+            WeekBasedCalendar endTime = new WeekBasedCalendar(Integer.parseInt(activity.get(2)), 2026);
+            TimeFrame myTimeFrame = new TimeFrame(startTime, endTime);
+
+            try {
+                myApp.createActivity(myProject.getId(), activityName, myTimeFrame);
+            } catch (IllegalAccessException e) {
+                errorHolder.setError(e.getMessage());
+                break;
+            }
+        }
+        assertEquals(activities.size(), myProject.getActivitySet().size(), "Failed to add the activities to the project.");
+    }
+
+    @Given("{string} has a fixed activity from week {int} to week {int}")
+    public void has_a_fixed_activity_from_week_to_week(String employee, Integer startWeek, Integer endWeek) {
+        TimeFrame activityPeriod = new TimeFrame(new WeekBasedCalendar(startWeek, 2026), new WeekBasedCalendar(endWeek, 2026));
+        String priorUser = myApp.getUserInitials();
+        myApp.login(employee);
+        myApp.createFixedActivity(Emergency,  activityPeriod);
+        if (priorUser != null) {
+            myApp.login(priorUser);
+        }
+    }
+
+    @When("the user searches for available employees for {string} in between week {int} and {int}")
+    public void the_user_searches_for_available_employees_in_between_week_and(String activityName, Integer startWeek, Integer endWeek) {
+        Activity myActivity = getActivitybyName(activityName);
+        myActivity = getActivitybyName(activityName);
+        try {
+            assert myActivity != null;
+            availableEmployees = myApp.getAvailableEmployees(myProject.getId(), myActivity.getId());
+        } catch (IllegalAccessException e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
+    @Then("the employees are returned in the following order")
+    public void the_employees_are_returned_in_the_following_order(List<String> employees) {
+        assertEquals(employees.size(), availableEmployees.size());
+        for (int i = 0; i < employees.size(); i++) {
+            assertEquals(employees.get(i), availableEmployees.get(i));
+        }
+    }
+
+    @And("{string} gets assigned to {string}")
+    public void getsAssignedTo(String employeeInitials, String activityName) {
+        Activity activity = getActivitybyName(activityName);
+        try {
+            myApp.addEmployeeToActivity(myProject.getId(), activity.getId(), employeeInitials);
+        } catch (IllegalAccessException e) {
+            errorHolder.setError(e.getMessage());
+        }
     }
 }

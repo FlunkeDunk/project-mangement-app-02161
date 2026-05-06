@@ -1,11 +1,7 @@
 package dtu.superPlanner;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ProjectManagementApp {
     private Map<Integer, Project> projects;
@@ -153,12 +149,45 @@ public class ProjectManagementApp {
         }
     }
 
-    public List<Employee> getAvailableEmployees(int projectId, int activityId) throws IllegalAccessException {
-        if (getProject(projectId).isProjectLeader(userInitials)) {
+    public List<String> getAvailableEmployees(int projectId, int activityId) throws IllegalAccessException {
+        if (!getProject(projectId).isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can see available employees.");
         }
 
-        return employees.values().stream().toList();
+        List<Employee> allEmployees = employees.values().stream().toList();
+        TimeFrame activityDuration = projects.get(projectId).getActivityTimeFrame(activityId);
+        PriorityQueue<priorityEmployee> leastBusyEmployees = new PriorityQueue<>();
+
+        for (Employee employee : allEmployees) {
+            if (employee.isOnFixedAcitivity(activityDuration)) {
+                continue;
+            }
+
+            int alreadyAssignedActivitiesInTimeFrame = getActivitiesOverlapping(activityDuration, employees.get(userInitials));
+            leastBusyEmployees.add(new priorityEmployee(employee.getInitials(), alreadyAssignedActivitiesInTimeFrame));
+        }
+
+        List<String> availableEmployeesInOrder = new ArrayList<>();
+        while (!leastBusyEmployees.isEmpty()) {
+            availableEmployeesInOrder.add(leastBusyEmployees.poll().userInitials());
+        }
+
+        return availableEmployeesInOrder;
+    }
+
+    private int getActivitiesOverlapping(TimeFrame activityDuration, Employee employee) {
+        Set<Activity> alreadyAssignedActivities = employee.getActivities();
+        int activitiesOverlapping = 0;
+
+        for (Activity activity : alreadyAssignedActivities) {
+            TimeFrame existingActivityDuration = activity.getTimeFrame();
+
+            if (TimeFrame.overlaps(existingActivityDuration, activityDuration)) {
+                activitiesOverlapping++;
+            }
+        }
+
+        return activitiesOverlapping;
     }
 
     public String getUserInitials() {
@@ -187,4 +216,12 @@ public class ProjectManagementApp {
         Employee user = employees.get(userInitials);
         return user.getFixedActivities();
     }
+
+    private record priorityEmployee(String userInitials, int priority) implements Comparable<priorityEmployee> {
+
+        @Override
+            public int compareTo(priorityEmployee other) {
+                return Integer.compare(this.priority, other.priority);
+            }
+        }
 }

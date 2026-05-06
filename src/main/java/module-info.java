@@ -1,7 +1,8 @@
 module hellofx {
     requires transitive javafx.controls;
     requires javafx.fxml;
- 
+    requires java.sql;
+
     opens dtu.example.ui to javafx.fxml; // Gives access to fxml files
     opens dtu.example.ui.controllers to javafx.fxml; // Gives access to fxml files
     opens dtu.example.ui.components to javafx.fxml; // Gives access to fxml files
