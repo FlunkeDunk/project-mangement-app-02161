@@ -14,14 +14,9 @@ import java.util.List;
 
 class EmployeeFileReader {
 
-    private final InputStream input;
-
-    public EmployeeFileReader(InputStream input) {
-        this.input = input;
-    }
 
     public List<String> loadEmployees() throws IOException {
-        return loadEmployees(input);
+        return loadEmployees(getClass().getClassLoader().getResourceAsStream("initials.txt"));
     }
 
 
