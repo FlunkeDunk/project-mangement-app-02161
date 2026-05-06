@@ -20,12 +20,7 @@ public class Project {
         this.name = name;
     }
 
-    public void editName(String editorInitials, String newName) {
-        if (isProjectLeader(editorInitials)) {
-            // throw new IllegalStateException("Only the project leader can rename the
-            // activities");
-        }
-
+    public void editName(String newName) {
         name = newName;
     }
 

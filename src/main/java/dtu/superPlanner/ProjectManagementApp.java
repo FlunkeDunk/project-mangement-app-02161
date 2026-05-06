@@ -129,8 +129,10 @@ public class ProjectManagementApp {
         }
     }
 
-    public void setProjectName(int projectId, String name) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void setProjectName(int projectId, String name) throws IllegalAccessException { // Ebbe
+        Project project = getProject(projectId);
+        if(!project.isLeader(userInitials)) throw new IllegalAccessException("Only the project leader can change project names");
+        project.editName(name);
     }
 
     public void setActivityName(int projectId, int activityId, String name) throws IllegalAccessException {
