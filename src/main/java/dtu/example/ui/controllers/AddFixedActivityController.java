@@ -2,6 +2,7 @@ package dtu.example.ui.controllers;
 
 import java.time.LocalDate;
 
+import dtu.superPlanner.FixedActivityType;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
 import javafx.fxml.FXML;
@@ -11,7 +12,7 @@ import javafx.scene.control.DatePicker;
 public class AddFixedActivityController extends ProjectManagementAwareController{
 
     @FXML
-    private ChoiceBox<String> activityTypeChoiceBox;
+    private ChoiceBox<FixedActivityType> activityTypeChoiceBox;
 
     @FXML
     private DatePicker startDatePicker;
@@ -23,10 +24,7 @@ public class AddFixedActivityController extends ProjectManagementAwareController
     public void initialize() {
         // Populate choice box (example values)
         activityTypeChoiceBox.getItems().addAll(
-                "Work",
-                "Exercise",
-                "Study",
-                "Leisure"
+                FixedActivityType.values()
         );
 
         startDatePicker.setValue(LocalDate.now());
@@ -35,7 +33,7 @@ public class AddFixedActivityController extends ProjectManagementAwareController
 
     @FXML
     private void addFixedActivity() {
-        String type = activityTypeChoiceBox.getValue();
+        FixedActivityType type = activityTypeChoiceBox.getValue();
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
 
@@ -54,6 +52,6 @@ public class AddFixedActivityController extends ProjectManagementAwareController
             return;
         }
 
-        app.createFixedActivity(null, type, timeFrame);
+        app.createFixedActivity(type, timeFrame);
     }
 }
