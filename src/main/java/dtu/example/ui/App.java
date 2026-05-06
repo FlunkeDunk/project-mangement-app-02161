@@ -13,7 +13,7 @@ public class App extends Application {
 
     private Navigator navigator;
 
-    private final int HEIGHT = 480;
+    private final int HEIGHT = 540;
     private final int WIDTH = 640;
 
     @Override
