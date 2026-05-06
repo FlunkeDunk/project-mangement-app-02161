@@ -137,6 +137,12 @@ public class ProjectManagementApp {
         throw new UnsupportedOperationException("Not implemented");
     }
 
+    public void setActivityName(int projectId, int activityId, String name) throws IllegalAccessException {
+        Project project = getProject(projectId);
+        if (!project.isLeader(userInitials)) throw new IllegalAccessException("Only the project leader can change activity names");
+        project.getActivityById(activityId).setName(name);
+    }
+
     public void login(String employeeInitials) {
         if (getEmployees()
                 .stream()

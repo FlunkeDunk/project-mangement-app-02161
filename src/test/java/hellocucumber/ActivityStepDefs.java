@@ -117,6 +117,18 @@ public class ActivityStepDefs {
 
     }
 
+    @Then("the project has activities with the names")
+    public void theProjectHasActivitiesWithTheNames(List<String> expectedActivityNames) {
+        Set<Activity> activities = myProject.getActivitySet();
+        List<String> activityNames = new ArrayList<>(activities.stream().map(a -> a.getName()).toList());
+        List<String> expected = new ArrayList<>(expectedActivityNames);
+
+        Collections.sort(activityNames);
+        Collections.sort(expected);
+
+        assertEquals(expected, activityNames);
+    }
+
     @Given("the project has no activities")
     public void theProjectHasNoActivities() {
         assertTrue(myProject.getActivitySet().isEmpty());
@@ -137,9 +149,12 @@ public class ActivityStepDefs {
     }
 
     @When("the user changes the activity name to {string}")
-    public void theUserChangesTheActivityNameTo(String arg0) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void theUserChangesTheActivityNameTo(String name) {
+        try {
+            myApp.setActivityName(myProject.getId(), myActivity.getId(), name);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
     }
 
     @When("the project leader sets the timeframe of activity {string} to")
@@ -217,7 +232,7 @@ public class ActivityStepDefs {
         String prevUser = myApp.getUserInitials();
         if (myApp.getProject(myProject.getId()).getProjectLeader() != null) {
             myApp.login(myProject.getProjectLeader());
-        } //TODO
+        } // TODO
 
         try {
             myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
