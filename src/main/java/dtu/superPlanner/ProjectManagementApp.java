@@ -56,7 +56,8 @@ public class ProjectManagementApp {
     }
 
     public Activity createActivity(int projectId, String name, TimeFrame timeFrame) throws IllegalAccessException {
-        //System.out.println("\nCreating activity for project " + projectId + "\nUser:" + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
+        // System.out.println("\nCreating activity for project " + projectId + "\nUser:"
+        // + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
         Project myProject = getProject(projectId);
         if (!myProject.isLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can create activities");
@@ -66,10 +67,19 @@ public class ProjectManagementApp {
     }
 
     public void registerTime(int projectId, int activityId, double time, LocalDate date) {
+        if (time < 0) {
+            throw new IllegalArgumentException("Cannot register negative time");
+        }
+        if (date.isAfter(timeServer.getCurrentDate())) {
+            throw new IllegalArgumentException("Cannot register time in the future");
+        }
         getProject(projectId).registerTime(activityId, userInitials, date, time);
     }
 
     public void registerTime(int projectId, int activityId, double time) {
+        if (time < 0) {
+            throw new IllegalArgumentException("Cannot register negative time");
+        }
         getProject(projectId).registerTime(activityId, userInitials, timeServer.getCurrentDate(), time);
     }
 
@@ -78,10 +88,11 @@ public class ProjectManagementApp {
     }
 
     public void setProjectLeader(int projectId, String employeeInitials) {
-        //String projectLeader = projects.get(projectId).getProjectLeader();
-        //if (projectLeader != null && !projectLeader.equals(userInitials)) {
-        //    throw new IllegalAccessException("Only the project leader can set a new project leader");
-        //}
+        // String projectLeader = projects.get(projectId).getProjectLeader();
+        // if (projectLeader != null && !projectLeader.equals(userInitials)) {
+        // throw new IllegalAccessException("Only the project leader can set a new
+        // project leader");
+        // }
         projects.get(projectId).setProjectLeader(employeeInitials);
     }
 
@@ -96,7 +107,8 @@ public class ProjectManagementApp {
 
     public void setBudgetedTime(int projectId, int activityId, double budgetedTime) throws IllegalAccessException {
         Project project = getProject(projectId);
-        if (!project.isLeader(userInitials)) throw new IllegalAccessException("Only the project leader can set budgeted time for activities");
+        if (!project.isLeader(userInitials))
+            throw new IllegalAccessException("Only the project leader can set budgeted time for activities");
         projects.get(projectId).setBudgetedTime(activityId, budgetedTime);
     }
 
@@ -104,14 +116,14 @@ public class ProjectManagementApp {
         getProject(projectId).setActivityTimeFrame(activityId, timeFrame);
     }
 
-    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) throws IllegalAccessException {
+    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials)
+            throws IllegalAccessException {
         Project proj = projects.get(projectId);
         if (proj.isLeader(userInitials)) {
             projects.get(projectId).addEmployeeToActivity(activityId, employeeInitials);
         } else {
             throw new IllegalAccessException("Only the Project Leader can add employees to an activity");
         }
-
 
     }
 
@@ -129,5 +141,9 @@ public class ProjectManagementApp {
 
     public String getUserInitials() {
         return userInitials;
+    }
+
+    public TimeServer getTimeServer() {
+        return timeServer;
     }
 }
