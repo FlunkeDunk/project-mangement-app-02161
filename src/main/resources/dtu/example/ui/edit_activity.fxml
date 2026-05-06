@@ -53,7 +53,7 @@
             </GridPane>
          </children>
       </VBox>
-      <Button onAction="#onSave" text="Save &amp; exit" />
+      <Button onAction="#onSave" text="Save &amp; close" />
    </children>
    <padding>
       <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />

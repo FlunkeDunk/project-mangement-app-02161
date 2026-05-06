@@ -1,27 +1,31 @@
 package hellocucumber;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dtu.example.ui.App;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class ViewProjectDetailsStepDefs {
 
-    public String user;
-    // public String date;
-    public ProjectManagementApp myApp;
-    public Project project;
+    private String user;
+    // private String date;
+    private ProjectManagementApp myApp;
+    private Project project;
     private ErrorMessageHolder errorHolder;
+
+    private Map<String, String> information;
 
     public ViewProjectDetailsStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder, App ui) {
         this.myApp = myApp;
         this.errorHolder = errorHolder;
+        information = new HashMap<>();
     }
 
     @When("the user views the details of the project")

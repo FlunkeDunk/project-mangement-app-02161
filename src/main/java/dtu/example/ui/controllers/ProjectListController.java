@@ -11,11 +11,14 @@ import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.StackPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class ProjectListController extends ProjectManagementAwareController {
@@ -37,7 +40,9 @@ public class ProjectListController extends ProjectManagementAwareController {
     @FXML
     private ListView<Project> projectList;
     @FXML
-    private StackPane popUpPane;
+    private AnchorPane popUpPane;
+    @FXML
+    private Pane popUpContainer;
     @FXML
     private VBox rootVBox;
     // --- Buttons ---
@@ -49,6 +54,8 @@ public class ProjectListController extends ProjectManagementAwareController {
     private Button addProjectButton;
     @FXML
     private Button viewReportButton;
+    @FXML
+    private Button closePopUpButton;
 
     @FXML
     private void initialize() {
@@ -56,8 +63,8 @@ public class ProjectListController extends ProjectManagementAwareController {
         clearProjectDetails();
         clearActivityList();
         loadProjects();
-        popUpManager = new PopUpManager(popUpPane, rootVBox, navigator);
-
+        popUpManager = new PopUpManager(popUpPane, popUpContainer, rootVBox, navigator);
+        popUpManager.popDown();
         projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             try {
                 onProjectSelected();
@@ -117,29 +124,29 @@ public class ProjectListController extends ProjectManagementAwareController {
             ActivityItem activityItem = new ActivityItem(activity, activityId);
             activityListAccordion.getPanes().add(activityItem);
             activityItem.setOnRegisterTimeRequested(
-                    () -> changeSceneWithActivity("register_time", RegisterTimeController.class, activityId));
+                    () -> popUpSceneWithActivity("register_time", RegisterTimeController.class, activityId));
             activityItem.setOnEditActivityRequested(
-                    () -> changeSceneWithActivity("edit_activity", EditActivityController.class, activityId));
+                    () -> popUpSceneWithActivity("edit_activity", EditActivityController.class, activityId));
             activityItem.setOnAssignToActivityRequested(
-                    () -> changeSceneWithActivity("assign_to_activity", AssignToActivityController.class, activityId));
+                    () -> popUpSceneWithActivity("assign_to_activity", AssignToActivityController.class, activityId));
             activityItem.setOnEditRegisteredTimeRequested(
-                    () -> changeSceneWithActivity("edit_registered_time", EditRegisteredTimeController.class,
+                    () -> popUpSceneWithActivity("edit_registered_time", EditRegisteredTimeController.class,
                             activityId));
         }
     }
 
-    private <T extends ActivityAware> void changeSceneWithActivity(
+    private <T extends ActivityAware> void popUpSceneWithActivity(
             String sceneName,
             Class<T> controllerClass,
             int activityId) {
         try {
-            navigator.changeScene(sceneName, controller -> {
+            popUpManager.popUp(sceneName, controller -> {
                 T typedController = controllerClass.cast(controller);
                 typedController.setProjectId(selectedProjectId);
                 typedController.setActivityId(activityId);
             });
         } catch (IOException e) {
-            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
+            showAlert("Failed loading", "Failed loading " + sceneName + ": " + e.getMessage());
         }
     }
 
@@ -162,7 +169,7 @@ public class ProjectListController extends ProjectManagementAwareController {
             Class<T> controllerClass,
             int projectId) {
         try {
-            navigator.changeScene(sceneName, controller -> {
+            popUpManager.popUp(sceneName, controller -> {
                 T typedController = controllerClass.cast(controller);
                 typedController.setProjectId(projectId);
             });
@@ -186,7 +193,7 @@ public class ProjectListController extends ProjectManagementAwareController {
     // --- Button Handlers ---
     @FXML
     private void handleAddActivity() throws IOException {
-        navigator.changeScene("create_activity", controller -> {
+        popUpManager.popUp("create_activity", controller -> {
             ((CreateActivityController) controller).setProjectId(selectedProjectId);
         });
     }
@@ -213,11 +220,38 @@ public class ProjectListController extends ProjectManagementAwareController {
     }
 
     @FXML
-    private void onAddFixedActivity() {
-
+    private void onAddFixedActivity() throws IOException {
+        popUpManager.popUp("add_fixed_activity");
     }
+
     @FXML
     private void onUserRegisterTime() {
-
+        System.out.println("User clicked user register time");
     }
+
+    @FXML
+    private void checkClickedOutsidePopUp(MouseEvent event) {
+        Node clickedNode = (Node) event.getTarget();
+
+        // Check if the clicked node is NOT inside popUpPane
+        if (!isDescendant(clickedNode, popUpPane)) {
+            popUpManager.popDown();
+        }
+    }
+
+    @FXML
+    private void closePopUpClicked() {
+        popUpManager.popDown();
+    }
+
+    private boolean isDescendant(Node child, Node parent) {
+        while (child != null) {
+            if (child == parent) {
+                return true;
+            }
+            child = child.getParent();
+        }
+        return false;
+    }
+
 }
