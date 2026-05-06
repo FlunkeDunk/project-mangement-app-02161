@@ -27,8 +27,8 @@ public class AssignToActivityController extends ProjectManagementAwareController
     @FXML
     private void initialize() {
         employeeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        // Example data (replace with real data source)
         employeeListView.getItems().addAll(
+            // app.getAvailableEmployees(projectId, activityId));    
                 "Alice",
                 "Bob",
                 "Charlie",

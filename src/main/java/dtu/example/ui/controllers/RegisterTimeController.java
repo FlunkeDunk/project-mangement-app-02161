@@ -2,16 +2,13 @@ package dtu.example.ui.controllers;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import dtu.example.ui.ActivityAware;
-import javafx.collections.FXCollections;
+import dtu.example.ui.TimeSpinnerValueFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 
 public class RegisterTimeController extends ProjectManagementAwareController implements ActivityAware {
 
@@ -35,15 +32,7 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
             updateButtonState();
         }));
 
-        List<LocalTime> times = new ArrayList<>();
-        times.add(LocalTime.of(0, 30));
-        for (int h = 1; h < 24; h++) {
-            times.add(LocalTime.of(h, 0));
-            times.add(LocalTime.of(h, 30));
-        }
-
-        timeSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(
-                FXCollections.observableArrayList(times)));
+        timeSpinner.setValueFactory(new TimeSpinnerValueFactory());
     }
 
     @FXML

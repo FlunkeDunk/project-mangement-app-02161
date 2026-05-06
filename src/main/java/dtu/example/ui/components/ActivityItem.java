@@ -42,6 +42,7 @@ public class ActivityItem extends TitledPane {
     private Runnable onRegisterTimeRequested;
     private Runnable onEditActivityRequested;
     private Runnable onAssignToAcitvityRequested;
+    private Runnable onEditRegisteredTimeRequested;
 
     public ActivityItem(Activity activity, int id) {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("activity_item.fxml"));
@@ -79,6 +80,13 @@ public class ActivityItem extends TitledPane {
         }
     }
 
+    @FXML
+    public void onEditRegisteredTime() {
+        if (onEditRegisteredTimeRequested != null) {
+            onEditRegisteredTimeRequested.run();
+        }
+    }
+
     public void setOnRegisterTimeRequested(Runnable handler) {
         this.onRegisterTimeRequested = handler;
     }
@@ -89,6 +97,9 @@ public class ActivityItem extends TitledPane {
 
     public void setOnAssignToActivityRequested(Runnable handler) {
         this.onAssignToAcitvityRequested = handler;
+    }
+    public void setOnEditRegisteredTimeRequested(Runnable handler) {
+        this.onEditRegisteredTimeRequested = handler;
     }
 
     public void setActivity(Activity activity, int id) {

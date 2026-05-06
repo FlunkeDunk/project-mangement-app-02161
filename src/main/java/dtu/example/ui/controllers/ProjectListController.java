@@ -15,10 +15,13 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public class ProjectListController extends ProjectManagementAwareController {
 
     private int selectedProjectId = -1;
+    private PopUpManager popUpManager;
 
     // --- Project Details Labels ---
     @FXML
@@ -33,7 +36,10 @@ public class ProjectListController extends ProjectManagementAwareController {
     private Accordion activityListAccordion;
     @FXML
     private ListView<Project> projectList;
-
+    @FXML
+    private StackPane popUpPane;
+    @FXML
+    private VBox rootVBox;
     // --- Buttons ---
     @FXML
     private Button addActivityButton;
@@ -50,14 +56,16 @@ public class ProjectListController extends ProjectManagementAwareController {
         clearProjectDetails();
         clearActivityList();
         loadProjects();
+        popUpManager = new PopUpManager(popUpPane, rootVBox, navigator);
+
         projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             try {
                 onProjectSelected();
             } catch (IOException ex) {
-                System.getLogger(ProjectListController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                System.getLogger(ProjectListController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
+                        ex);
             }
         });
-
 
     }
 
@@ -67,19 +75,18 @@ public class ProjectListController extends ProjectManagementAwareController {
         viewReportButton.setDisable(disabled);
     }
 
-    
     private void loadProjects() {
         projectList.getItems().addAll(app.getAllProjects());
     }
-    
+
     @FXML
     private void onProjectSelected() throws IOException {
         Project project = projectList.getSelectionModel().getSelectedItem();
-        
+
         if (project == null || selectedProjectId == project.getId()) {
             return;
         }
-        
+
         selectedProjectId = project.getId();
         String projectId = "" + project.getId();
         String projectStartDate = project.getStartDate().toString();
@@ -87,7 +94,7 @@ public class ProjectListController extends ProjectManagementAwareController {
         loadActivities(project.getActivityMap());
         setSelectedProjectButtonsDisabled(false);
     }
-    
+
     // --- Public method to update UI when a project is selected ---
     public void setProjectDetails(String name, String id, String startDate, String leader) {
         String displayName = name != null ? name : "none";
@@ -111,12 +118,13 @@ public class ProjectListController extends ProjectManagementAwareController {
             activityListAccordion.getPanes().add(activityItem);
             activityItem.setOnRegisterTimeRequested(
                     () -> changeSceneWithActivity("register_time", RegisterTimeController.class, activityId));
-
             activityItem.setOnEditActivityRequested(
                     () -> changeSceneWithActivity("edit_activity", EditActivityController.class, activityId));
-
             activityItem.setOnAssignToActivityRequested(
                     () -> changeSceneWithActivity("assign_to_activity", AssignToActivityController.class, activityId));
+            activityItem.setOnEditRegisteredTimeRequested(
+                    () -> changeSceneWithActivity("edit_registered_time", EditRegisteredTimeController.class,
+                            activityId));
         }
     }
 
@@ -190,11 +198,26 @@ public class ProjectListController extends ProjectManagementAwareController {
 
     @FXML
     private void handleAddProject() throws IOException {
-        navigator.changeScene("create_project");
+        popUpManager.popUp("create_project");
     }
 
     @FXML
     private void handleViewReport() {
-        changeSceneWithReport("view_report", ViewReportController.class, app.getProject(selectedProjectId).createReport());
+        changeSceneWithReport("view_report", ViewReportController.class,
+                app.getProject(selectedProjectId).createReport());
+    }
+
+    @FXML
+    private void onLogout() throws IOException {
+        navigator.changeScene("login");
+    }
+
+    @FXML
+    private void onAddFixedActivity() {
+
+    }
+    @FXML
+    private void onUserRegisterTime() {
+
     }
 }

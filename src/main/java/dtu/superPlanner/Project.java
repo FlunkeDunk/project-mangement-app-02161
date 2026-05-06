@@ -21,8 +21,9 @@ public class Project {
     }
 
     public void editName(String editorInitials, String newName) {
-        if(isProjectLeader(editorInitials)) {
-            //throw new IllegalStateException("Only the project leader can rename the activities");
+        if (isProjectLeader(editorInitials)) {
+            // throw new IllegalStateException("Only the project leader can rename the
+            // activities");
         }
 
         name = newName;
@@ -33,7 +34,7 @@ public class Project {
     }
 
     public Activity createActivity(String name, TimeFrame timeFrame) {
-        Activity myActivity = new Activity(name, timeFrame, activities.size()+1);
+        Activity myActivity = new Activity(name, timeFrame, activities.size() + 1);
         activities.put(myActivity.getId(), myActivity);
         return myActivity;
     }
@@ -62,10 +63,6 @@ public class Project {
         return getActivityById(activityId).getTimeFrame();
     }
 
-    public boolean isLeader(String employeeInitials) {
-        return projectLeader == null ? true : projectLeader.equals(employeeInitials);
-    }
-
     public Activity getActivityById(int activityId) {
         return activities.get(activityId);
     }
@@ -91,6 +88,10 @@ public class Project {
 
     public String getProjectLeader() {
         return projectLeader;
+    }
+
+    public boolean isLeader(String employeeInitials) {
+        return projectLeader == null ? true : projectLeader.equals(employeeInitials);
     }
 
     public boolean isProjectLeader(String initials) {

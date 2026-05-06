@@ -1,0 +1,16 @@
+package dtu.example.ui.controllers;
+
+import dtu.superPlanner.Employee;
+import javafx.util.StringConverter;
+
+public class EmployeeStringConverter extends StringConverter<Employee> {
+    @Override
+    public String toString(Employee e) {
+        return e == null ? "" : e.getInitials();
+    }
+
+    @Override
+    public Employee fromString(String s) {
+        return null; // not needed for ChoiceBox
+    }
+}

@@ -86,6 +86,9 @@ public class ProjectManagementApp {
     }
 
     public void editTime(int projectId, int activityId, LocalDate date, double newTime) {
+        if (newTime < 0 ) {
+            throw new IllegalArgumentException("Cannot register negative time");
+        }
         getProject(projectId).editTime(activityId, userInitials, date, newTime);
     }
 

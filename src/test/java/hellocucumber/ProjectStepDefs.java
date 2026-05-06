@@ -3,15 +3,18 @@ package hellocucumber;
 import java.time.LocalDate;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.WeekBasedCalendar;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ProjectStepDefs {
     public String user;
@@ -142,7 +145,7 @@ public class ProjectStepDefs {
     }
 
     @Given("the user is the project leader")
-    public void the_user_is_a_project_leader() {
+    public void the_user_is_a_project_leader() throws IllegalAccessException {
         myApp.setProjectLeader(project.getId(), myApp.getUserInitials());
         assertEquals(user, project.getProjectLeader());
     }

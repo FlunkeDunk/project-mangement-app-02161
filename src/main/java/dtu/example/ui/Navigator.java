@@ -50,10 +50,7 @@ public class Navigator {
     }
 
     public <T> void changeScene(String fxml) throws IOException {
-        FXMLLoader loader = loadFXML(fxml);
-        Parent root = loader.load();
-        stage.setScene(new Scene(root));
-        stage.show();
+        changeScene(fxml, null);
     }
 
     public FXMLLoader loadFXML(String fxml) throws IOException {

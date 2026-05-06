@@ -6,6 +6,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
@@ -16,8 +21,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ActivityStepDefs {
 
@@ -83,7 +86,7 @@ public class ActivityStepDefs {
     }
 
     @Given("the project has a project leader")
-    public void theProjectHasAProjectLeader() {
+    public void theProjectHasAProjectLeader() throws IllegalAccessException {
         myApp.setProjectLeader(myProject.getId(), "PROJECT_LEADER");
     }
 

@@ -11,13 +11,14 @@ import java.util.Set;
 
 public class Activity extends AbstractActivity {
     private final Set<String> employees = new HashSet<>();
-    private Map<String, TimeLedger> employeeTimeLedgers = new HashMap<>();
+    private Map<String, TimeLedger> employeeTimeLedgers;
     private double budgetedTime;
     private final int ID;
 
     public Activity(String name, TimeFrame timeFrame, int ID) {
         super(name, timeFrame);
         this.ID = ID;
+        employeeTimeLedgers = new HashMap<>();
     }
 
     public void registerTime(String employeeInitials, LocalDate date, double time) {

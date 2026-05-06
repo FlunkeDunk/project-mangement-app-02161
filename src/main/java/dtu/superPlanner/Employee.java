@@ -6,6 +6,11 @@ public class Employee {
     private Set<Activity> activities;
     private Set<FixedActivity> fixedActivities;
     private double dailyWorkHours;
+    private String initials;
+
+    Employee(String initials) {
+        this.initials = initials;
+    }
 
     public void addActivity(AbstractActivity activity) {
         throw new UnsupportedOperationException("Not implemented");
@@ -21,5 +26,9 @@ public class Employee {
 
     public boolean isAvailable(TimeFrame timeFrame) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public String getInitials() {
+        return initials;
     }
 }

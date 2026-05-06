@@ -20,6 +20,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         stage.setTitle("Project Management App");
         ProjectManagementApp app = new ProjectManagementApp();
+        app.createEmployees(new EmployeeFileReader().loadEmployees());
         navigator = new Navigator(stage, app);
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);

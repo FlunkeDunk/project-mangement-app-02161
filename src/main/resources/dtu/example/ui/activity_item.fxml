@@ -24,7 +24,7 @@
             </Label>
             <HBox layoutX="10.0" layoutY="30.0" spacing="10.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <ScrollPane focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" HBox.hgrow="ALWAYS">
+                  <ScrollPane focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="66.0" HBox.hgrow="ALWAYS">
                      <content>
                         <VBox fx:id="employeListVBox">
                            <padding>
@@ -54,8 +54,9 @@
                   <VBox spacing="5.0">
                      <children>
                         <Button fx:id="registimerTimeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRegisterTime" text="Register time" />
-                        <Button fx:id="editButton" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditActivity" text="Edit" />
+                        <Button fx:id="editButton" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditActivity" text="Edit activity" />
                         <Button fx:id="assignButton" maxWidth="1.7976931348623157E308" minWidth="0.0" mnemonicParsing="false" onAction="#onAssignToActivity" text="Assign employee" />
+                        <Button layoutX="10.0" layoutY="70.0" maxWidth="1.7976931348623157E308" minWidth="0.0" mnemonicParsing="false" onAction="#onEditRegisteredTime" text="Edit registered time" />
                      </children>
                   </VBox>
                </children>

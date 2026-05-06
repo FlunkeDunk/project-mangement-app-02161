@@ -45,7 +45,7 @@ public class CreateActivityController extends ProjectManagementAwareController {
         } catch (IllegalArgumentException e ) {
             showAlert("Invalid date", e.getMessage());
         } catch (IllegalAccessException e) {
-            showAlert("Invalid acces", e.getMessage());
+            showAlert("Invalid access", e.getMessage());
         }
     }
 
