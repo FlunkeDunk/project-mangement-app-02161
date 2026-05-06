@@ -48,7 +48,9 @@ public class ActivityStepDefs {
         WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 1);
         WeekBasedCalendar endWeek = new WeekBasedCalendar(1 + weeks, 1);
         TimeFrame myTimeFrame = new TimeFrame(startWeek, endWeek);
-        if (force) {
+
+        String prevUser = myApp.getUserInitials();
+        if (force && myProject.getProjectLeader() != null) {
             myApp.login(myProject.getProjectLeader());
         }
 
@@ -59,8 +61,8 @@ public class ActivityStepDefs {
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         } finally {
-            if (force) {
-                myApp.login(user);
+            if (force && prevUser != null) {
+                myApp.login(prevUser);
             }
         }
 
@@ -80,6 +82,12 @@ public class ActivityStepDefs {
         return null; // Has to have a return
     }
 
+    private void addEmployee(String userID) {
+        List<String> users = new ArrayList<>();
+        users.add(userID);
+        myApp.createEmployees(users);
+    }
+
     @When("an employee tries to add activity {string} with budgeted time {int} weeks")
     public void anEmployeeTriesToAddActivity(String name, int weeks) {
         addActivityWithNameAndDuration(name, weeks, false);
@@ -87,6 +95,7 @@ public class ActivityStepDefs {
 
     @Given("the project has a project leader")
     public void theProjectHasAProjectLeader() throws IllegalAccessException {
+        addEmployee("PROJECT_LEADER");
         myApp.setProjectLeader(myProject.getId(), "PROJECT_LEADER");
     }
 
@@ -186,7 +195,8 @@ public class ActivityStepDefs {
     @Then("an exception is thrown {string}")
     public void anExceptionIsThrown(String exception) {
         assertNotNull(errorHolder.getError());
-        assert (errorHolder.getError().contains(exception));
+        System.out.println(errorHolder.getError());
+        assertTrue(errorHolder.getError().contains(exception));
     }
 
     @Given("the activity {string} gets {double} hours budgeted")
@@ -205,10 +215,13 @@ public class ActivityStepDefs {
         String debugUser = "Gandalf";
 
         String prevUser = myApp.getUserInitials();
-        myApp.login(myProject.getProjectLeader());
+        if (myApp.getProject(myProject.getId()).getProjectLeader() != null) {
+            myApp.login(myProject.getProjectLeader());
+        } //TODO
 
         try {
             myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
+            addEmployee(debugUser);
             myApp.login(debugUser);
             myApp.registerTime(myProject.getId(), currentActivity.getId(), hours);
         } catch (IllegalAccessException e) {
