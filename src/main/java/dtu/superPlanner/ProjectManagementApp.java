@@ -45,7 +45,10 @@ public class ProjectManagementApp {
         this.timeServer = timeServer;
     }
 
-    public Project getProject(int projectId) {
+        public Project getProject(int projectId) {
+        if (!projects.containsKey(projectId)) {
+            throw new IllegalArgumentException("Invalid project id");
+        }
         return projects.get(projectId);
     }
 
@@ -57,7 +60,7 @@ public class ProjectManagementApp {
         // System.out.println("\nCreating activity for project " + projectId + "\nUser:"
         // + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
         Project myProject = getProject(projectId);
-        if (!myProject.isLeader(userInitials)) {
+        if (!myProject.isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can create activities");
         }
 
@@ -110,7 +113,7 @@ public class ProjectManagementApp {
 
     public void setBudgetedTime(int projectId, int activityId, double budgetedTime) throws IllegalAccessException {
         Project project = getProject(projectId);
-        if (!project.isLeader(userInitials))
+        if (!project.isProjectLeader(userInitials))
             throw new IllegalAccessException("Only the project leader can set budgeted time for activities");
         projects.get(projectId).setBudgetedTime(activityId, budgetedTime);
     }
@@ -123,7 +126,7 @@ public class ProjectManagementApp {
             throws IllegalAccessException {
         Project proj = projects.get(projectId);
         Employee employee = employees.get(employeeInitials);
-        if (proj.isLeader(userInitials)) {
+        if (proj.isProjectLeader(userInitials)) {
             proj.addEmployeeToActivity(activityId, employeeInitials);
             employee.addActivity(proj.getActivityById(activityId));
         } else {
@@ -133,14 +136,21 @@ public class ProjectManagementApp {
 
     public void setProjectName(int projectId, String name) throws IllegalAccessException { // Ebbe
         Project project = getProject(projectId);
-        if(!project.isLeader(userInitials)) throw new IllegalAccessException("Only the project leader can change project names");
+        if(!project.isProjectLeader(userInitials)) throw new IllegalAccessException("Only the project leader can change project names");
         project.editName(name);
     }
 
     public void setActivityName(int projectId, int activityId, String name) throws IllegalAccessException {
         Project project = getProject(projectId);
-        if (!project.isLeader(userInitials)) throw new IllegalAccessException("Only the project leader can change activity names");
+        if (!project.isProjectLeader(userInitials)) throw new IllegalAccessException("Only the project leader can change activity names");
         project.getActivityById(activityId).setName(name);
+    }
+
+    public Employee getEmployee(String initials) {
+        if (!employees.containsKey(initials)) {
+            throw new IllegalArgumentException("Invalid employee initials");
+        }
+        return employees.get(initials);
     }
 
     public void login(String employeeInitials) {

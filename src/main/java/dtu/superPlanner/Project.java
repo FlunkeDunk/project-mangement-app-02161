@@ -85,10 +85,6 @@ public class Project {
         return projectLeader;
     }
 
-    public boolean isLeader(String employeeInitials) {
-        return projectLeader == null ? true : projectLeader.equals(employeeInitials);
-    }
-
     public boolean isProjectLeader(String initials) {
         return projectLeader == null || projectLeader.equals(initials);
     }

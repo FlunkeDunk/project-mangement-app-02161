@@ -6,6 +6,7 @@ import dtu.superPlanner.Employee;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.WeekBasedCalendar;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -20,8 +21,9 @@ public class CreateProjectController extends ProjectManagementAwareController {
 
     @FXML
     private void initialize() {
-        projectLeaderChoiceBox.setItems(
-                FXCollections.observableArrayList(app.getEmployees()));
+        ObservableList<Employee> employees = FXCollections.observableArrayList(app.getEmployees());
+        employees.add(0, null);
+        projectLeaderChoiceBox.setItems(employees);
 
         projectLeaderChoiceBox.setConverter(new EmployeeStringConverter());
     }

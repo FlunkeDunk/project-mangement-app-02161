@@ -5,9 +5,10 @@ import java.io.IOException;
 import dtu.example.ui.ProjectAware;
 import dtu.superPlanner.Employee;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 public class EditProjectController extends ProjectManagementAwareController implements ProjectAware {
@@ -16,34 +17,46 @@ public class EditProjectController extends ProjectManagementAwareController impl
     private TextField projectNameTextField;
 
     @FXML
-    private ChoiceBox<Employee> projectLeaderChoiceBox;
+    private ComboBox<Employee> projectLeaderComboBox;
 
     private int projectId;
 
-    @FXML
-    private void initialize() {
-        projectLeaderChoiceBox.setItems(
-                FXCollections.observableArrayList(app.getEmployees()));
+    private void setup() {
+        ObservableList<Employee> employees = FXCollections.observableArrayList(app.getEmployees());
+        employees.add(0, null);
+        projectLeaderComboBox.setItems(employees);
+        projectLeaderComboBox.setConverter(new EmployeeStringConverter());
+        String leaderInitals = app.getProject(projectId).getProjectLeader();
+        Employee leader = leaderInitals != null ? app.getEmployee(leaderInitals) : null;
+        projectLeaderComboBox.setValue(leader);
 
-        projectLeaderChoiceBox.setConverter(new EmployeeStringConverter());
+        projectNameTextField.setText(app.getProject(projectId).getName());
     }
 
     @FXML
     private void onSave(ActionEvent event) throws IOException {
-        String projectName = projectNameTextField.getText();
-        if (projectLeaderChoiceBox.getValue() != null) {
+        try {
+            String projectName = projectNameTextField.getText();
+            Employee leader = projectLeaderComboBox.getValue();
+            String leaderInitials = leader != null ? leader.getInitials() : null;
             try {
-                app.setProjectLeader(projectId, projectLeaderChoiceBox.getValue().getInitials());
+                app.setProjectLeader(projectId, leaderInitials);
             } catch (IllegalAccessException ex) {
                 showAlert("Invalid access", ex.getMessage());
+                System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
+                        ex);
             }
+            app.setProjectName(projectId, projectName);
+            navigator.changeScene("project_list");
+        } catch (IllegalAccessException ex) {
+            showAlert("Invalid access", ex.getMessage());
+            System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        app.getProject(projectId).editName("", projectName);
-        navigator.changeScene("project_list");
     }
 
     @Override
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+        setup();
     }
 }
