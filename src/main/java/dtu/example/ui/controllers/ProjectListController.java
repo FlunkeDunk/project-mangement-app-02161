@@ -147,6 +147,7 @@ public class ProjectListController extends ProjectManagementAwareController {
             });
         } catch (IOException e) {
             showAlert("Failed loading", "Failed loading " + sceneName + ": " + e.getMessage());
+            
         }
     }
 
@@ -225,8 +226,13 @@ public class ProjectListController extends ProjectManagementAwareController {
     }
 
     @FXML
-    private void onUserRegisterTime() {
-        System.out.println("User clicked user register time");
+    private void onUserRegisterTime(){
+        try {
+            navigator.changeScene("register_time_list");
+        } catch (IOException ex) {
+            showAlert("Failed loading", ex.getMessage());
+            System.getLogger(AssignToActivityController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
     }
 
     @FXML

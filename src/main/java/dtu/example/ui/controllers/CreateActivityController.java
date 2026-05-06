@@ -24,6 +24,12 @@ public class CreateActivityController extends ProjectManagementAwareController {
 
     private int projectId;
 
+    @FXML
+    private void initialize() {
+        startDatePicker.setValue(app.getTimeServer().getCurrentDate());
+        endDatePicker.setValue(app.getTimeServer().getCurrentDate());
+    }
+
 
     @FXML
     private void onCreateActivity() throws IOException, IllegalAccessException {

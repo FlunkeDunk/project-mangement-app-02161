@@ -1,17 +1,15 @@
 package dtu.example.ui.controllers;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 import java.util.TreeSet;
 
 import dtu.example.ui.ActivityAware;
-import dtu.example.ui.TimeSpinnerValueFactory;
+import dtu.example.ui.components.TimeSpinner;
 import dtu.superPlanner.TimeLedger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
 import javafx.scene.layout.GridPane;
 
 public class EditRegisteredTimeController extends ProjectManagementAwareController implements ActivityAware {
@@ -22,11 +20,6 @@ public class EditRegisteredTimeController extends ProjectManagementAwareControll
     private int projectId;
 
     private int activityId;
-
-    @FXML
-    private void onBack() throws IOException {
-        navigator.changeScene("project_list");
-    }
 
     private void loadLedger() {
         TimeLedger timeLedger = app.getProject(projectId).getActivityById(activityId)
@@ -46,16 +39,13 @@ public class EditRegisteredTimeController extends ProjectManagementAwareControll
     }
 
     private void setupRow(LocalDate date, LocalTime time) {
-        Spinner<LocalTime> timeSpinner = new Spinner<>();
-        timeSpinner.setValueFactory(new TimeSpinnerValueFactory());
-        timeSpinner.getValueFactory().setValue(time);
+        TimeSpinner timeSpinner = new TimeSpinner(time);
         Label dateLabel = new Label(date.toString());
         dateGridPane.addRow(dateGridPane.getRowCount(), dateLabel, timeSpinner);
 
         timeSpinner.valueProperty().addListener(((observableValue, oldValue, newValue) -> {
-            double hours = newValue.getHour() + (double) newValue.getMinute() / 60.0;
             try {
-                app.editTime(projectId, activityId, date, hours);
+                app.editTime(projectId, activityId, date, timeSpinner.getHours());
             } catch (IllegalArgumentException ex) {
                 showAlert("Invalid time", ex.getMessage());
             }

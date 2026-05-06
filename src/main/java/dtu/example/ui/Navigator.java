@@ -44,8 +44,13 @@ public class Navigator {
         if (initializer != null) {
             initializer.accept(loader.getController());
         }
+        
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(
+            App.class.getResource("style.css").toExternalForm()
+        );
 
-        stage.setScene(new Scene(root));
+        stage.setScene(scene);
         stage.show();
     }
 

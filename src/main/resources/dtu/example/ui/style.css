@@ -3,3 +3,9 @@
     -fx-border-color: rgb(197, 197, 197);
     -fx-border-width: 2;
 }
+
+
+.subtitle-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}

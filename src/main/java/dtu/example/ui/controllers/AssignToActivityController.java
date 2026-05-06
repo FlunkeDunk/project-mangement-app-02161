@@ -1,11 +1,10 @@
 package dtu.example.ui.controllers;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dtu.example.ui.ActivityAware;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 
@@ -14,29 +13,23 @@ public class AssignToActivityController extends ProjectManagementAwareController
     @FXML
     private ListView<String> employeeListView;
 
-    @FXML
-    private Button assignButton;
-
-    @FXML
-    private Button exitButton;
-
     int projectId;
 
     int activityId;
 
     @FXML
-    private void initialize() {
+    private void loadInitials() {
         employeeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        employeeListView.getItems().addAll(
-            // app.getAvailableEmployees(projectId, activityId));    
-                "Alice",
-                "Bob",
-                "Charlie",
-                "Diana",
-                "Eric",
-                "Felix",
-                "George"
-        );
+        List<String> initialsList = new ArrayList<>();
+        try {
+            initialsList = app.getAvailableEmployees(projectId, activityId);
+        } catch (IllegalAccessException ex) {
+            showAlert("Invalid acces", ex.getMessage());
+            System.getLogger(AssignToActivityController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        if (initialsList != null) {
+            employeeListView.getItems().addAll(initialsList);
+        }
     }
     
     @FXML    
@@ -54,18 +47,20 @@ public class AssignToActivityController extends ProjectManagementAwareController
         employeeListView.getItems().removeAll(selectedEmployees);
         employeeListView.refresh();
     }
-    @FXML
-    private void handleExit() throws  IOException{
-        navigator.changeScene("project_list");
-    }
 
     @Override
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+        if (activityId != 0) {
+            loadInitials();
+        }
     }
     
     @Override
     public void setActivityId(int activityId) {
         this.activityId = activityId;
+        if (projectId != 0) {
+            loadInitials();
+        }
     }
 }

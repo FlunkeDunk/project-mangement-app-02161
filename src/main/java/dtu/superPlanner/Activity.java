@@ -86,4 +86,9 @@ public class Activity extends AbstractActivity {
     public double getBudgetedTime() {
         return budgetedTime;
     }
+
+    @Override
+    public String toString() {
+        return getId() + " - " + getName();
+    }
 }

@@ -1,5 +1,6 @@
 package dtu.example.ui.controllers;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 import dtu.superPlanner.FixedActivityType;
@@ -32,7 +33,7 @@ public class AddFixedActivityController extends ProjectManagementAwareController
     }
 
     @FXML
-    private void addFixedActivity() {
+    private void addFixedActivity() throws IOException {
         FixedActivityType type = activityTypeChoiceBox.getValue();
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
@@ -53,5 +54,6 @@ public class AddFixedActivityController extends ProjectManagementAwareController
         }
 
         app.createFixedActivity(type, timeFrame);
+        navigator.changeScene("project_list");
     }
 }
