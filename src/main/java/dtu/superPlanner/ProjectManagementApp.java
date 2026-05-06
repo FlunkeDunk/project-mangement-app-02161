@@ -69,10 +69,19 @@ public class ProjectManagementApp {
     }
 
     public void registerTime(int projectId, int activityId, double time, LocalDate date) {
+        if (time < 0) {
+            throw new IllegalArgumentException("Cannot register negative time");
+        }
+        if (date.isAfter(timeServer.getCurrentDate())) {
+            throw new IllegalArgumentException("Cannot register time in the future");
+        }
         getProject(projectId).registerTime(activityId, userInitials, date, time);
     }
 
     public void registerTime(int projectId, int activityId, double time) {
+        if (time < 0) {
+            throw new IllegalArgumentException("Cannot register negative time");
+        }
         getProject(projectId).registerTime(activityId, userInitials, timeServer.getCurrentDate(), time);
     }
 
@@ -107,7 +116,8 @@ public class ProjectManagementApp {
         getProject(projectId).setActivityTimeFrame(activityId, timeFrame);
     }
 
-    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) throws IllegalAccessException {
+    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials)
+            throws IllegalAccessException {
         Project proj = projects.get(projectId);
         if (proj.isLeader(userInitials)) {
             projects.get(projectId).addEmployeeToActivity(activityId, employeeInitials);
@@ -154,5 +164,9 @@ public class ProjectManagementApp {
 
     private void createEmployee(String initials) {
         employees.put(initials, new Employee(initials));
+    }
+
+    public TimeServer getTimeServer() {
+        return timeServer;
     }
 }

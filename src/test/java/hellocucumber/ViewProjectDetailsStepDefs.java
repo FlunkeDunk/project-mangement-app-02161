@@ -48,12 +48,6 @@ public class ViewProjectDetailsStepDefs {
         throw new PendingException();
     }
 
-    @And("the project has activities with the names")
-    public void theProjectHasTheseActivities(List<String> acitivities) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
     @Then("activities with these names are shown")
     public void theseActivitiesAreShown(List<String> activities) {
         // Write code here that turns the phrase above into concrete actions
