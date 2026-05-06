@@ -34,12 +34,12 @@ public class ReportStepDefs {
 
     @Then("the activity {string} has {double} hours budgeted")
     public void theActivityHasHoursBudgeted(String activityName, double hoursBudgeted) {
-        Map<Integer, ReportEntry> entries = report.getEntries();
+        Map<Integer, Report.ReportEntry> entries = report.getEntries();
         Set<Activity> activities = myApp.getProject(project.getId()).getActivitySet();
 
         for (Activity activity : activities) {
             if (activity.getName().equals(activityName)) {
-                assertEquals(hoursBudgeted, entries.get(activity.getId()).getBudgeted());
+                assertEquals(hoursBudgeted, entries.get(activity.getId()).budgetedTime());
             }
         }
 
