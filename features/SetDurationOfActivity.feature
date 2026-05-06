@@ -24,6 +24,9 @@ Feature: Set duration of activity
       |       1988 |     2043 |          2 |     1920 |                1988 |              2079 |                   2 |                41 |
       |      -2027 |     2027 |          1 |        4 |               -2027 |              2027 |                   1 |                 4 |
       |       2026 |     2027 |         51 |       -1 |                2026 |              2026 |                  51 |                53 |
+      |       2026 |     2027 |        -51 |        2 |                2025 |              2027 |                   2 |                 2 |
+      |       1934 |     1987 |         56 |      321 |                1935 |              1993 |                   4 |                 7 |
+
 
   Scenario Outline: A project leader sets start date to be after end date
     When the project leader sets the timeframe of activity "Design" to
