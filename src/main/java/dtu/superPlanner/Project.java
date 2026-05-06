@@ -20,7 +20,7 @@ public class Project {
         this.name = name;
     }
 
-    public void editName(String newName) {
+    public void editName(String newName) { // Ebbe
         name = newName;
     }
 

@@ -119,11 +119,13 @@ public class ProjectManagementApp {
         getProject(projectId).setActivityTimeFrame(activityId, timeFrame);
     }
 
-    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials)
+    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) // Ebbe og Benjamin
             throws IllegalAccessException {
         Project proj = projects.get(projectId);
+        Employee employee = employees.get(employeeInitials);
         if (proj.isLeader(userInitials)) {
-            projects.get(projectId).addEmployeeToActivity(activityId, employeeInitials);
+            proj.addEmployeeToActivity(activityId, employeeInitials);
+            employee.addActivity(proj.getActivityById(activityId));
         } else {
             throw new IllegalAccessException("Only the Project Leader can add employees to an activity");
         }
