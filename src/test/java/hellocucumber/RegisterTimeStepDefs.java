@@ -1,22 +1,15 @@
 package hellocucumber;
 
-import static org.mockito.ArgumentMatchers.doubleThat;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import io.cucumber.datatable.DataTable;
 import dtu.superPlanner.Activity;
-import dtu.superPlanner.Employee;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.TimeLedger;
 import dtu.superPlanner.WeekBasedCalendar;
-import io.cucumber.java.PendingException;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

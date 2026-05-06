@@ -192,13 +192,6 @@ public class ActivityStepDefs {
         assertEquals(week, endDate.getWeek());
     }
 
-    @Then("an exception is thrown {string}")
-    public void anExceptionIsThrown(String exception) {
-        assertNotNull(errorHolder.getError());
-        System.out.println(errorHolder.getError());
-        assertTrue(errorHolder.getError().contains(exception));
-    }
-
     @Given("the activity {string} gets {double} hours budgeted")
     public void theActivityGetsHoursBudgeted(String name, double hours) {
         Activity currentActivity = getActivitybyName(name);

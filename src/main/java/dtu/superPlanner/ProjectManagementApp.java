@@ -104,8 +104,12 @@ public class ProjectManagementApp {
         return myProject.createReport();
     }
 
-    public FixedActivity createFixedActivity(String employeeInitials, String name, TimeFrame timeFrame) {
-        throw new UnsupportedOperationException("Not implemented");
+    public FixedActivity createFixedActivity(FixedActivityType type, TimeFrame timeFrame) throws IllegalArgumentException {
+        FixedActivity activity = new FixedActivity(type, timeFrame);
+        Employee user = employees.get(userInitials);
+        user.addActivity(activity);
+
+        return activity;
     }
 
     public void setBudgetedTime(int projectId, int activityId, double budgetedTime) throws IllegalAccessException {
@@ -171,5 +175,10 @@ public class ProjectManagementApp {
 
     public TimeServer getTimeServer() {
         return timeServer;
+    }
+
+    public Set<FixedActivity> getFixedActivities() {
+        Employee user = employees.get(userInitials);
+        return user.getFixedActivities();
     }
 }

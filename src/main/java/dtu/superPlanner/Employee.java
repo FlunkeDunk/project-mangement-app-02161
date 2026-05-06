@@ -1,5 +1,6 @@
 package dtu.superPlanner;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Employee {
@@ -10,10 +11,21 @@ public class Employee {
 
     Employee(String initials) {
         this.initials = initials;
+        
+        activities = new HashSet<>();
+        fixedActivities = new HashSet<>();
     }
 
-    public void addActivity(AbstractActivity activity) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void addActivity(AbstractActivity activity) throws IllegalArgumentException {
+        switch (activity) {
+            case Activity a:
+                activities.add(a);
+                break;
+            case FixedActivity a:
+                if (!fixedActivities.add(a)) throw new IllegalArgumentException("The employee already has that fixed activity");
+                break;
+            default:
+        } 
     }
 
     public Set<Activity> getActivities() {
@@ -21,7 +33,7 @@ public class Employee {
     }
     
     public Set<FixedActivity> getFixedActivities() {
-        throw new UnsupportedOperationException("Not implemented");
+        return fixedActivities;
     }
 
     public boolean isAvailable(TimeFrame timeFrame) {

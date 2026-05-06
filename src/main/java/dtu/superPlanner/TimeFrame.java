@@ -43,4 +43,20 @@ public class TimeFrame {
     public String toString() {
         return "(" + startDate.toString() + " to " + endDate.toString() + ")";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TimeFrame))
+            return false;
+
+        TimeFrame other = (TimeFrame) obj;
+        return other.startDate.equals(this.startDate) && other.endDate.equals(this.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        int h1 = startDate.hashCode();
+        int h2 = endDate.hashCode();
+        return (h1 * h1 + h1 + 2 * h1 * h2 + 3 * h2 + h2 * h2) / 2;
+    }
 }
