@@ -4,8 +4,8 @@ Feature: Read file with list of employee initials
   Actor: User
 
   Scenario: A user starts the program and the employees are put in a list successfully
-    Given a file "EmployeeList.txt" exists
-    And the file contains the following initials
+    Given a file "initials.txt" exists
+    And the file "initials.txt" contains the following initials
       | huba |
       | anda |
       | wilo |
@@ -14,14 +14,14 @@ Feature: Read file with list of employee initials
       | huba |
       | anda |
       | wilo |
-  @skip
+
   Scenario: A user starts the program and throws an exception
-    Given a file "EmployeeList.txt" does not exist
+    Given a file "initials.txt" does not exist
     When a user start the program
-    Then an error is thrown "\"EmployeeList.txt\" can not be found"
+    Then an error is now thrown "File not found!"
   @skip
   Scenario: A user starts the program and is warned about corrupted data
-    Given a file "EmployeeList.txt" exists
+    Given a file "initials.txt" exists
     And the file contains the following initials
       | hubau |
       | anda  |
