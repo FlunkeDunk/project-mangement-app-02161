@@ -31,7 +31,12 @@ public class LoginController extends ProjectManagementAwareController{
             return;
         }
 
-        app.login(initials);
+        try {
+            app.login(initials);
+        } catch (IllegalArgumentException ex) {
+            showAlert("Invalid initials", ex.getMessage());
+            return;
+        }
 
         navigator.changeScene("project_list");
     }

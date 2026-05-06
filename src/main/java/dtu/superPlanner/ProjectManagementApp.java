@@ -9,12 +9,14 @@ import java.util.Set;
 
 public class ProjectManagementApp {
     private Map<Integer, Project> projects;
+    private Map<String, Employee> employees;
     private String userInitials;
     private int projectIdNumerator;
     private TimeServer timeServer;
 
     public ProjectManagementApp() {
         projects = new HashMap<>();
+        employees = new HashMap<>();
         timeServer = new TimeServer();
     }
 
@@ -56,7 +58,8 @@ public class ProjectManagementApp {
     }
 
     public Activity createActivity(int projectId, String name, TimeFrame timeFrame) throws IllegalAccessException {
-        //System.out.println("\nCreating activity for project " + projectId + "\nUser:" + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
+        // System.out.println("\nCreating activity for project " + projectId + "\nUser:"
+        // + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
         Project myProject = getProject(projectId);
         if (!myProject.isLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can create activities");
@@ -77,12 +80,11 @@ public class ProjectManagementApp {
         getProject(projectId).editTime(activityId, userInitials, date, newTime);
     }
 
-    public void setProjectLeader(int projectId, String employeeInitials) {
-        //String projectLeader = projects.get(projectId).getProjectLeader();
-        //if (projectLeader != null && !projectLeader.equals(userInitials)) {
-        //    throw new IllegalAccessException("Only the project leader can set a new project leader");
-        //}
-        projects.get(projectId).setProjectLeader(employeeInitials);
+    public void setProjectLeader(int projectId, String newLeaderInitials) throws IllegalAccessException {
+        if (!getProject(projectId).isProjectLeader(userInitials)) {
+            throw new IllegalAccessException("Only the project leader can set a new project leader");
+        }
+        projects.get(projectId).setProjectLeader(newLeaderInitials);
     }
 
     public Report createReport(int projectId) {
@@ -96,7 +98,8 @@ public class ProjectManagementApp {
 
     public void setBudgetedTime(int projectId, int activityId, double budgetedTime) throws IllegalAccessException {
         Project project = getProject(projectId);
-        if (!project.isLeader(userInitials)) throw new IllegalAccessException("Only the project leader can set budgeted time for activities");
+        if (!project.isLeader(userInitials))
+            throw new IllegalAccessException("Only the project leader can set budgeted time for activities");
         projects.get(projectId).setBudgetedTime(activityId, budgetedTime);
     }
 
@@ -111,8 +114,6 @@ public class ProjectManagementApp {
         } else {
             throw new IllegalAccessException("Only the Project Leader can add employees to an activity");
         }
-
-
     }
 
     public void setProjectName(int projectId, String name) {
@@ -120,14 +121,38 @@ public class ProjectManagementApp {
     }
 
     public void login(String employeeInitials) {
-        userInitials = employeeInitials;
+        if (getEmployees()
+                .stream()
+                .anyMatch(employee -> employee.getInitials().equals(employeeInitials))) {
+            userInitials = employeeInitials;
+        } else {
+            throw new IllegalArgumentException("Employee with initals " + employeeInitials + " does not exist.");
+        }
     }
 
-    public List<Employee> getAvailableEmployees(String employeeInitials, int projectId, int activityId) {
-        throw new UnsupportedOperationException("Not implemented");
+    public List<Employee> getAvailableEmployees(int projectId, int activityId) throws IllegalAccessException {
+        if (getProject(projectId).isProjectLeader(userInitials)) {
+            throw new IllegalAccessException("Only the project leader can see available employees.");
+        }
+
+        return employees.values().stream().toList();
     }
 
     public String getUserInitials() {
         return userInitials;
+    }
+
+    public Set<Employee> getEmployees() {
+        return new HashSet<Employee>(employees.values());
+    }
+
+    public void createEmployees(List<String> initialsList) {
+        for (String initials : initialsList) {
+            createEmployee(initials);
+        }
+    }
+
+    private void createEmployee(String initials) {
+        employees.put(initials, new Employee(initials));
     }
 }
