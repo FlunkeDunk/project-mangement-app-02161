@@ -27,7 +27,6 @@ public class ActivityStepDefs {
     private final ProjectManagementApp myApp;
     private final ErrorMessageHolder errorHolder;
     private final Project myProject;
-    private String user;
     private Activity myActivity;
     private LocalDate currentDate;
 
@@ -36,12 +35,14 @@ public class ActivityStepDefs {
         this.errorHolder = errorHolder;
 
         Set<Project> projects = myApp.getAllProjects();
-        if (projects.size() != 1) {
-            throw new IllegalStateException("Expected exactly one project");
+        if (projects.size() > 1) {
+            throw new IllegalStateException("Expected at most one project");
         }
-        myProject = projects.iterator().next();
-
-        user = myApp.getUserInitials();
+        if (!projects.isEmpty()) {
+            myProject = projects.iterator().next();
+        } else {
+            myProject = null;
+        }
     }
 
     private Activity addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
@@ -190,6 +191,12 @@ public class ActivityStepDefs {
         WeekBasedCalendar endDate = myProject.getActivityTimeFrame(myActivity.getId()).getEndDate();
         assertEquals(year, endDate.getYear());
         assertEquals(week, endDate.getWeek());
+    }
+
+    @Then("an exception is thrown {string}")
+    public void anExceptionIsThrown(String exception) {
+        assertNotNull(errorHolder.getError());
+        assertTrue(errorHolder.getError().contains(exception));
     }
 
     @Given("the activity {string} gets {double} hours budgeted")

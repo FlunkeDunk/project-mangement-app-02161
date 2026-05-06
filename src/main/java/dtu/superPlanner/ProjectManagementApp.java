@@ -143,7 +143,7 @@ public class ProjectManagementApp {
                 .anyMatch(employee -> employee.getInitials().equals(employeeInitials))) {
             userInitials = employeeInitials;
         } else {
-            throw new IllegalArgumentException("Employee with initals " + employeeInitials + " does not exist.");
+            throw new IllegalArgumentException("Employee with initials " + employeeInitials + " does not exist.");
         }
     }
 

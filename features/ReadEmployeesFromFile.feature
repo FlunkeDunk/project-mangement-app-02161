@@ -1,33 +1,33 @@
-# @skip # Fjern denne linje når du vil implementere
-# Feature: Read file with list of employee initials
-#   Description: The program reads a file containing the initials of all the employees
-#   Actor: User
 
-#   Scenario: A user starts the program and the employees are put in a list successfully
-#     Given a file "EmployeeList.txt" exists
-#     And the file contains the following initials
-#       | huba |
-#       | anda |
-#       | wilo |
-#     When a user start the program
-#     Then the program returns a list containing 
-#       | huba |
-#       | anda |
-#       | wilo |
+Feature: Read file with list of employee initials
+  Description: The program reads a file containing the initials of all the employees
+  Actor: User
 
-#   Scenario: A user starts the program and throws an exception
-#     Given a file "EmployeeList.txt" does not exist
-#     When a user start the program
-#     Then an error is thrown "\"EmployeeList.txt\" can not be found"
-
-#  Scenario: A user starts the program and is warned about corrupted data
-#    Given a file "EmployeeList.txt" exists
-#    And the file contains the following initials
-#      | hubau |
-#      | anda |
-#      | wilo |
-#    When a user start the program
-#    Then a notification is given to the user
-#    And the program returns a list containing
-#      | anda |
-#      | wilo |
+  Scenario: A user starts the program and the employees are put in a list successfully
+    Given a file "EmployeeList.txt" exists
+    And the file contains the following initials
+      | huba |
+      | anda |
+      | wilo |
+    When a user start the program
+    Then the program returns a list containing
+      | huba |
+      | anda |
+      | wilo |
+  @skip
+  Scenario: A user starts the program and throws an exception
+    Given a file "EmployeeList.txt" does not exist
+    When a user start the program
+    Then an error is thrown "\"EmployeeList.txt\" can not be found"
+  @skip
+  Scenario: A user starts the program and is warned about corrupted data
+    Given a file "EmployeeList.txt" exists
+    And the file contains the following initials
+      | hubau |
+      | anda  |
+      | wilo  |
+    When a user start the program
+    Then a notification is given to the user
+    And the program returns a list containing
+      | anda |
+      | wilo |

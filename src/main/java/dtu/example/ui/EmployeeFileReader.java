@@ -14,11 +14,14 @@ import java.util.List;
 
 class EmployeeFileReader {
 
+
     public List<String> loadEmployees() throws IOException {
+        return loadEmployees(getClass().getClassLoader().getResourceAsStream("initials.txt"));
+    }
+
+
+    public List<String> loadEmployees(InputStream input) throws IOException {
         List<String> initials = new ArrayList<>();
-        InputStream input = getClass()
-                .getClassLoader()
-                .getResourceAsStream("initials.txt");
 
         if (input == null) {
             throw new IllegalArgumentException("File not found!");
@@ -36,5 +39,4 @@ class EmployeeFileReader {
 
         return initials;
     }
-
 }

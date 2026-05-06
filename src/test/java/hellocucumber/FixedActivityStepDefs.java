@@ -97,10 +97,4 @@ public class FixedActivityStepDefs {
     public void theUserHasFixedActivities(Integer int1) {
         assertEquals(int1, app.getFixedActivities().size());
     }
-
-    @Then("an exception is thrown {string}")
-    public void anExceptionIsThrown(String exception) {
-        assertNotNull(errorHolder.getError());
-        assertTrue(errorHolder.getError().contains(exception));
-    }
 }

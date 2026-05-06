@@ -2,13 +2,13 @@ Feature: User Login
   Description: When the user logs into the program using their account details.
   Actor: User
 
-  # Scenario: Successful login
-  #   Given a user that is logged out with username initials "AS"
-  #   When the user enters "AS" into the username box
-  #   Then then the user is successfully logged in
+  Scenario: Successful login
+    And the initials "AS" exists in the database
+    When the user tries to log in as "AS"
+    Then then the user is successfully logged in as "AS"
 
-  # Scenario: Unsuccessful login
-  #   Given a user that is logged out with username "DW"
-  #   When the user enters "cookie" into the username box
-  #   Then the user is not logged in
-  #   And an unsuccessful login notification is given to the user
+  Scenario: Unsuccessful login
+    And the initials "DW" exists in the database
+    When the user tries to log in as "cookie"
+    Then the user is not logged in
+    And an exception is thrown "Employee with initials cookie does not exist."
