@@ -306,11 +306,15 @@ public class ActivityStepDefs {
      */
     @When("{string} assigns {string} to {string}")
     public void theEmployeeAssignsTo(String assigner, String assignee, String activityName) {
+        myApp.createEmployee(assigner);
+        myApp.createEmployee(assignee);
+
         String prevUser = myApp.getUserInitials();
 
         myApp.login(assigner);
         try {
-            myApp.addEmployeeToActivity(myProject.getId(), myActivity.getId(), assignee);
+            Activity activity = getActivitybyName(activityName);
+            myApp.addEmployeeToActivity(myProject.getId(), activity.getId(), assignee);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -441,6 +445,7 @@ public class ActivityStepDefs {
     @And("{string} gets assigned to {string}")
     public void getsAssignedTo(String employeeInitials, String activityName) {
         Activity activity = getActivitybyName(activityName);
+        assertNotNull(activity, "Activity does not exist");
         try {
             myApp.addEmployeeToActivity(myProject.getId(), activity.getId(), employeeInitials);
         } catch (IllegalAccessException e) {
@@ -456,5 +461,27 @@ public class ActivityStepDefs {
         addEmployee(employee);
         myApp.setProjectLeader(myProject.getId(), employee);
         assertEquals(employee, myProject.getProjectLeader());
+    }
+
+    /**
+     * @author Ebbe
+     */
+    @Given("{string} is assigned to activity {string}")
+    public void isAssignedActivityTo(String employeeInitials, String activityName) {
+        getsAssignedTo(employeeInitials, activityName);
+    }
+
+    /**
+     * @author Ebbe
+     */
+    @Given("{string} is not assigned to activity {string}")
+    public void isNotAssignedActivityTo(String employeeInitials, String activityName) {
+        Activity activity = getActivitybyName(activityName);
+
+        assertNotNull(activity, "Activity does not exist");
+
+        if (activity.getEmployees().contains(employeeInitials)) {
+            activity.removeEmployee(employeeInitials);
+        }
     }
 }

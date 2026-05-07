@@ -66,6 +66,13 @@ public class Activity extends AbstractActivity {
         employees.add(assignedInitials);
     }
 
+     /**
+     * @author Ebbe
+     */
+    public void removeEmployee(String employeeInitials) {
+        employees.remove(employeeInitials);
+    }
+
     public Set<String> getEmployees() {
         return employees;
     }

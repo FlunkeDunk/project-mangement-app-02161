@@ -1,6 +1,7 @@
 package hellocucumber;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -78,8 +80,12 @@ public class ProjectStepDefs {
         assertEquals(expectedId, project.getId());
     }
 
+    /**
+     * @author Ebbe
+     */
     @Then("the project has no project leader")
     public void the_projects_has_no_project_leader() {
+        project.setProjectLeader(null);
         assertNull(project.getProjectLeader());
     }
 
@@ -159,5 +165,24 @@ public class ProjectStepDefs {
     @When("the user changes the project name to {string}")
     public void the_user_changes_the_project_name_to(String employeeInitials, String newProjectName) throws IllegalAccessException {
         myApp.setProjectName(project.getId(), newProjectName);
+    }
+
+    /**
+     * @author Ebbe
+     */
+    @Given("the project has the activities with the names")
+    public void theProjectHasTheActivitiesWithTheNames(List<String> activityNames) {
+
+        for (String name : activityNames) {
+            WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 2026);
+            WeekBasedCalendar endWeek = new WeekBasedCalendar(2, 2026);
+            TimeFrame timeFrame = new TimeFrame(startWeek, endWeek);
+
+            try {
+                myApp.createActivity(project.getId(), name, timeFrame);
+            } catch (IllegalAccessException e) {
+                errorHolder.setError(e.getMessage());
+            }
+        }
     }
 }
