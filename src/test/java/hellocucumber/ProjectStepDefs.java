@@ -142,6 +142,9 @@ public class ProjectStepDefs {
         project = myApp.createProject(string);
     }
 
+    /**
+     * @author Ebbe
+     */
     @Then("the project has the name {string}")
     public void theProjectHasTheName(String string) {
         assertEquals(string, project.getName());
@@ -160,22 +163,49 @@ public class ProjectStepDefs {
         assertEquals(int1, projects.size());
     }
 
+    /**
+     * @author Ebbe
+     */
     @Given("the user is the project leader")
     public void the_user_is_a_project_leader() throws IllegalAccessException {
         myApp.setProjectLeader(project.getId(), myApp.getUserInitials());
         assertEquals(user, project.getProjectLeader());
     }
 
+    /**
+     * @author Ebbe
+     */
     @Given("the user is not a project leader")
-    public void the_user_is_not_a_project_leader(String employeeInitials) {
-        assertNotEquals(employeeInitials, project.getProjectLeader());
+    public void the_user_is_not_a_project_leader() {
+        assertNotEquals(myApp.getUserInitials(), project.getProjectLeader());
     }
 
+    /**
+     * @author Ebbe
+     */
     @When("the user changes the project name to {string}")
-    public void the_user_changes_the_project_name_to(String employeeInitials, String newProjectName)
-            throws IllegalAccessException {
-        myApp.setProjectName(project.getId(), newProjectName);
+    public void the_user_changes_the_project_name_to(String newName) {
+        try {
+            myApp.setProjectName(project.getId(), newName);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
     }
+
+    /**
+     * @author Ebbe
+     */
+    @Given("a project with the name {string}")
+    public void aProjectWithTheName(String projectName) {
+        try {
+            project = myApp.createProject(projectName);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+
+        assertNotNull(project, "Project was not created");
+    }
+
 
     /**
      * @author Ebbe
