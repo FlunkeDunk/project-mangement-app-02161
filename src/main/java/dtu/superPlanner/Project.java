@@ -100,4 +100,8 @@ public class Project {
     public String toString() {
         return getId() + " - " + getName();
     }
+
+    public Map<Integer, Activity> getActivityMap() {
+        return activities;
+    }
 }
