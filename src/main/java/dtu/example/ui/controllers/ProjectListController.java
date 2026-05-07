@@ -3,9 +3,8 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.util.Map;
 
-import dtu.example.ui.ActivityAware;
-import dtu.example.ui.ProjectAware;
-import dtu.example.ui.ReportAware;
+import dtu.example.ui.CustomScene;
+import dtu.example.ui.PopupService;
 import dtu.example.ui.components.ActivityItem;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
@@ -21,10 +20,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+/**
+ * @author Arthur
+ */
+
 public class ProjectListController extends ProjectManagementAwareController {
 
-    private int selectedProjectId = -1;
-    private PopUpManager popUpManager;
+    private PopupService popupService;
 
     // --- Project Details Labels ---
     @FXML
@@ -63,8 +65,8 @@ public class ProjectListController extends ProjectManagementAwareController {
         clearProjectDetails();
         clearActivityList();
         loadProjects();
-        popUpManager = new PopUpManager(popUpPane, popUpContainer, rootVBox, navigator);
-        popUpManager.popDown();
+        popupService = new PopUpManager(popUpPane, popUpContainer, rootVBox, navigator);
+        popupService.popDown();
         projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             try {
                 onProjectSelected();
@@ -90,11 +92,6 @@ public class ProjectListController extends ProjectManagementAwareController {
     private void onProjectSelected() throws IOException {
         Project project = projectList.getSelectionModel().getSelectedItem();
 
-        if (project == null || selectedProjectId == project.getId()) {
-            return;
-        }
-
-        selectedProjectId = project.getId();
         String projectId = "" + project.getId();
         String projectStartDate = project.getStartDate().toString();
         setProjectDetails(project.getName(), projectId, projectStartDate, project.getProjectLeader());
@@ -114,68 +111,53 @@ public class ProjectListController extends ProjectManagementAwareController {
 
     private void loadActivities(Map<Integer, Activity> activities) throws IOException {
         clearActivityList();
-        if (activities == null) {
+
+        if (activities == null || activities.isEmpty()) {
             return;
         }
 
         for (Map.Entry<Integer, Activity> entry : activities.entrySet()) {
             int activityId = entry.getKey();
             Activity activity = entry.getValue();
+
             ActivityItem activityItem = new ActivityItem(activity, activityId);
             activityListAccordion.getPanes().add(activityItem);
+
             activityItem.setOnRegisterTimeRequested(
-                    () -> popUpSceneWithActivity("register_time", RegisterTimeController.class, activityId));
+                    () -> {
+                        try {
+                            popupService.registerTime(getSelectedProjectId(), activityId);
+                        } catch (IOException e) {
+                            showAlert("Operation failed", e.getMessage());
+                        }
+                    });
+
             activityItem.setOnEditActivityRequested(
-                    () -> popUpSceneWithActivity("edit_activity", EditActivityController.class, activityId));
+                    () -> {
+                        try {
+                            popupService.editActivity(getSelectedProjectId(), activityId);
+                        } catch (IOException e) {
+                            showAlert("Operation failed", e.getMessage());
+                        }
+                    });
+
             activityItem.setOnAssignToActivityRequested(
-                    () -> popUpSceneWithActivity("assign_to_activity", AssignToActivityController.class, activityId));
+                    () -> {
+                        try {
+                            popupService.assignToActivity(getSelectedProjectId(), activityId);
+                        } catch (IOException e) {
+                            showAlert("Operation failed", e.getMessage());
+                        }
+                    });
+
             activityItem.setOnEditRegisteredTimeRequested(
-                    () -> popUpSceneWithActivity("edit_registered_time", EditRegisteredTimeController.class,
-                            activityId));
-        }
-    }
-
-    private <T extends ActivityAware> void popUpSceneWithActivity(
-            String sceneName,
-            Class<T> controllerClass,
-            int activityId) {
-        try {
-            popUpManager.popUp(sceneName, controller -> {
-                T typedController = controllerClass.cast(controller);
-                typedController.setProjectId(selectedProjectId);
-                typedController.setActivityId(activityId);
-            });
-        } catch (IOException e) {
-            showAlert("Failed loading", "Failed loading " + sceneName + ": " + e.getMessage());
-            
-        }
-    }
-
-    private <T extends ReportAware> void changeSceneWithReport(
-            String sceneName,
-            Class<T> controllerClass,
-            Report report) {
-        try {
-            navigator.changeScene(sceneName, controller -> {
-                T typedController = controllerClass.cast(controller);
-                typedController.setReport(report);
-            });
-        } catch (IOException e) {
-            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
-        }
-    }
-
-    private <T extends ProjectAware> void changeSceneWithProject(
-            String sceneName,
-            Class<T> controllerClass,
-            int projectId) {
-        try {
-            popUpManager.popUp(sceneName, controller -> {
-                T typedController = controllerClass.cast(controller);
-                typedController.setProjectId(projectId);
-            });
-        } catch (IOException e) {
-            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
+                    () -> {
+                        try {
+                            popupService.editRegisteredTime(getSelectedProjectId(), activityId);
+                        } catch (IOException e) {
+                            showAlert("Operation failed", e.getMessage());
+                        }
+                    });
         }
     }
 
@@ -193,45 +175,60 @@ public class ProjectListController extends ProjectManagementAwareController {
 
     // --- Button Handlers ---
     @FXML
-    private void handleAddActivity() throws IOException {
-        popUpManager.popUp("create_activity", controller -> {
-            ((CreateActivityController) controller).setProjectId(selectedProjectId);
-        });
+    private void handleAddActivity() {
+        try {
+            popupService.addActivity(getSelectedProjectId());
+        } catch (IOException e) {
+            showAlert("Operation failed", e.getMessage());
+        }
     }
 
     @FXML
     private void handleEditProject() {
-        changeSceneWithProject("edit_project", EditProjectController.class, selectedProjectId);
+        try {
+            popupService.editProject(getSelectedProjectId());
+        } catch (IOException e) {
+            showAlert("Operation failed", e.getMessage());
+        }
     }
 
     @FXML
-    private void handleAddProject() throws IOException {
-        popUpManager.popUp("create_project");
+    private void handleAddProject() {
+        try {
+            popupService.popUp(CustomScene.CREATE_PROJECT);
+        } catch (IOException e) {
+            showAlert("Operation failed", e.getMessage());
+        }
     }
 
     @FXML
     private void handleViewReport() {
-        changeSceneWithReport("view_report", ViewReportController.class,
-                app.getProject(selectedProjectId).createReport());
+        Report report = app.createReport(getSelectedProjectId());
+        try {
+            popupService.viewReport(report);
+        } catch (IOException e) {
+            showAlert("Failed loading", e.getMessage());
+        }
     }
 
     @FXML
     private void onLogout() throws IOException {
-        navigator.changeScene("login");
+        navigator.changeScene(CustomScene.LOGIN);
     }
 
     @FXML
     private void onAddFixedActivity() throws IOException {
-        popUpManager.popUp("add_fixed_activity");
+        popupService.popUp(CustomScene.ADD_FIXED_ACTIVITY);
     }
 
     @FXML
-    private void onUserRegisterTime(){
+    private void onUserRegisterTime() {
         try {
-            navigator.changeScene("register_time_list");
+            navigator.changeScene(CustomScene.REGISTER_TIME_LIST);
         } catch (IOException ex) {
             showAlert("Failed loading", ex.getMessage());
-            System.getLogger(AssignToActivityController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            System.getLogger(AssignToActivityController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
+                    ex);
         }
     }
 
@@ -241,13 +238,13 @@ public class ProjectListController extends ProjectManagementAwareController {
 
         // Check if the clicked node is NOT inside popUpPane
         if (!isDescendant(clickedNode, popUpPane)) {
-            popUpManager.popDown();
+            popupService.popDown();
         }
     }
 
     @FXML
     private void closePopUpClicked() {
-        popUpManager.popDown();
+        popupService.popDown();
     }
 
     private boolean isDescendant(Node child, Node parent) {
@@ -258,6 +255,11 @@ public class ProjectListController extends ProjectManagementAwareController {
             child = child.getParent();
         }
         return false;
+    }
+
+    private int getSelectedProjectId() {
+        Project project = projectList.getSelectionModel().getSelectedItem();
+        return project != null ? project.getId() : 0;
     }
 
 }

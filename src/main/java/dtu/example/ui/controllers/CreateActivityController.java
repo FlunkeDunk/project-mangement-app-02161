@@ -3,6 +3,8 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import dtu.example.ui.CustomScene;
+import dtu.example.ui.ProjectAware;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
@@ -11,7 +13,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
-public class CreateActivityController extends ProjectManagementAwareController {
+    /**
+    * @author Arthur
+    */
+public class CreateActivityController extends ProjectManagementAwareController implements ProjectAware{
 
     @FXML
     TextField activityNameTextField;
@@ -47,7 +52,7 @@ public class CreateActivityController extends ProjectManagementAwareController {
             if (budgetSpinner.valueProperty().getValue() > 0) {
                 activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
             }
-            navigator.changeScene("project_list");
+            navigator.changeScene(CustomScene.PROJECT_LIST);
         } catch (IllegalArgumentException e ) {
             showAlert("Invalid date", e.getMessage());
         } catch (IllegalAccessException e) {
@@ -55,6 +60,7 @@ public class CreateActivityController extends ProjectManagementAwareController {
         }
     }
 
+    @Override
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }

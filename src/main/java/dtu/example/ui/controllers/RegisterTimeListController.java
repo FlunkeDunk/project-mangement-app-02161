@@ -2,6 +2,7 @@ package dtu.example.ui.controllers;
 
 import java.io.IOException;
 
+import dtu.example.ui.CustomScene;
 import dtu.example.ui.components.TimeSpinner;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
@@ -56,7 +57,7 @@ public class RegisterTimeListController extends ProjectManagementAwareController
 
     @FXML
     private void onBack() throws IOException {
-        navigator.changeScene("project_list");
+        navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 
     private void setupProjectLabel(Project project) {

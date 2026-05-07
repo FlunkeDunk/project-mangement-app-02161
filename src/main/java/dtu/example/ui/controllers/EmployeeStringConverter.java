@@ -3,6 +3,10 @@ package dtu.example.ui.controllers;
 import dtu.superPlanner.Employee;
 import javafx.util.StringConverter;
 
+    /**
+    * @author Arthur
+    */
+   
 public class EmployeeStringConverter extends StringConverter<Employee> {
     @Override
     public String toString(Employee e) {

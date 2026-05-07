@@ -2,6 +2,7 @@ package dtu.example.ui.controllers;
 
 import java.io.IOException;
 
+import dtu.example.ui.CustomScene;
 import dtu.example.ui.ProjectAware;
 import dtu.superPlanner.Employee;
 import javafx.collections.FXCollections;
@@ -11,6 +12,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+    /**
+    * @author Arthur
+    */
 public class EditProjectController extends ProjectManagementAwareController implements ProjectAware {
 
     @FXML
@@ -35,22 +39,23 @@ public class EditProjectController extends ProjectManagementAwareController impl
 
     @FXML
     private void onSave(ActionEvent event) throws IOException {
+        String projectName = projectNameTextField.getText();
+        Employee leader = projectLeaderComboBox.getValue();
+        String leaderInitials = leader != null ? leader.getInitials() : null;
         try {
-            String projectName = projectNameTextField.getText();
-            Employee leader = projectLeaderComboBox.getValue();
-            String leaderInitials = leader != null ? leader.getInitials() : null;
-            try {
-                app.setProjectLeader(projectId, leaderInitials);
-            } catch (IllegalAccessException ex) {
-                showAlert("Invalid access", ex.getMessage());
-                System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
-                        ex);
-            }
             app.setProjectName(projectId, projectName);
-            navigator.changeScene("project_list");
+            navigator.changeScene(CustomScene.PROJECT_LIST);
         } catch (IllegalAccessException ex) {
             showAlert("Invalid access", ex.getMessage());
             System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+
+        try {
+            app.setProjectLeader(projectId, leaderInitials);
+        } catch (IllegalAccessException ex) {
+            showAlert("Invalid access", ex.getMessage());
+            System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
+                    ex);
         }
     }
 

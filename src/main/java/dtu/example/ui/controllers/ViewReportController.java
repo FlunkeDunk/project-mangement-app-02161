@@ -3,6 +3,7 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.util.Map;
 
+import dtu.example.ui.CustomScene;
 import dtu.example.ui.ReportAware;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
@@ -55,6 +56,7 @@ public class ViewReportController extends ProjectManagementAwareController imple
         reportNameLabel.setText("Report: " + name);
     }
 
+    @Override
     public void setReport(Report report) {
         setChartData(report);
         setBarChart(report);
@@ -63,6 +65,6 @@ public class ViewReportController extends ProjectManagementAwareController imple
 
     @FXML
     public void onExit() throws IOException{
-        navigator.changeScene("project_list");
+        navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 }

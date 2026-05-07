@@ -37,8 +37,8 @@ public class Navigator {
 
     }
 
-    public <T> void changeScene(String fxml, Consumer<T> initializer) throws IOException {
-        FXMLLoader loader = loadFXML(fxml);
+    public <T> void changeScene(CustomScene fxmlScene, Consumer<T> initializer) throws IOException {
+        FXMLLoader loader = loadFXML(fxmlScene);
         Parent root = loader.load();
         
         if (initializer != null) {
@@ -54,14 +54,14 @@ public class Navigator {
         stage.show();
     }
 
-    public <T> void changeScene(String fxml) throws IOException {
-        changeScene(fxml, null);
+    public <T> void changeScene(CustomScene scene) throws IOException {
+        changeScene(scene, null);
     }
 
-    public FXMLLoader loadFXML(String fxml) throws IOException {
-        var resource = App.class.getResource(fxml + ".fxml");
+    public FXMLLoader loadFXML(CustomScene scene) {
+        var resource = App.class.getResource(scene.getFxmlFile() + ".fxml");
         if (resource == null) {
-            throw new IllegalArgumentException("FXML file not found: " + fxml);
+            throw new IllegalArgumentException("FXML file not found: " + scene.getFxmlFile());
         }
         
         FXMLLoader fxmlLoader = new FXMLLoader(resource);

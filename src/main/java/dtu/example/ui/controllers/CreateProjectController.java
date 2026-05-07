@@ -2,14 +2,18 @@ package dtu.example.ui.controllers;
 
 import java.io.IOException;
 
+import dtu.example.ui.CustomScene;
 import dtu.superPlanner.Employee;
 import dtu.superPlanner.Project;
-import dtu.superPlanner.WeekBasedCalendar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+
+    /**
+    * @author Arthur, Emanuel, Mikkel, Ebbe and Benjamin with mob programming
+    */
 
 public class CreateProjectController extends ProjectManagementAwareController {
 
@@ -34,7 +38,6 @@ public class CreateProjectController extends ProjectManagementAwareController {
         if (projectLeaderChoiceBox.getValue() != null) {
             app.setProjectLeader(project.getId(), projectLeaderChoiceBox.getValue().getInitials());
         }
-        WeekBasedCalendar wbc = project.getStartDate();
-        navigator.changeScene("project_list");
+        navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 }

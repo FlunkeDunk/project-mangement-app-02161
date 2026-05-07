@@ -7,7 +7,9 @@ import dtu.example.ui.ActivityAware;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-
+    /**
+    * @author Arthur
+    */
 public class AssignToActivityController extends ProjectManagementAwareController implements ActivityAware{
 
     @FXML

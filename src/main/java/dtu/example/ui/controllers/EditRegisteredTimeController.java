@@ -12,6 +12,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
+    /**
+    * @author Arthur
+    */
 public class EditRegisteredTimeController extends ProjectManagementAwareController implements ActivityAware {
 
     @FXML
@@ -52,6 +55,7 @@ public class EditRegisteredTimeController extends ProjectManagementAwareControll
         }));
     }
 
+    @Override
     public void setProjectId(int projectId) {
         this.projectId = projectId;
         if (activityId != 0) {
@@ -59,6 +63,7 @@ public class EditRegisteredTimeController extends ProjectManagementAwareControll
         }
     }
 
+    @Override
     public void setActivityId(int activityId) {
         this.activityId = activityId;
         if (projectId != 0) {
