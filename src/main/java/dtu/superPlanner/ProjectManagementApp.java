@@ -1,18 +1,24 @@
 package dtu.superPlanner;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 public class ProjectManagementApp {
     private Map<Integer, Project> projects;
-    private Map<String, Employee> employees;
     private String userInitials;
     private int projectIdNumerator;
     private TimeServer timeServer;
+    private EmployeeRepository employeeRepository;
 
-    public ProjectManagementApp() {
+    public ProjectManagementApp(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
         projects = new HashMap<>();
-        employees = new HashMap<>();
         timeServer = new TimeServer();
     }
 
@@ -105,7 +111,7 @@ public class ProjectManagementApp {
 
     public FixedActivity createFixedActivity(FixedActivityType type, TimeFrame timeFrame) throws IllegalArgumentException {
         FixedActivity activity = new FixedActivity(type, timeFrame);
-        Employee user = employees.get(userInitials);
+        Employee user = employeeRepository.get(userInitials);
         user.addActivity(activity);
 
         return activity;
@@ -125,7 +131,7 @@ public class ProjectManagementApp {
     public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) // Ebbe og Benjamin
             throws IllegalAccessException {
         Project proj = projects.get(projectId);
-        Employee employee = employees.get(employeeInitials);
+        Employee employee = employeeRepository.get(employeeInitials);
         if (proj.isProjectLeader(userInitials)) {
             proj.addEmployeeToActivity(activityId, employeeInitials);
             employee.addActivity(proj.getActivityById(activityId));
@@ -147,10 +153,10 @@ public class ProjectManagementApp {
     }
 
     public Employee getEmployee(String initials) {
-        if (!employees.containsKey(initials)) {
+        if (!employeeRepository.contains(initials)) {
             throw new IllegalArgumentException("Invalid employee initials");
         }
-        return employees.get(initials);
+        return employeeRepository.get(initials);
     }
 
     public void login(String employeeInitials) {
@@ -168,7 +174,7 @@ public class ProjectManagementApp {
             throw new IllegalAccessException("Only the project leader can see available employees.");
         }
 
-        List<Employee> allEmployees = employees.values().stream().toList();
+        List<Employee> allEmployees = employeeRepository.getAllEmployees();
         TimeFrame activityDuration = projects.get(projectId).getActivityTimeFrame(activityId);
         PriorityQueue<priorityEmployee> leastBusyEmployees = new PriorityQueue<>();
 
@@ -177,7 +183,7 @@ public class ProjectManagementApp {
                 continue;
             }
 
-            int alreadyAssignedActivitiesInTimeFrame = getActivitiesOverlapping(activityDuration, employees.get(userInitials));
+            int alreadyAssignedActivitiesInTimeFrame = getActivitiesOverlapping(activityDuration, employeeRepository.get(userInitials));
             leastBusyEmployees.add(new priorityEmployee(employee.getInitials(), alreadyAssignedActivitiesInTimeFrame));
         }
 
@@ -209,17 +215,7 @@ public class ProjectManagementApp {
     }
 
     public Set<Employee> getEmployees() {
-        return new HashSet<Employee>(employees.values());
-    }
-
-    public void createEmployees(List<String> initialsList) {
-        for (String initials : initialsList) {
-            createEmployee(initials);
-        }
-    }
-
-    private void createEmployee(String initials) {
-        employees.put(initials, new Employee(initials));
+        return new HashSet<>(employeeRepository.getAllEmployees());
     }
 
     public TimeServer getTimeServer() {
@@ -227,7 +223,7 @@ public class ProjectManagementApp {
     }
 
     public Set<FixedActivity> getFixedActivities() {
-        Employee user = employees.get(userInitials);
+        Employee user = employeeRepository.get(userInitials);
         return user.getFixedActivities();
     }
 
@@ -238,4 +234,8 @@ public class ProjectManagementApp {
                 return Integer.compare(this.priority, other.priority);
             }
         }
+
+    public void createEmployee(String initials) {
+        employeeRepository.addEmployee(initials);
+    }
 }

@@ -2,6 +2,7 @@ package dtu.example.ui.controllers;
 
 import java.io.IOException;
 
+import dtu.example.ui.EmployeeStringConverter;
 import dtu.example.ui.interfaces.ProjectAware;
 import dtu.superPlanner.Employee;
 import javafx.collections.FXCollections;

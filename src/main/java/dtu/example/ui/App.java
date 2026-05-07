@@ -2,6 +2,8 @@ package dtu.example.ui;
 
 import java.io.IOException;
 
+import dtu.superPlanner.EmployeeRepository;
+import dtu.superPlanner.FileEmployeeRepository;
 import dtu.superPlanner.ProjectManagementApp;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -10,25 +12,30 @@ import javafx.stage.Stage;
  * JavaFX App
  */
 public class App extends Application {
-
-    private Navigator navigator;
-
-    private final int HEIGHT = 540;
-    private final int WIDTH = 640;
-
     @Override
     public void start(Stage stage) throws IOException {
+
+        ProjectManagementApp app = buildApp();
+        Navigator navigator = buildNavigator(stage, app);
+
         stage.setTitle("Project Management App");
-        ProjectManagementApp app = new ProjectManagementApp();
-        app.createEmployees(new EmployeeFileReader().loadEmployees());
-        navigator = new Navigator(stage, app);
-        stage.setWidth(WIDTH);
-        stage.setHeight(HEIGHT);
+        stage.setWidth(640);
+        stage.setHeight(540);
+
         navigator.toLogin();
     }
 
-    public static void main(String[] args) {
-        launch();
+    private ProjectManagementApp buildApp() {
+        EmployeeRepository repo = new FileEmployeeRepository("initials.txt");
+        return new ProjectManagementApp(repo);
     }
 
+    private Navigator buildNavigator(Stage stage, ProjectManagementApp app) {
+        return new Navigator(
+            stage,
+            app,
+            new DefaultPopupServiceFactory(),
+            new ActivityItemFactory()
+        );
+    }
 }

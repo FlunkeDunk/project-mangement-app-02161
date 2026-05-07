@@ -1,4 +1,4 @@
-package dtu.example.ui.controllers;
+package dtu.example.ui;
 
 import dtu.superPlanner.Employee;
 import javafx.util.StringConverter;

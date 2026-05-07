@@ -6,18 +6,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static dtu.superPlanner.FixedActivityType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dtu.superPlanner.Activity;
+import static dtu.superPlanner.FixedActivityType.Emergency;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -32,8 +31,8 @@ public class ActivityStepDefs {
     private LocalDate currentDate;
     private List<String> availableEmployees;
 
-    public ActivityStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
-        this.myApp = myApp;
+    public ActivityStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+        this.myApp = context.app;
         this.errorHolder = errorHolder;
 
         Set<Project> projects = myApp.getAllProjects();
@@ -85,10 +84,8 @@ public class ActivityStepDefs {
         return null; // Has to have a return
     }
 
-    private void addEmployee(String userID) {
-        List<String> users = new ArrayList<>();
-        users.add(userID);
-        myApp.createEmployees(users);
+    private void addEmployee(String userId) {
+        myApp.createEmployee(userId);
     }
 
     @When("an employee tries to add activity {string} with budgeted time {int} weeks")

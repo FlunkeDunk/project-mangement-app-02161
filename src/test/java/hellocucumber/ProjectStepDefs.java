@@ -1,8 +1,6 @@
 package hellocucumber;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,17 +23,15 @@ public class ProjectStepDefs {
     public Project project;
     private ErrorMessageHolder errorHolder;
 
-    public ProjectStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
-        this.myApp = myApp;
+    public ProjectStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+        this.myApp = context.app;
         this.errorHolder = errorHolder;
     }
 
     @Given("a user is logged in")
     public void aUserIsLoggedIn() {
-        List<String> users = new ArrayList<>();
-        users.add("huba");
-        myApp.createEmployees(users);
         user = "huba";
+        myApp.createEmployee(user);
         myApp.login(user);
     }
 
