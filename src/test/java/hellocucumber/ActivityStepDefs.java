@@ -237,9 +237,9 @@ public class ActivityStepDefs {
         } // TODO
 
         try {
-            myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
             addEmployee(debugUser);
             myApp.login(debugUser);
+            myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
             myApp.registerTime(myProject.getId(), currentActivity.getId(), hours);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
