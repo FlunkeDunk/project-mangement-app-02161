@@ -19,7 +19,7 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();
     }
-    
+
     @Override
     public void start(Stage stage) {
 
@@ -63,11 +63,7 @@ public class App extends Application {
         try {
             repo = new FileEmployeeRepository(input);
         } catch (IOException e) {
-            showAlert(
-                    AlertType.ERROR,
-                    "Failed reading file",
-                    "Failed reading initials.txt");
-            throw e;
+            throw new IOException("Failed reading initials.txt", e);
         }
 
         if (repo.getSkippedLines()) {

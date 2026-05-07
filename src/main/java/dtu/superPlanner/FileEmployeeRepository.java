@@ -26,6 +26,10 @@ public class FileEmployeeRepository implements EmployeeRepository{
         employees = loadEmployees(input);
     }
 
+    public FileEmployeeRepository() {
+        employees = new TreeMap<>();
+    }
+
 
     public Set<String> getEmployeeInitials() {
         return employees.keySet();
