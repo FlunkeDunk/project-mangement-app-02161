@@ -26,6 +26,9 @@ public class ProjectManagementApp {
         return createProject("");
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public Project createProject(String name) throws RuntimeException {
         if (projectIdNumerator >= 999) {
             throw new RuntimeException("Cannot create more than 999 projects a year");
@@ -63,8 +66,6 @@ public class ProjectManagementApp {
     }
 
     public Activity createActivity(int projectId, String name, TimeFrame timeFrame) throws IllegalAccessException {
-        // System.out.println("\nCreating activity for project " + projectId + "\nUser:"
-        // + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
         Project myProject = getProject(projectId);
         if (!myProject.isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can create activities");
@@ -172,6 +173,9 @@ public class ProjectManagementApp {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public List<String> getAvailableEmployees(int projectId, int activityId) throws IllegalAccessException {
         if (!getProject(projectId).isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can see available employees.");
@@ -198,6 +202,9 @@ public class ProjectManagementApp {
         return availableEmployeesInOrder;
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     private int getActivitiesOverlapping(TimeFrame activityDuration, Employee employee) {
         Set<Activity> alreadyAssignedActivities = employee.getActivities();
         int activitiesOverlapping = 0;
@@ -233,6 +240,9 @@ public class ProjectManagementApp {
         return user.getFixedActivities();
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     private record priorityEmployee(String userInitials, int priority) implements Comparable<priorityEmployee> {
 
         @Override

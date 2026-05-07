@@ -24,6 +24,9 @@ public class Activity extends AbstractActivity {
         employeeTimeLedgers = new HashMap<>();
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public void registerTime(String employeeInitials, LocalDate date, double time) {
         if (!employeeTimeLedgers.containsKey(employeeInitials)) {
             employeeTimeLedgers.put(employeeInitials, new TimeLedger());
@@ -31,6 +34,9 @@ public class Activity extends AbstractActivity {
         employeeTimeLedgers.get(employeeInitials).registerTime(date, time);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public double getTotalTimeSpent() {
         double totalTimeSpent = 0;
         for (TimeLedger timeLedger : employeeTimeLedgers.values()) {
@@ -43,6 +49,9 @@ public class Activity extends AbstractActivity {
         return employeeTimeLedgers.get(employeeInitials);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public void editTime(String initials, LocalDate date, double newTime) {
         if (newTime < 0) {
             throw new IllegalArgumentException("Negative time not allowed for activities");
@@ -62,6 +71,9 @@ public class Activity extends AbstractActivity {
         return ID;
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public int getDuration() {
         WeekFields wf = WeekFields.ISO;
         TimeFrame timeFrame = this.getTimeFrame();

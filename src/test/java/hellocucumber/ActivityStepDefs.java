@@ -31,6 +31,9 @@ public class ActivityStepDefs {
     private LocalDate currentDate;
     private List<String> availableEmployees;
 
+    /**
+     * @author BenjaminEwe
+     */
     public ActivityStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
         this.myApp = context.app;
         this.errorHolder = errorHolder;
@@ -46,6 +49,9 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     private Activity addActivityWithNameAndDuration(String projectName, int weeks, Boolean force) {
         WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 1);
         WeekBasedCalendar endWeek = new WeekBasedCalendar(1 + weeks, 1);
@@ -71,6 +77,9 @@ public class ActivityStepDefs {
         return activity;
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     private Activity getActivitybyName(String activityName) {
         Set<Activity> activities = null;
         activities = myApp.getProject(myProject.getId()).getActivitySet();
@@ -88,17 +97,26 @@ public class ActivityStepDefs {
         myApp.createEmployee(userId);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @When("an employee tries to add activity {string} with budgeted time {int} weeks")
     public void anEmployeeTriesToAddActivity(String name, int weeks) {
         addActivityWithNameAndDuration(name, weeks, false);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Given("the project has a project leader")
     public void theProjectHasAProjectLeader() throws IllegalAccessException {
         addEmployee("PROJECT_LEADER");
         myApp.setProjectLeader(myProject.getId(), "PROJECT_LEADER");
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("the project should have the activities with the names and budgeted times")
     public void theProjectShouldHaveTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> expectedActivities) {
         Set<Activity> actualActivities = myProject.getActivitySet();
@@ -128,6 +146,9 @@ public class ActivityStepDefs {
         assertEquals(expected, activityNames);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Given("the project has no activities")
     public void theProjectHasNoActivities() {
         assertTrue(myProject.getActivitySet().isEmpty());
@@ -213,6 +234,9 @@ public class ActivityStepDefs {
         assertTrue(errorHolder.getError().contains(exception));
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Given("the activity {string} gets {double} hours budgeted")
     public void theActivityGetsHoursBudgeted(String name, double hours) {
         Activity currentActivity = getActivitybyName(name);
@@ -223,6 +247,9 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Given("an employee has spent {double} hours on the activity {string}")
     public void anEmployeeHasSpentHoursOnTheActivity(double hours, String name) {
         Activity currentActivity = getActivitybyName(name);
@@ -245,12 +272,18 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Given("the user has registered {double} hours on {string}")
     public void theUserHasRegisteredHoursOn(double hours, String activityName) {
         myApp.registerTime(myProject.getId(), myActivity.getId(), hours);
         currentDate = LocalDate.now();
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @When("the user changes the registered time on activity {string} to {double}")
     public void theUserChangesTheRegisteredTimeOnActivityTo(String activityName, Double hours) {
         try {
@@ -260,11 +293,17 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("the activity {string} has {double} hours worked")
     public void theActivityHasHoursWorked(String activityName, Double hours) {
         assertEquals(hours, getActivitybyName(activityName).getTotalTimeSpent());
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @When("{string} assigns {string} to {string}")
     public void theEmployeeAssignsTo(String assigner, String assignee, String activityName) {
         String prevUser = myApp.getUserInitials();
@@ -278,6 +317,9 @@ public class ActivityStepDefs {
         myApp.login(prevUser);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("{string} is not assigned to {string}")
     public void isNotAssignedTo(String assignee, String activityName) {
         Activity activity = getActivitybyName(activityName);
@@ -285,6 +327,9 @@ public class ActivityStepDefs {
         assertFalse(activity.getEmployees().contains(assignee), "Employee " + assignee + " not on activity " + activityName);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("{string} is assigned to {string}")
     public void isAssignedTo(String assignee, String activityName) {
         Activity activity = getActivitybyName(activityName);
@@ -324,6 +369,9 @@ public class ActivityStepDefs {
         assertEquals(d, myActivity.getBudgetedTime());
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Given("the following employees exist")
     public void the_following_employees_exist(List<String> employees) {
         for (String employee : employees) {
@@ -331,6 +379,9 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Given("the project has the activities with the names, start and end weeks")
     public void the_project_has_the_activities_with_the_names_start_and_end_weeks(List<List<String>> activities) {
         for (List<String> activity : activities) {
@@ -349,6 +400,9 @@ public class ActivityStepDefs {
         assertEquals(activities.size(), myProject.getActivitySet().size(), "Failed to add the activities to the project.");
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Given("{string} has a fixed activity from week {int} to week {int}")
     public void has_a_fixed_activity_from_week_to_week(String employee, Integer startWeek, Integer endWeek) {
         TimeFrame activityPeriod = new TimeFrame(new WeekBasedCalendar(startWeek, 2026), new WeekBasedCalendar(endWeek, 2026));
@@ -360,6 +414,9 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @When("the user searches for available employees for {string} in between week {int} and {int}")
     public void the_user_searches_for_available_employees_in_between_week_and(String activityName, Integer startWeek, Integer endWeek) {
         Activity myActivity = getActivitybyName(activityName);
@@ -372,6 +429,9 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("the employees are returned in the following order")
     public void the_employees_are_returned_in_the_following_order(List<String> employees) {
         assertEquals(employees.size(), availableEmployees.size());
@@ -380,6 +440,9 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @And("{string} gets assigned to {string}")
     public void getsAssignedTo(String employeeInitials, String activityName) {
         Activity activity = getActivitybyName(activityName);
