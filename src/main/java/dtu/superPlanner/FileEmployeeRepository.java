@@ -10,17 +10,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 ;
 
 public class FileEmployeeRepository implements EmployeeRepository{
 
     private Map<String, Employee> employees ;
+    private boolean skippedLines;
 
-    public FileEmployeeRepository(String fileName){
-        employees = loadEmployees(fileName);
+    public FileEmployeeRepository(InputStream input) throws IOException{
+        skippedLines = false;
+        employees = loadEmployees(input);
     }
 
 
@@ -28,12 +31,11 @@ public class FileEmployeeRepository implements EmployeeRepository{
         return employees.keySet();
     }
 
-    private final Map<String, Employee> loadEmployees(String fileName) {
-        InputStream input = getClass().getClassLoader().getResourceAsStream(fileName);
+    private final Map<String, Employee> loadEmployees(InputStream input) throws IOException {
         Map<String, Employee> loadedEmployees = new TreeMap<>();
 
         if (input == null) {
-            return new TreeMap<>();
+            throw new IllegalArgumentException("Input file cannot be null");
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
@@ -42,10 +44,12 @@ public class FileEmployeeRepository implements EmployeeRepository{
                 initials = initials.strip();
                 if (initials.length() == 4) {
                     loadedEmployees.put(initials, new Employee(initials));
+                } else {
+                    skippedLines = true;
                 }
             }
         } catch (IOException ex) {
-            return new TreeMap<>();
+            throw new IOException("Failed reading input file");
         }
         return loadedEmployees;
     }
@@ -71,5 +75,10 @@ public class FileEmployeeRepository implements EmployeeRepository{
     @Override
     public void addEmployee(String initials) {
         employees.put(initials, new Employee(initials));
+    }
+
+
+    public boolean getSkippedLines() {
+        return skippedLines;
     }
 }
