@@ -22,8 +22,8 @@ public class ViewProjectDetailsStepDefs {
 
     private Map<String, String> information;
 
-    public ViewProjectDetailsStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder, App ui) {
-        this.myApp = myApp;
+    public ViewProjectDetailsStepDefs(TestContext context, ErrorMessageHolder errorHolder, App ui) {
+        this.myApp = context.app;
         this.errorHolder = errorHolder;
         information = new HashMap<>();
     }

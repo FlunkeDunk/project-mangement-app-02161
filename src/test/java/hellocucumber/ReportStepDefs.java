@@ -1,14 +1,20 @@
 package hellocucumber;
 
-import dtu.superPlanner.*;
-import io.cucumber.java.PendingException;
-import io.cucumber.java.en.*;
-
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import dtu.superPlanner.Activity;
+import dtu.superPlanner.Project;
+import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.Report;
+import io.cucumber.java.PendingException;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class ReportStepDefs {
     private ProjectManagementApp myApp;
@@ -16,8 +22,8 @@ public class ReportStepDefs {
     private Project project;
     private Report report;
 
-    public ReportStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
-        this.myApp = myApp;
+    public ReportStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+        this.myApp = context.app;
         this.errorHolder = errorHolder;
         this.project = myApp.getAllProjects().iterator().next(); // Assuming one project
     }

@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
@@ -13,8 +17,6 @@ import dtu.superPlanner.WeekBasedCalendar;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RegisterTimeStepDefs {
     public Project project;
@@ -26,8 +28,8 @@ public class RegisterTimeStepDefs {
     public final String USER = "huba";
     private ErrorMessageHolder errorHolder;
 
-    public RegisterTimeStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorHolder) {
-        this.myApp = myApp;
+    public RegisterTimeStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+        this.myApp = context.app;
         this.errorHolder = errorHolder;
     }
 

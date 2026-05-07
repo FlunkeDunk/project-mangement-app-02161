@@ -1,29 +1,27 @@
 package hellocucumber;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import dtu.superPlanner.ProjectManagementApp;
-import io.cucumber.java.PendingException;
-import io.cucumber.java.en.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class LoginStepDefs {
 
     private final ProjectManagementApp myApp;
     private final ErrorMessageHolder errorMessageHolder;
 
-    public LoginStepDefs(ProjectManagementApp myApp, ErrorMessageHolder errorMessageHolder ) {
-        this.myApp = myApp;
+    public LoginStepDefs(TestContext context, ErrorMessageHolder errorMessageHolder ) {
+        this.myApp = context.app;
         this.errorMessageHolder = errorMessageHolder;
     }
 
     @Given("the initials {string} exists in the database")
     public void a_user_with_username_initials_exists_in_the_database(String userID) {
-        List<String> users = new ArrayList<>();
-        users.add(userID);
-        myApp.createEmployees(users);
+        myApp.createEmployee(userID);
     }
 
     @When("the user tries to log in as {string}")

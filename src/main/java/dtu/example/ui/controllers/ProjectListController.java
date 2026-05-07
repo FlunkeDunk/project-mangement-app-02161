@@ -1,8 +1,10 @@
 package dtu.example.ui.controllers;
 
 import dtu.example.ui.ActivityItemFactory;
+import dtu.example.ui.NodeUtils;
 import dtu.example.ui.ProjectDetailsView;
 import dtu.example.ui.interfaces.PopupService;
+import dtu.example.ui.interfaces.PopupServiceFactory;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
@@ -22,10 +24,11 @@ import javafx.scene.layout.VBox;
 
 public class ProjectListController extends ProjectManagementAwareController {
 
-    private PopupService popupService;
-    private ActivityItemFactory activityItemFactory;
+    private final ActivityItemFactory ACTIVITY_ITEM_FACTORY;
+    private final PopupServiceFactory popupService_FACTORY;
 
-    // --- Project Details Labels ---
+    private PopupService popupService;
+
     @FXML
     private Label selectedProjectNameLabel;
     @FXML
@@ -50,27 +53,27 @@ public class ProjectListController extends ProjectManagementAwareController {
     @FXML
     private Button editProjectButton;
     @FXML
-    private Button addProjectButton;
-    @FXML
     private Button viewReportButton;
-    @FXML
-    private Button closePopUpButton;
+
+
+    public ProjectListController(PopupServiceFactory popupServiceFactory, ActivityItemFactory activityItemFactory) {
+        this.ACTIVITY_ITEM_FACTORY = activityItemFactory;
+        this.popupService_FACTORY = popupServiceFactory;
+    }
 
     @FXML
     private void initialize() {
+        popupService = popupService_FACTORY.create(popUpPane, popUpContainer, rootVBox, navigator);
         setSelectedProjectButtonsDisabled(true);
         clearProjectDetails();
         clearActivityList();
         loadProjects();
-        popupService = new PopUpManager(popUpPane, popUpContainer, rootVBox, navigator);
         popupService.popDown();
         projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 showProject(newSelection);
             }
-
         });
-
     }
 
     private void setSelectedProjectButtonsDisabled(Boolean disabled) {
@@ -90,7 +93,7 @@ public class ProjectListController extends ProjectManagementAwareController {
 
         setProjectDetails(new ProjectDetailsView(project));
         activityListAccordion.getPanes()
-                .setAll(activityItemFactory.createActivityItems(project, popupService, this::executeUiAction));
+                .setAll(ACTIVITY_ITEM_FACTORY.createActivityItems(project, popupService, this::executeUiAction));
         setSelectedProjectButtonsDisabled(false);
     }
 
@@ -118,17 +121,17 @@ public class ProjectListController extends ProjectManagementAwareController {
     @FXML
     private void handleAddActivity() {
         executeUiAction(
-            popupService::addActivity,
-            getSelectedProjectId(),
-            "Operation failed");
+                popupService::addActivity,
+                getSelectedProjectId(),
+                "Operation failed");
     }
 
     @FXML
     private void handleEditProject() {
         executeUiAction(
-            popupService::editProject,
-            getSelectedProjectId(),
-            "Operation failed");
+                popupService::editProject,
+                getSelectedProjectId(),
+                "Operation failed");
     }
 
     @FXML
@@ -142,9 +145,9 @@ public class ProjectListController extends ProjectManagementAwareController {
     private void handleViewReport() {
         Report report = app.createReport(getSelectedProjectId());
         executeUiAction(
-            navigator::toViewReport,
-            report,
-            "Operation failed");
+                navigator::toViewReport,
+                report,
+                "Operation failed");
     }
 
     @FXML
@@ -171,7 +174,6 @@ public class ProjectListController extends ProjectManagementAwareController {
     @FXML
     private void checkClickedOutsidePopUp(MouseEvent event) {
         Node clickedNode = (Node) event.getTarget();
-
         // Check if the clicked node is NOT inside popUpPane
         if (!NodeUtils.isDescendant(clickedNode, popUpPane)) {
             popupService.popDown();
@@ -186,9 +188,5 @@ public class ProjectListController extends ProjectManagementAwareController {
     private int getSelectedProjectId() {
         Project project = projectList.getSelectionModel().getSelectedItem();
         return project != null ? project.getId() : 0;
-    }
-
-    public void setActivityItemFactory(ActivityItemFactory activityItemFactory) {
-        this.activityItemFactory = activityItemFactory;
     }
 }

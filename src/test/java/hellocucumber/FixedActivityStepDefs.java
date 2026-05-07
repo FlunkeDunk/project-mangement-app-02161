@@ -23,8 +23,8 @@ public class FixedActivityStepDefs {
     private String user;
     private LocalDate currentDate;
 
-    public FixedActivityStepDefs(ProjectManagementApp app, ErrorMessageHolder errorHolder) {
-        this.app = app;
+    public FixedActivityStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+        this.app = context.app;
         this.errorHolder = errorHolder;
 
         user = app.getUserInitials();

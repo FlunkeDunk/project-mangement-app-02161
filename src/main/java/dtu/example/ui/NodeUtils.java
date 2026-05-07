@@ -1,4 +1,4 @@
-package dtu.example.ui.controllers;
+package dtu.example.ui;
 
 import javafx.scene.Node;
 
