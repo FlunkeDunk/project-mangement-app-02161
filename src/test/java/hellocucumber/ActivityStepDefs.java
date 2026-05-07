@@ -292,11 +292,9 @@ public class ActivityStepDefs {
         assertTrue(activity.getEmployees().contains(assignee), "Employee " + assignee + " not on activity " + activityName);
     }
 
-    @And("{string} is the project leader") // Is this supposed to be a then or a given??? This is why we use @Given,
-                                           // @When or @Then and not @And
-    public void isTheProjectLeader(String projectLeader) {
-        // Project leader reference needed below
-        // assertEquals(projectLeader, myActivity.);
+    @Given("{string} is the project leader")
+    public void isTheProjectLeader(String user) {
+        assertEquals(user, myProject.getProjectLeader());
     }
 
     @Given("an activity {string} with a duration of {int} week(s)")
