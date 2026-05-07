@@ -183,7 +183,7 @@ public class ProjectManagementApp {
                 continue;
             }
 
-            int alreadyAssignedActivitiesInTimeFrame = getActivitiesOverlapping(activityDuration, employeeRepository.get(userInitials));
+            int alreadyAssignedActivitiesInTimeFrame = getActivitiesOverlapping(activityDuration, employee);
             leastBusyEmployees.add(new priorityEmployee(employee.getInitials(), alreadyAssignedActivitiesInTimeFrame));
         }
 
