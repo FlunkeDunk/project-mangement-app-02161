@@ -9,13 +9,19 @@ public class Employee {
     private double dailyWorkHours;
     private String initials;
 
-    Employee(String initials) {
+    /**
+     * @author Emanuel
+     */
+    public Employee(String initials) {
         this.initials = initials;
         
         activities = new HashSet<>();
         fixedActivities = new HashSet<>();
     }
-
+    
+    /**
+     * @author Emanuel
+     */
     public void addActivity(AbstractActivity activity) throws IllegalArgumentException {
         switch (activity) {
             case Activity a:
@@ -37,21 +43,15 @@ public class Employee {
     }
 
     public boolean isAvailable(TimeFrame timeFrame) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    public String getInitials() {
-        return initials;
-    }
-
-    public boolean isOnFixedAcitivity(TimeFrame activityDuration) {
-        Set<FixedActivity> fixedActivities = getFixedActivities();
-
         for (FixedActivity fixedActivity : fixedActivities) {
-            if (TimeFrame.overlaps(activityDuration, fixedActivity.getTimeFrame())) {
+            if (TimeFrame.overlaps(timeFrame, fixedActivity.getTimeFrame())) {
                 return true;
             }
         }
         return false;
+    }
+
+    public String getInitials() {
+        return initials;
     }
 }

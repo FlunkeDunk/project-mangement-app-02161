@@ -1,5 +1,8 @@
 package dtu.superPlanner;
 
+/**
+ * @author Emanuel
+ */
 public enum FixedActivityType {
     Vacation ("Vacation"),
     Sick ("Sick"),

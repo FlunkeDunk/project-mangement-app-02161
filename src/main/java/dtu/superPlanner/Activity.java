@@ -15,6 +15,9 @@ public class Activity extends AbstractActivity {
     private double budgetedTime;
     private final int ID;
 
+    /**
+     * @author Emanuel
+     */
     public Activity(String name, TimeFrame timeFrame, int ID) {
         super(name, timeFrame);
         this.ID = ID;
@@ -59,7 +62,7 @@ public class Activity extends AbstractActivity {
         return ID;
     }
 
-    public Integer getDuration() {
+    public int getDuration() {
         WeekFields wf = WeekFields.ISO;
         TimeFrame timeFrame = this.getTimeFrame();
         WeekBasedCalendar startDate = timeFrame.getStartDate();

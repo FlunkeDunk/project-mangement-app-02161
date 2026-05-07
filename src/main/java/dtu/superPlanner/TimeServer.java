@@ -3,6 +3,9 @@ package dtu.superPlanner;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
 
+/**
+ * @author Emanuel
+ */
 public class TimeServer {
     public LocalDate getCurrentDate() {
         return LocalDate.now();

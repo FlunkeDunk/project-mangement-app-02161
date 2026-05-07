@@ -19,8 +19,11 @@ public class Project {
         this(startDate, ID);
         this.name = name;
     }
-
-    public void editName(String newName) { // Ebbe
+    
+    /**
+     * @author Ebbe
+     */
+    public void editName(String newName) {
         name = newName;
     }
 
@@ -63,9 +66,6 @@ public class Project {
     }
 
     public Set<Activity> getActivitySet() {
-        if (activities == null) {
-            return null;
-        }
         return new HashSet<>(activities.values());
     }
 

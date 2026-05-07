@@ -1,5 +1,8 @@
 package dtu.superPlanner;
 
+/**
+ * @author Emanuel
+ */
 public abstract class AbstractActivity {
     private String name;
     private TimeFrame timeFrame;
