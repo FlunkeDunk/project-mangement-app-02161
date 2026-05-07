@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-class EmployeeFileReader {
+public class EmployeeFileReader {
 
 
     public List<String> loadEmployees() throws IOException {

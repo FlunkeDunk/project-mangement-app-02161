@@ -3,8 +3,7 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import dtu.example.ui.CustomScene;
-import dtu.example.ui.ProjectAware;
+import dtu.example.ui.interfaces.ProjectAware;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
@@ -52,7 +51,7 @@ public class CreateActivityController extends ProjectManagementAwareController i
             if (budgetSpinner.valueProperty().getValue() > 0) {
                 activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
             }
-            navigator.changeScene(CustomScene.PROJECT_LIST);
+            navigator.toProjectList();
         } catch (IllegalArgumentException e ) {
             showAlert("Invalid date", e.getMessage());
         } catch (IllegalAccessException e) {

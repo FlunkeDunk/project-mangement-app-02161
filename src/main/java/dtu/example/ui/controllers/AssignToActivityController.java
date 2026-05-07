@@ -3,7 +3,7 @@ package dtu.example.ui.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import dtu.example.ui.ActivityAware;
+import dtu.example.ui.interfaces.ActivityAware;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;

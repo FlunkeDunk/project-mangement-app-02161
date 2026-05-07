@@ -3,7 +3,6 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import dtu.example.ui.CustomScene;
 import dtu.superPlanner.FixedActivityType;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
@@ -57,6 +56,6 @@ public class AddFixedActivityController extends ProjectManagementAwareController
         }
 
         app.createFixedActivity(type, timeFrame);
-        navigator.changeScene(CustomScene.PROJECT_LIST);
+        navigator.toProjectList();;
     }
 }

@@ -1,6 +1,6 @@
 package dtu.example.ui.controllers;
 
-import dtu.example.ui.ActivityAware;
+import dtu.example.ui.interfaces.ActivityAware;
 import dtu.superPlanner.Activity;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;

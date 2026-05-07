@@ -5,8 +5,8 @@ import java.time.LocalTime;
 import java.util.Set;
 import java.util.TreeSet;
 
-import dtu.example.ui.ActivityAware;
 import dtu.example.ui.components.TimeSpinner;
+import dtu.example.ui.interfaces.ActivityAware;
 import dtu.superPlanner.TimeLedger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

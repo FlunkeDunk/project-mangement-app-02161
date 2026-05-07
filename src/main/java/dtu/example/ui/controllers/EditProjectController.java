@@ -2,8 +2,7 @@ package dtu.example.ui.controllers;
 
 import java.io.IOException;
 
-import dtu.example.ui.CustomScene;
-import dtu.example.ui.ProjectAware;
+import dtu.example.ui.interfaces.ProjectAware;
 import dtu.superPlanner.Employee;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,10 +43,11 @@ public class EditProjectController extends ProjectManagementAwareController impl
         String leaderInitials = leader != null ? leader.getInitials() : null;
         try {
             app.setProjectName(projectId, projectName);
-            navigator.changeScene(CustomScene.PROJECT_LIST);
+            navigator.toProjectList();
         } catch (IllegalAccessException ex) {
             showAlert("Invalid access", ex.getMessage());
             System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            return;
         }
 
         try {

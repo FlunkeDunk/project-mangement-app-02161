@@ -3,6 +3,7 @@ package dtu.example.ui;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+import dtu.example.ui.controllers.ProjectListController;
 import dtu.superPlanner.ProjectManagementApp;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,12 +33,12 @@ public class Navigator {
         };
     }
 
-    public void setStage(Stage stage) {
+    private void setStage(Stage stage) {
         this.stage = stage;
 
     }
 
-    public <T> void changeScene(CustomScene fxmlScene, Consumer<T> initializer) throws IOException {
+    private <T> T changeScene(CustomScene fxmlScene, Consumer<T> initializer) throws IOException {
         FXMLLoader loader = loadFXML(fxmlScene);
         Parent root = loader.load();
         
@@ -52,10 +53,12 @@ public class Navigator {
 
         stage.setScene(scene);
         stage.show();
+
+        return loader.getController();
     }
 
-    public <T> void changeScene(CustomScene scene) throws IOException {
-        changeScene(scene, null);
+    private <T> T changeScene(CustomScene scene) throws IOException {
+        return changeScene(scene, null);
     }
 
     public FXMLLoader loadFXML(CustomScene scene) {
@@ -71,4 +74,18 @@ public class Navigator {
 
         return fxmlLoader;
     }
+
+    public void toRegisterTimeList() throws IOException{
+        changeScene(CustomScene.REGISTER_TIME_LIST);
+    }
+
+    public void toLogin() throws IOException{
+        changeScene(CustomScene.LOGIN);
+    }
+
+    public void toProjectList() throws IOException{
+        ProjectListController controller = changeScene(CustomScene.PROJECT_LIST);
+        controller.setActivityItemFactory(new ActivityItemFactory());
+    }
+
 }

@@ -3,11 +3,11 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-import dtu.example.ui.ActivityAware;
 import dtu.example.ui.CustomScene;
 import dtu.example.ui.Navigator;
-import dtu.example.ui.PopupService;
-import dtu.example.ui.ProjectAware;
+import dtu.example.ui.interfaces.ActivityAware;
+import dtu.example.ui.interfaces.PopupService;
+import dtu.example.ui.interfaces.ProjectAware;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -126,6 +126,16 @@ public class PopUpManager implements PopupService {
     @Override
     public void viewReport(Report report) throws IOException{
         popUp(CustomScene.VIEW_REPORT, ViewReportController.class, c -> c.setReport(report));
+    }
+
+    @Override
+    public void createProject() throws IOException {
+        popUp(CustomScene.CREATE_PROJECT);
+    }
+    
+    @Override
+    public void addFixedActivity() throws IOException {
+        popUp(CustomScene.ADD_FIXED_ACTIVITY);
     }
 
 }

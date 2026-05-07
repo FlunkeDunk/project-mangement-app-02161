@@ -1,12 +1,8 @@
 package dtu.example.ui.controllers;
 
-import java.io.IOException;
-import java.util.Map;
-
-import dtu.example.ui.CustomScene;
-import dtu.example.ui.PopupService;
-import dtu.example.ui.components.ActivityItem;
-import dtu.superPlanner.Activity;
+import dtu.example.ui.ActivityItemFactory;
+import dtu.example.ui.ProjectDetailsView;
+import dtu.example.ui.interfaces.PopupService;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
@@ -27,6 +23,7 @@ import javafx.scene.layout.VBox;
 public class ProjectListController extends ProjectManagementAwareController {
 
     private PopupService popupService;
+    private ActivityItemFactory activityItemFactory;
 
     // --- Project Details Labels ---
     @FXML
@@ -68,12 +65,10 @@ public class ProjectListController extends ProjectManagementAwareController {
         popupService = new PopUpManager(popUpPane, popUpContainer, rootVBox, navigator);
         popupService.popDown();
         projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            try {
-                onProjectSelected();
-            } catch (IOException ex) {
-                System.getLogger(ProjectListController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
-                        ex);
+            if (newSelection != null) {
+                showProject(newSelection);
             }
+
         });
 
     }
@@ -89,76 +84,22 @@ public class ProjectListController extends ProjectManagementAwareController {
     }
 
     @FXML
-    private void onProjectSelected() throws IOException {
-        Project project = projectList.getSelectionModel().getSelectedItem();
+    private void showProject(Project project) {
+        if (project == null)
+            return;
 
-        String projectId = "" + project.getId();
-        String projectStartDate = project.getStartDate().toString();
-        setProjectDetails(project.getName(), projectId, projectStartDate, project.getProjectLeader());
-        loadActivities(project.getActivityMap());
+        setProjectDetails(new ProjectDetailsView(project));
+        activityListAccordion.getPanes()
+                .setAll(activityItemFactory.createActivityItems(project, popupService, this::executeUiAction));
         setSelectedProjectButtonsDisabled(false);
     }
 
     // --- Public method to update UI when a project is selected ---
-    public void setProjectDetails(String name, String id, String startDate, String leader) {
-        String displayName = name != null ? name : "none";
-        String displayLeader = leader != null ? leader : "none";
-        selectedProjectNameLabel.setText(displayName);
-        selectedProjectIdLabel.setText(id);
-        selectedProjectStartDateLabel.setText(startDate);
-        selectedProjectLeaderLabel.setText(displayLeader);
-    }
-
-    private void loadActivities(Map<Integer, Activity> activities) throws IOException {
-        clearActivityList();
-
-        if (activities == null || activities.isEmpty()) {
-            return;
-        }
-
-        for (Map.Entry<Integer, Activity> entry : activities.entrySet()) {
-            int activityId = entry.getKey();
-            Activity activity = entry.getValue();
-
-            ActivityItem activityItem = new ActivityItem(activity, activityId);
-            activityListAccordion.getPanes().add(activityItem);
-
-            activityItem.setOnRegisterTimeRequested(
-                    () -> {
-                        try {
-                            popupService.registerTime(getSelectedProjectId(), activityId);
-                        } catch (IOException e) {
-                            showAlert("Operation failed", e.getMessage());
-                        }
-                    });
-
-            activityItem.setOnEditActivityRequested(
-                    () -> {
-                        try {
-                            popupService.editActivity(getSelectedProjectId(), activityId);
-                        } catch (IOException e) {
-                            showAlert("Operation failed", e.getMessage());
-                        }
-                    });
-
-            activityItem.setOnAssignToActivityRequested(
-                    () -> {
-                        try {
-                            popupService.assignToActivity(getSelectedProjectId(), activityId);
-                        } catch (IOException e) {
-                            showAlert("Operation failed", e.getMessage());
-                        }
-                    });
-
-            activityItem.setOnEditRegisteredTimeRequested(
-                    () -> {
-                        try {
-                            popupService.editRegisteredTime(getSelectedProjectId(), activityId);
-                        } catch (IOException e) {
-                            showAlert("Operation failed", e.getMessage());
-                        }
-                    });
-        }
+    public void setProjectDetails(ProjectDetailsView details) {
+        selectedProjectNameLabel.setText(details.getName());
+        selectedProjectIdLabel.setText(details.getId());
+        selectedProjectStartDateLabel.setText(details.getStartDate());
+        selectedProjectLeaderLabel.setText(details.getLeader());
     }
 
     // --- Clear UI ---
@@ -176,60 +117,55 @@ public class ProjectListController extends ProjectManagementAwareController {
     // --- Button Handlers ---
     @FXML
     private void handleAddActivity() {
-        try {
-            popupService.addActivity(getSelectedProjectId());
-        } catch (IOException e) {
-            showAlert("Operation failed", e.getMessage());
-        }
+        executeUiAction(
+            popupService::addActivity,
+            getSelectedProjectId(),
+            "Operation failed");
     }
 
     @FXML
     private void handleEditProject() {
-        try {
-            popupService.editProject(getSelectedProjectId());
-        } catch (IOException e) {
-            showAlert("Operation failed", e.getMessage());
-        }
+        executeUiAction(
+            popupService::editProject,
+            getSelectedProjectId(),
+            "Operation failed");
     }
 
     @FXML
     private void handleAddProject() {
-        try {
-            popupService.popUp(CustomScene.CREATE_PROJECT);
-        } catch (IOException e) {
-            showAlert("Operation failed", e.getMessage());
-        }
+        executeUiAction(
+                popupService::createProject,
+                "Operation failed");
     }
 
     @FXML
     private void handleViewReport() {
         Report report = app.createReport(getSelectedProjectId());
-        try {
-            popupService.viewReport(report);
-        } catch (IOException e) {
-            showAlert("Failed loading", e.getMessage());
-        }
+        executeUiAction(
+            popupService::viewReport,
+            report,
+            "Operation failed");
     }
 
     @FXML
-    private void onLogout() throws IOException {
-        navigator.changeScene(CustomScene.LOGIN);
+    private void onLogout() {
+        executeUiAction(
+                navigator::toLogin,
+                "Operation failed");
     }
 
     @FXML
-    private void onAddFixedActivity() throws IOException {
-        popupService.popUp(CustomScene.ADD_FIXED_ACTIVITY);
+    private void onAddFixedActivity() {
+        executeUiAction(
+                popupService::addFixedActivity,
+                "Operation failed");
     }
 
     @FXML
     private void onUserRegisterTime() {
-        try {
-            navigator.changeScene(CustomScene.REGISTER_TIME_LIST);
-        } catch (IOException ex) {
-            showAlert("Failed loading", ex.getMessage());
-            System.getLogger(AssignToActivityController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
-                    ex);
-        }
+        executeUiAction(
+                navigator::toRegisterTimeList,
+                "Operation failed");
     }
 
     @FXML
@@ -237,7 +173,7 @@ public class ProjectListController extends ProjectManagementAwareController {
         Node clickedNode = (Node) event.getTarget();
 
         // Check if the clicked node is NOT inside popUpPane
-        if (!isDescendant(clickedNode, popUpPane)) {
+        if (!NodeUtils.isDescendant(clickedNode, popUpPane)) {
             popupService.popDown();
         }
     }
@@ -247,19 +183,12 @@ public class ProjectListController extends ProjectManagementAwareController {
         popupService.popDown();
     }
 
-    private boolean isDescendant(Node child, Node parent) {
-        while (child != null) {
-            if (child == parent) {
-                return true;
-            }
-            child = child.getParent();
-        }
-        return false;
-    }
-
     private int getSelectedProjectId() {
         Project project = projectList.getSelectionModel().getSelectedItem();
         return project != null ? project.getId() : 0;
     }
 
+    public void setActivityItemFactory(ActivityItemFactory activityItemFactory) {
+        this.activityItemFactory = activityItemFactory;
+    }
 }

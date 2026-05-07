@@ -2,7 +2,6 @@ package dtu.example.ui.controllers;
 
 import java.io.IOException;
 
-import dtu.example.ui.CustomScene;
 import dtu.superPlanner.Employee;
 import dtu.superPlanner.Project;
 import javafx.collections.FXCollections;
@@ -38,6 +37,6 @@ public class CreateProjectController extends ProjectManagementAwareController {
         if (projectLeaderChoiceBox.getValue() != null) {
             app.setProjectLeader(project.getId(), projectLeaderChoiceBox.getValue().getInitials());
         }
-        navigator.changeScene(CustomScene.PROJECT_LIST);
+        navigator.toProjectList();;
     }
 }

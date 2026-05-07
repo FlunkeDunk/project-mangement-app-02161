@@ -3,8 +3,7 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.util.Map;
 
-import dtu.example.ui.CustomScene;
-import dtu.example.ui.ReportAware;
+import dtu.example.ui.interfaces.ReportAware;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -65,6 +64,6 @@ public class ViewReportController extends ProjectManagementAwareController imple
 
     @FXML
     public void onExit() throws IOException{
-        navigator.changeScene(CustomScene.PROJECT_LIST);
+        navigator.toProjectList();;
     }
 }

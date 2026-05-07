@@ -43,6 +43,6 @@ public class LoginController extends ProjectManagementAwareController{
             return;
         }
 
-        navigator.changeScene(CustomScene.PROJECT_LIST);
+        navigator.toProjectList();
     }
 }

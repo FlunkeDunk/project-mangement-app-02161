@@ -24,7 +24,7 @@ public class App extends Application {
         navigator = new Navigator(stage, app);
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
-        navigator.changeScene(CustomScene.LOGIN);
+        navigator.toLogin();
     }
 
     public static void main(String[] args) {
