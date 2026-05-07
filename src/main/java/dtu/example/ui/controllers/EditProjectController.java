@@ -46,7 +46,7 @@ public class EditProjectController extends ProjectManagementAwareController impl
             app.setProjectName(projectId, projectName);
             navigator.toProjectList();
         } catch (IllegalAccessException ex) {
-            showAlert("Invalid access", ex.getMessage());
+            alertService.show("Invalid access", ex.getMessage());
             System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             return;
         }
@@ -54,7 +54,7 @@ public class EditProjectController extends ProjectManagementAwareController impl
         try {
             app.setProjectLeader(projectId, leaderInitials);
         } catch (IllegalAccessException ex) {
-            showAlert("Invalid access", ex.getMessage());
+            alertService.show("Invalid access", ex.getMessage());
             System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
                     ex);
         }

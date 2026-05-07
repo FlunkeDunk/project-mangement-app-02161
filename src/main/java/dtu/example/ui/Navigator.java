@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import dtu.example.ui.controllers.ProjectListController;
 import dtu.example.ui.controllers.ViewReportController;
+import dtu.example.ui.interfaces.AlertServiceAware;
 import dtu.example.ui.interfaces.PopupServiceFactory;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.Report;
@@ -21,7 +22,7 @@ public class Navigator {
     private Callback<Class<?>, Object> controllerFactory;
 
     public Navigator(Stage stage, ProjectManagementApp app, PopupServiceFactory popupServiceFactory,
-            ActivityItemFactory activityItemFactory) {
+            ActivityItemFactory activityItemFactory, AlertService alertService) {
         Map<Class<?>, Supplier<?>> controllers = Map.of(
                 ProjectListController.class,
                 () -> new ProjectListController(
@@ -48,6 +49,10 @@ public class Navigator {
                 if (controller instanceof NavigatorAware aware) {
                     aware.setNavigator(this);
                 }
+                if (controller instanceof AlertServiceAware aware) {
+                    aware.setAlertService(alertService);
+                }
+
 
                 return controller;
 

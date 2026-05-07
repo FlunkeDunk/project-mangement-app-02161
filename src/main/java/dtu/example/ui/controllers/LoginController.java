@@ -2,7 +2,6 @@ package dtu.example.ui.controllers;
 
 import java.io.IOException;
 
-import dtu.example.ui.CustomScene;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -24,7 +23,7 @@ public class LoginController extends ProjectManagementAwareController{
         String initials = userInitialsTextField.getText().toLowerCase();
 
         if (initials == null || initials.trim().isEmpty()) {
-            showAlert("Login Error", "Please enter your user initials.");
+            alertService.show("Login Error", "Please enter your user initials.");
             return;
         }
 
@@ -32,14 +31,14 @@ public class LoginController extends ProjectManagementAwareController{
 
         // Validate: only letters, length 4
         if (!initials.matches("[a-zA-Z]{4}")) {
-            showAlert("Login Error", "Initials must be 4 letters (A–Z only).");
+            alertService.show("Login Error", "Initials must be 4 letters (A–Z only).");
             return;
         }
 
         try {
             app.login(initials);
         } catch (IllegalArgumentException ex) {
-            showAlert("Invalid initials", ex.getMessage());
+            alertService.show("Invalid initials", ex.getMessage());
             return;
         }
 

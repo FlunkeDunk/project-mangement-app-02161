@@ -50,7 +50,7 @@ public class EditRegisteredTimeController extends ProjectManagementAwareControll
             try {
                 app.editTime(projectId, activityId, date, timeSpinner.getHours());
             } catch (IllegalArgumentException ex) {
-                showAlert("Invalid time", ex.getMessage());
+                alertService.show("Invalid time", ex.getMessage());
             }
         }));
     }

@@ -26,7 +26,7 @@ public class AssignToActivityController extends ProjectManagementAwareController
         try {
             initialsList = app.getAvailableEmployees(projectId, activityId);
         } catch (IllegalAccessException ex) {
-            showAlert("Invalid acces", ex.getMessage());
+            alertService.show("Invalid acces", ex.getMessage());
             System.getLogger(AssignToActivityController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         if (initialsList != null) {
@@ -42,7 +42,7 @@ public class AssignToActivityController extends ProjectManagementAwareController
                 try {
                     app.addEmployeeToActivity(projectId, activityId, selectedEmployee);
                 } catch (IllegalAccessException e) {
-                    showAlert("Not allowed", e.getMessage());
+                    alertService.show("Not allowed", e.getMessage());
                 }
             }
         }

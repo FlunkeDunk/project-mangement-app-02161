@@ -1,14 +1,9 @@
 package dtu.example.ui;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import dtu.superPlanner.EmployeeRepository;
-import dtu.superPlanner.FileEmployeeRepository;
 import dtu.superPlanner.ProjectManagementApp;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
@@ -23,64 +18,31 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
 
+        AlertService alertService = new AlertService();
         ProjectManagementApp app;
         try {
-            app = buildApp();
+            app = new AppFactory().createApp();
         } catch (IOException e) {
-            showAlert(AlertType.WARNING, "Failed building app model", e.getMessage());
+            alertService.show(AlertType.ERROR, "Failed creating app", e.getMessage());
             return;
         }
-        Navigator navigator = buildNavigator(stage, app);
-
+        
+        Navigator navigator = buildNavigator(stage, app, alertService);
         configureStage(stage);
-
         try {
             navigator.toLogin();
         } catch (IOException e) {
-            showAlert(AlertType.WARNING, "Failed loading scene", e.getMessage());
+            alertService.show(AlertType.ERROR, "Failed loading scene", e.getMessage());
         }
     }
 
-    private ProjectManagementApp buildApp() throws IOException {
-        EmployeeRepository employeeRepository = buildEmployeeRepository();
-        return new ProjectManagementApp(employeeRepository);
-    }
-
-    private Navigator buildNavigator(Stage stage, ProjectManagementApp app) {
+    private Navigator buildNavigator(Stage stage, ProjectManagementApp app, AlertService alertService) {
         return new Navigator(
                 stage,
                 app,
                 new DefaultPopupServiceFactory(),
-                new ActivityItemFactory());
-    }
-
-    private EmployeeRepository buildEmployeeRepository() throws IOException {
-        InputStream input = getClass().getClassLoader().getResourceAsStream("initials.txt");
-        if (input == null) {
-            throw new IOException("Resource file initials.txt not found");
-        }
-        FileEmployeeRepository repo;
-        try {
-            repo = new FileEmployeeRepository(input);
-        } catch (IOException e) {
-            throw new IOException("Failed reading initials.txt", e);
-        }
-
-        if (repo.getSkippedLines()) {
-            Platform.runLater(() -> showAlert(
-                    AlertType.WARNING,
-                    "Skipped lines",
-                    "Some lines in employee text file were skipped"));
-        }
-        return repo;
-    }
-
-    private void showAlert(AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+                new ActivityItemFactory(),
+                alertService);
     }
 
     private void configureStage(Stage stage) {
@@ -88,5 +50,4 @@ public class App extends Application {
         stage.setWidth(640);
         stage.setHeight(540);
     }
-
 }

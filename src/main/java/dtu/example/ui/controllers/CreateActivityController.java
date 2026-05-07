@@ -40,7 +40,7 @@ public class CreateActivityController extends ProjectManagementAwareController i
         LocalDate startPickerDate = startDatePicker.getValue();
         LocalDate endPickerDate = endDatePicker.getValue();
         if (startPickerDate == null || endPickerDate == null) {
-            showAlert("Invalid date", "Must choose both dates");
+            alertService.show("Invalid date", "Must choose both dates");
         }
         WeekBasedCalendar startDate = new WeekBasedCalendar(startPickerDate);
         WeekBasedCalendar endDate = new WeekBasedCalendar(endPickerDate);
@@ -53,9 +53,9 @@ public class CreateActivityController extends ProjectManagementAwareController i
             }
             navigator.toProjectList();
         } catch (IllegalArgumentException e ) {
-            showAlert("Invalid date", e.getMessage());
+            alertService.show("Invalid date", e.getMessage());
         } catch (IllegalAccessException e) {
-            showAlert("Invalid access", e.getMessage());
+            alertService.show("Invalid access", e.getMessage());
         }
     }
 

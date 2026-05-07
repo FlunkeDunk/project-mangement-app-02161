@@ -42,7 +42,7 @@ public class AddFixedActivityController extends ProjectManagementAwareController
 
         // Basic validation
         if (type == null || startDate == null || endDate == null) {
-            showAlert("Invalid input", "Please fill in all fields.");
+            alertService.show("Invalid input", "Please fill in all fields.");
             return;
         }
         
@@ -51,7 +51,7 @@ public class AddFixedActivityController extends ProjectManagementAwareController
         try {
             timeFrame = new TimeFrame(new WeekBasedCalendar(startDate), new WeekBasedCalendar(startDate));
         } catch (IllegalArgumentException ex) {
-            showAlert("Invalid dates", ex.getMessage());
+            alertService.show("Invalid dates", ex.getMessage());
             return;
         }
 
