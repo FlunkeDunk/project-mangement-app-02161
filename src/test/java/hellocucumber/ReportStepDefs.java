@@ -1,5 +1,6 @@
 package hellocucumber;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +14,6 @@ import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.Report;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -29,16 +29,25 @@ public class ReportStepDefs {
         this.project = myApp.getAllProjects().iterator().next(); // Assuming one project
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @When("the project leader creates a report")
     public void the_project_leader_creates_a_report() {
         report = myApp.createReport(project.getId());
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("a report is created")
     public void a_report_is_created() {
         assertNotNull(report);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("the activity {string} has {double} hours budgeted")
     public void theActivityHasHoursBudgeted(String activityName, double hoursBudgeted) {
         Map<Integer, Report.ReportEntry> entries = report.getEntries();
@@ -53,25 +62,47 @@ public class ReportStepDefs {
         fail("Activity " + activityName + " was not found");
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @And("the activity {string} has {int} hours spent")
     public void theActivityHasHoursSpent(String arg0, int arg1) {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("the report indicates the time budget is {int} hours")
     public void theReportIndicatesTheTimeBudgetIsHours(int budget) {
         assertEquals(budget, report.getBudgetedTime());
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("the report indicates the time spent is {double} hours")
     public void theReportIndicatesTheTimeSpentIsHours(double spent) {
         assertEquals(spent, report.getTimeSpent());
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     @Then("the report indicates the estimated time remaining is {int} hours")
     public void theReportIndicatesTheEstimatedTimeRemainingIsHours(int remaining) {
         assertEquals(remaining, report.getTimeLeft());
+    }
+
+    /**
+     * @author BenjaminEwe
+     */
+    @And("the report has the entries")
+    public void theReportHasTheEntries(List<String> expectedEntries) {
+        List<String> actualEntries = report.getEntries().values().stream().map(Object::toString).toList();
+
+        assertEquals(expectedEntries, actualEntries);
     }
 
     @Then("the report indecates the name of the project is {string}")

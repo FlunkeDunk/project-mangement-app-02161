@@ -16,7 +16,7 @@ Feature: Add activity
   Scenario: Add activity to a project with no project leader and existing activities
     Given a project
     And the project has no project leader
-    And the project has the activities with the names and budgeted times
+    And the project has the activities with the names and durations
       | Attack Mordor | 5 |
     When an employee tries to add activity "Destroy the ring" with budgeted time 8 weeks
     Then the project should have the activities with the names and budgeted times
@@ -26,7 +26,7 @@ Feature: Add activity
   Scenario: Add activity to a project with a project leader and existing activities
     Given a project
     And the project has a project leader
-    And the project has the activities with the names and budgeted times
+    And the project has the activities with the names and durations
       | Attack Mordor | 5 |
     When an employee tries to add activity "Destroy the ring" with budgeted time 8 weeks
     Then the project should have the activities with the names and budgeted times
@@ -36,7 +36,7 @@ Feature: Add activity
   Scenario: Add activity to a project with a project leader and existing activities as project leader
     Given a project
     And the user is the project leader
-    And the project has the activities with the names and budgeted times
+    And the project has the activities with the names and durations
       | Attack Mordor | 5 |
     When an employee tries to add activity "Destroy the ring" with budgeted time 8 weeks
     Then the project should have the activities with the names and budgeted times

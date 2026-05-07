@@ -48,7 +48,7 @@
                         <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="0" max="2147483647" min="0" />
                      </valueFactory>
                   </Spinner>
-                  <Label text="Budgetet hours:" GridPane.rowIndex="3" />
+                  <Label text="Budgeted hours:" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>
