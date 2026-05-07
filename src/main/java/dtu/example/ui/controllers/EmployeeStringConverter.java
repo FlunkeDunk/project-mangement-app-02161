@@ -3,10 +3,14 @@ package dtu.example.ui.controllers;
 import dtu.superPlanner.Employee;
 import javafx.util.StringConverter;
 
+    /**
+    * @author Arthur
+    */
+   
 public class EmployeeStringConverter extends StringConverter<Employee> {
     @Override
     public String toString(Employee e) {
-        return e == null ? "" : e.getInitials();
+        return e == null ? "None" : e.getInitials();
     }
 
     @Override

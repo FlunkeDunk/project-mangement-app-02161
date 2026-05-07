@@ -20,12 +20,7 @@ public class Project {
         this.name = name;
     }
 
-    public void editName(String editorInitials, String newName) {
-        if (isProjectLeader(editorInitials)) {
-            // throw new IllegalStateException("Only the project leader can rename the
-            // activities");
-        }
-
+    public void editName(String newName) { // Ebbe
         name = newName;
     }
 
@@ -90,10 +85,6 @@ public class Project {
         return projectLeader;
     }
 
-    public boolean isLeader(String employeeInitials) {
-        return projectLeader == null ? true : projectLeader.equals(employeeInitials);
-    }
-
     public boolean isProjectLeader(String initials) {
         return projectLeader == null || projectLeader.equals(initials);
     }
@@ -108,6 +99,6 @@ public class Project {
 
     @Override
     public String toString() {
-        return name;
+        return getId() + " - " + getName();
     }
 }

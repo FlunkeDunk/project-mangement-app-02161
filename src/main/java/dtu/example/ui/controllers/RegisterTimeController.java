@@ -3,8 +3,8 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.time.LocalTime;
 
-import dtu.example.ui.ActivityAware;
 import dtu.example.ui.TimeSpinnerValueFactory;
+import dtu.example.ui.interfaces.ActivityAware;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -43,7 +43,7 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
 
         double hours = (double) timeSpinner.getValue().getHour() + (double) timeSpinner.getValue().getMinute() / 60.0;
         app.registerTime(projectId, activityId, hours, datePicker.getValue());
-        navigator.changeScene("project_list");
+        navigator.toProjectList();
     }
 
     @Override

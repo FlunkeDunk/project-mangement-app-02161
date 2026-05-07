@@ -1,16 +1,15 @@
 package dtu.example.ui.controllers;
 
-import java.io.IOException;
-import java.time.LocalDate;
-
-import dtu.example.ui.ActivityAware;
+import dtu.example.ui.interfaces.ActivityAware;
 import dtu.superPlanner.Activity;
-import dtu.superPlanner.WeekBasedCalendar;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
+    /**
+    * @author Arthur
+    */
 public class EditActivityController extends ProjectManagementAwareController implements ActivityAware {
 
     @FXML
@@ -39,38 +38,8 @@ public class EditActivityController extends ProjectManagementAwareController imp
         budgetSpinner.getValueFactory().setValue((int) activity.getBudgetedTime());
     }
 
-    @FXML
-    private void onSave() throws IOException {
-        if (activity == null) {
-            navigator.changeScene("project_list");
-        }
 
-        activity.setName(activityNameTextField.getText());
-
-        LocalDate startDate = startDatePicker.getValue();
-        LocalDate endDate = endDatePicker.getValue();
-
-        if (startDate != null) {
-            try {
-                activity.getTimeFrame().setStartDate(new WeekBasedCalendar(startDate));
-            } catch (IllegalArgumentException e) {
-                showAlert("Invalid date", e.getMessage());
-            }
-        }
-        if (endDate != null) {
-            try {
-                activity.getTimeFrame().setEndDate(new WeekBasedCalendar(endDate));
-            } catch (IllegalArgumentException e) {
-                showAlert("Invalid date", e.getMessage());
-            }
-        }
-
-        if (budgetSpinner.valueProperty().getValue() > 0) {
-            activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
-        }
-        navigator.changeScene("project_list");
-    }
-
+    @Override
     public void setProjectId(int projectId) {
         this.projectId = projectId;
         if (activityId != 0) {
@@ -78,6 +47,7 @@ public class EditActivityController extends ProjectManagementAwareController imp
         }
     }
 
+    @Override
     public void setActivityId(int activityId) {
         this.activityId = activityId;
         if (projectId != 0) {

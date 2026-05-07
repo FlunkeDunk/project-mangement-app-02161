@@ -41,7 +41,17 @@ public class WeekBasedCalendar {
     }
 
     public void setWeek(int week) {
-        this.week = week;
+        if (week == 0) {
+            throw new IllegalArgumentException(String.format("DateError: Invalid week: %d", week));
+        }
+        else if (week < 0) {
+            // Since no week 0 exists, we take negative weeks to mean weeks before first week of a given year
+            week++;
+        }
+
+        LocalDate date = LocalDate.of(year, 1, 4).plusWeeks(week - 1);
+        this.week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        this.year = date.getYear();
     }
 
     public LocalDate toLocalDate() {
@@ -67,5 +77,10 @@ public class WeekBasedCalendar {
         if (!(other instanceof WeekBasedCalendar)) return false;
         WeekBasedCalendar wbc = (WeekBasedCalendar)other;
         return week == wbc.week && year == wbc.year;
+    }
+
+    @Override
+    public int hashCode() {
+        return year * 100 + week;
     }
 }

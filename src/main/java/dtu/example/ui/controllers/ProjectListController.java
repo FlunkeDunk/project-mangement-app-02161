@@ -1,27 +1,29 @@
 package dtu.example.ui.controllers;
 
-import java.io.IOException;
-import java.util.Map;
-
-import dtu.example.ui.ActivityAware;
-import dtu.example.ui.ProjectAware;
-import dtu.example.ui.ReportAware;
-import dtu.example.ui.components.ActivityItem;
-import dtu.superPlanner.Activity;
+import dtu.example.ui.ActivityItemFactory;
+import dtu.example.ui.ProjectDetailsView;
+import dtu.example.ui.interfaces.PopupService;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.StackPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+/**
+ * @author Arthur
+ */
 
 public class ProjectListController extends ProjectManagementAwareController {
 
-    private int selectedProjectId = -1;
-    private PopUpManager popUpManager;
+    private PopupService popupService;
+    private ActivityItemFactory activityItemFactory;
 
     // --- Project Details Labels ---
     @FXML
@@ -37,7 +39,9 @@ public class ProjectListController extends ProjectManagementAwareController {
     @FXML
     private ListView<Project> projectList;
     @FXML
-    private StackPane popUpPane;
+    private AnchorPane popUpPane;
+    @FXML
+    private Pane popUpContainer;
     @FXML
     private VBox rootVBox;
     // --- Buttons ---
@@ -49,6 +53,8 @@ public class ProjectListController extends ProjectManagementAwareController {
     private Button addProjectButton;
     @FXML
     private Button viewReportButton;
+    @FXML
+    private Button closePopUpButton;
 
     @FXML
     private void initialize() {
@@ -56,15 +62,13 @@ public class ProjectListController extends ProjectManagementAwareController {
         clearProjectDetails();
         clearActivityList();
         loadProjects();
-        popUpManager = new PopUpManager(popUpPane, rootVBox, navigator);
-
+        popupService = new PopUpManager(popUpPane, popUpContainer, rootVBox, navigator);
+        popupService.popDown();
         projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            try {
-                onProjectSelected();
-            } catch (IOException ex) {
-                System.getLogger(ProjectListController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
-                        ex);
+            if (newSelection != null) {
+                showProject(newSelection);
             }
+
         });
 
     }
@@ -80,95 +84,22 @@ public class ProjectListController extends ProjectManagementAwareController {
     }
 
     @FXML
-    private void onProjectSelected() throws IOException {
-        Project project = projectList.getSelectionModel().getSelectedItem();
-
-        if (project == null || selectedProjectId == project.getId()) {
+    private void showProject(Project project) {
+        if (project == null)
             return;
-        }
 
-        selectedProjectId = project.getId();
-        String projectId = "" + project.getId();
-        String projectStartDate = project.getStartDate().toString();
-        setProjectDetails(project.getName(), projectId, projectStartDate, project.getProjectLeader());
-        loadActivities(project.getActivityMap());
+        setProjectDetails(new ProjectDetailsView(project));
+        activityListAccordion.getPanes()
+                .setAll(activityItemFactory.createActivityItems(project, popupService, this::executeUiAction));
         setSelectedProjectButtonsDisabled(false);
     }
 
     // --- Public method to update UI when a project is selected ---
-    public void setProjectDetails(String name, String id, String startDate, String leader) {
-        String displayName = name != null ? name : "none";
-        String displayLeader = leader != null ? leader : "none";
-        selectedProjectNameLabel.setText(displayName);
-        selectedProjectIdLabel.setText(id);
-        selectedProjectStartDateLabel.setText(startDate);
-        selectedProjectLeaderLabel.setText(displayLeader);
-    }
-
-    private void loadActivities(Map<Integer, Activity> activities) throws IOException {
-        clearActivityList();
-        if (activities == null) {
-            return;
-        }
-
-        for (Map.Entry<Integer, Activity> entry : activities.entrySet()) {
-            int activityId = entry.getKey();
-            Activity activity = entry.getValue();
-            ActivityItem activityItem = new ActivityItem(activity, activityId);
-            activityListAccordion.getPanes().add(activityItem);
-            activityItem.setOnRegisterTimeRequested(
-                    () -> changeSceneWithActivity("register_time", RegisterTimeController.class, activityId));
-            activityItem.setOnEditActivityRequested(
-                    () -> changeSceneWithActivity("edit_activity", EditActivityController.class, activityId));
-            activityItem.setOnAssignToActivityRequested(
-                    () -> changeSceneWithActivity("assign_to_activity", AssignToActivityController.class, activityId));
-            activityItem.setOnEditRegisteredTimeRequested(
-                    () -> changeSceneWithActivity("edit_registered_time", EditRegisteredTimeController.class,
-                            activityId));
-        }
-    }
-
-    private <T extends ActivityAware> void changeSceneWithActivity(
-            String sceneName,
-            Class<T> controllerClass,
-            int activityId) {
-        try {
-            navigator.changeScene(sceneName, controller -> {
-                T typedController = controllerClass.cast(controller);
-                typedController.setProjectId(selectedProjectId);
-                typedController.setActivityId(activityId);
-            });
-        } catch (IOException e) {
-            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
-        }
-    }
-
-    private <T extends ReportAware> void changeSceneWithReport(
-            String sceneName,
-            Class<T> controllerClass,
-            Report report) {
-        try {
-            navigator.changeScene(sceneName, controller -> {
-                T typedController = controllerClass.cast(controller);
-                typedController.setReport(report);
-            });
-        } catch (IOException e) {
-            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
-        }
-    }
-
-    private <T extends ProjectAware> void changeSceneWithProject(
-            String sceneName,
-            Class<T> controllerClass,
-            int projectId) {
-        try {
-            navigator.changeScene(sceneName, controller -> {
-                T typedController = controllerClass.cast(controller);
-                typedController.setProjectId(projectId);
-            });
-        } catch (IOException e) {
-            System.err.println("Failed loading " + sceneName + ": " + e.getMessage());
-        }
+    public void setProjectDetails(ProjectDetailsView details) {
+        selectedProjectNameLabel.setText(details.getName());
+        selectedProjectIdLabel.setText(details.getId());
+        selectedProjectStartDateLabel.setText(details.getStartDate());
+        selectedProjectLeaderLabel.setText(details.getLeader());
     }
 
     // --- Clear UI ---
@@ -185,39 +116,79 @@ public class ProjectListController extends ProjectManagementAwareController {
 
     // --- Button Handlers ---
     @FXML
-    private void handleAddActivity() throws IOException {
-        navigator.changeScene("create_activity", controller -> {
-            ((CreateActivityController) controller).setProjectId(selectedProjectId);
-        });
+    private void handleAddActivity() {
+        executeUiAction(
+            popupService::addActivity,
+            getSelectedProjectId(),
+            "Operation failed");
     }
 
     @FXML
     private void handleEditProject() {
-        changeSceneWithProject("edit_project", EditProjectController.class, selectedProjectId);
+        executeUiAction(
+            popupService::editProject,
+            getSelectedProjectId(),
+            "Operation failed");
     }
 
     @FXML
-    private void handleAddProject() throws IOException {
-        popUpManager.popUp("create_project");
+    private void handleAddProject() {
+        executeUiAction(
+                popupService::createProject,
+                "Operation failed");
     }
 
     @FXML
     private void handleViewReport() {
-        changeSceneWithReport("view_report", ViewReportController.class,
-                app.getProject(selectedProjectId).createReport());
+        Report report = app.createReport(getSelectedProjectId());
+        executeUiAction(
+            navigator::toViewReport,
+            report,
+            "Operation failed");
     }
 
     @FXML
-    private void onLogout() throws IOException {
-        navigator.changeScene("login");
+    private void onLogout() {
+        executeUiAction(
+                navigator::toLogin,
+                "Operation failed");
     }
 
     @FXML
     private void onAddFixedActivity() {
-
+        executeUiAction(
+                popupService::addFixedActivity,
+                "Operation failed");
     }
+
     @FXML
     private void onUserRegisterTime() {
+        executeUiAction(
+                navigator::toRegisterTimeList,
+                "Operation failed");
+    }
 
+    @FXML
+    private void checkClickedOutsidePopUp(MouseEvent event) {
+        Node clickedNode = (Node) event.getTarget();
+
+        // Check if the clicked node is NOT inside popUpPane
+        if (!NodeUtils.isDescendant(clickedNode, popUpPane)) {
+            popupService.popDown();
+        }
+    }
+
+    @FXML
+    private void closePopUpClicked() {
+        popupService.popDown();
+    }
+
+    private int getSelectedProjectId() {
+        Project project = projectList.getSelectionModel().getSelectedItem();
+        return project != null ? project.getId() : 0;
+    }
+
+    public void setActivityItemFactory(ActivityItemFactory activityItemFactory) {
+        this.activityItemFactory = activityItemFactory;
     }
 }

@@ -66,7 +66,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#onUserRegisterTime" text="Register time">
                            <accelerator>
-                              <KeyCodeCombination alt="UP" code="R" control="ANY" meta="UP" shift="UP" shortcut="UP" />
+                              <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator>
                         </MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#onAddFixedActivity" text="Add fixed activity" />
@@ -169,9 +169,14 @@
           </SplitPane>
         </children>
       </VBox>
-      <StackPane mouseTransparent="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="popUpContainer" onMouseClicked="#checkClickedOutsidePopUp" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <StackPane fx:id="popUpPane" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="360.0" prefWidth="480.0" styleClass="popup-pane" stylesheets="@style.css" visible="false" />
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="480.0">
+               <children>
+                  <AnchorPane fx:id="popUpPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="480.0" styleClass="popup-pane" stylesheets="@style.css" />
+                  <Button fx:id="closePopUpButton" mnemonicParsing="false" onAction="#closePopUpClicked" text="Close" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+               </children>
+            </AnchorPane>
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

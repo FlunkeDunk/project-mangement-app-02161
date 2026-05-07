@@ -3,6 +3,7 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import dtu.example.ui.interfaces.ProjectAware;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
@@ -11,7 +12,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
-public class CreateActivityController extends ProjectManagementAwareController {
+    /**
+    * @author Arthur
+    */
+public class CreateActivityController extends ProjectManagementAwareController implements ProjectAware{
 
     @FXML
     TextField activityNameTextField;
@@ -23,6 +27,12 @@ public class CreateActivityController extends ProjectManagementAwareController {
     Spinner<Integer> budgetSpinner;
 
     private int projectId;
+
+    @FXML
+    private void initialize() {
+        startDatePicker.setValue(app.getTimeServer().getCurrentDate());
+        endDatePicker.setValue(app.getTimeServer().getCurrentDate());
+    }
 
 
     @FXML
@@ -41,7 +51,7 @@ public class CreateActivityController extends ProjectManagementAwareController {
             if (budgetSpinner.valueProperty().getValue() > 0) {
                 activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
             }
-            navigator.changeScene("project_list");
+            navigator.toProjectList();
         } catch (IllegalArgumentException e ) {
             showAlert("Invalid date", e.getMessage());
         } catch (IllegalAccessException e) {
@@ -49,6 +59,7 @@ public class CreateActivityController extends ProjectManagementAwareController {
         }
     }
 
+    @Override
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }

@@ -161,7 +161,7 @@ public class ProjectStepDefs {
     }
 
     @When("the user changes the project name to {string}")
-    public void the_user_changes_the_project_name_to(String employeeInitials, String newProjectName) {
-        project.editName(employeeInitials, newProjectName);
+    public void the_user_changes_the_project_name_to(String employeeInitials, String newProjectName) throws IllegalAccessException {
+        myApp.setProjectName(project.getId(), newProjectName);
     }
 }

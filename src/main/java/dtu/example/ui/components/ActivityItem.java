@@ -141,11 +141,6 @@ public class ActivityItem extends TitledPane {
         }
     }
 
-    private void addEmployee(String name) {
-        Label label = new Label(name);
-        employeListVBox.getChildren().add(label);
-    }
-
     private void clearEmployees() {
         employeListVBox.getChildren().clear();
     }

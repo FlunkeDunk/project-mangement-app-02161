@@ -1,71 +1,100 @@
 package hellocucumber;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import dtu.superPlanner.FixedActivity;
+import dtu.superPlanner.FixedActivityType;
+import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.TimeFrame;
+import dtu.superPlanner.WeekBasedCalendar;
 import io.cucumber.java.en.*;
 
 public class FixedActivityStepDefs {
-    @When("the employee sets the fixed activity {string} to start in year {int}")
-    public void the_employee_sets_the_fixed_activity_to_start_in_year(String string, Integer int1) {
+    private final ProjectManagementApp app;
+    private final ErrorMessageHolder errorHolder;
+    private FixedActivity activity;
+    private String user;
+    private LocalDate currentDate;
+
+    public FixedActivityStepDefs(ProjectManagementApp app, ErrorMessageHolder errorHolder) {
+        this.app = app;
+        this.errorHolder = errorHolder;
+
+        user = app.getUserInitials();
+    }
+
+    private TimeFrame getTimeFrameFromIntegerLists(List<List<Integer>> dates) {
+        List<Integer> tempDate = dates.get(0);
+        TimeFrame timeFrame = null;
+        try {
+            WeekBasedCalendar startDate = new WeekBasedCalendar(tempDate.get(0), tempDate.get(1));
+            tempDate = dates.get(1);
+            WeekBasedCalendar endDate = new WeekBasedCalendar(tempDate.get(0), tempDate.get(1));
+            timeFrame = new TimeFrame(startDate, endDate);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+
+        return timeFrame;
+    }
+
+    @When("sets {string} to end in year {int}")
+    public void setsToEndInYear(String string, Integer int1) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
-    @Then("the fixed activity starts in year {int}")
-    public void the_fixed_activity_starts_in_year(Integer int1) {
+
+    @When("sets {string} to start in week {int}")
+    public void setsToStartInWeek(String string, Integer int1) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
-    @Then("the fixed activity starts in week {int}")
-    public void the_fixed_activity_starts_in_week(Integer int1) {
+
+    @When("sets {string} to end in week {int}")
+    public void setsToEndInWeek(String string, Integer int1) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
-    @Then("the fixed activity ends in year {int}")
-    public void the_fixed_activity_ends_in_year(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+
+    @Given("a fixed activity {string} with timeframe")
+    public void aFixedActivityWithTimeframe(String string, List<List<Integer>> dates) {
+        theUserCreatesAFixedActivityWithTimeframe(string, dates);
     }
-    @Then("the fixed activity ends in week {int}")
-    public void the_fixed_activity_ends_in_week(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+
+    @When("the user creates a fixed activity {string} with timeframe")
+    public void theUserCreatesAFixedActivityWithTimeframe(String string, List<List<Integer>> dates) {
+        TimeFrame timeFrame = getTimeFrameFromIntegerLists(dates);
+
+        if (timeFrame == null)
+            return;
+
+        try {
+            activity = app.createFixedActivity(FixedActivityType.valueOf(string), timeFrame);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
     }
-    @Given("a fixed activity {string}")
-    public void a_fixed_activity(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+
+    @Then("the user has the fixed activity {string} with timeframe")
+    public void theUserHasTheFixedActivityWithTimeframe(String string, List<List<Integer>> dates) {
+        List<FixedActivity> fixedActivities = new ArrayList<>(app.getFixedActivities());
+        TimeFrame timeFrame = getTimeFrameFromIntegerLists(dates);
+        assertNotNull(timeFrame);
+
+        FixedActivity expectedActivity = new FixedActivity(FixedActivityType.valueOf(string), timeFrame);
+
+        assertTrue(fixedActivities.contains(expectedActivity));
     }
-    @Given("{string} is set to start in year {int}")
-    public void is_set_to_start_in_year(String string, Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Given("{string} is set to end in year {int}")
-    public void is_set_to_end_in_year(String string, Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Given("{string} is set to start in week {int}")
-    public void is_set_to_start_in_week(String string, Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Given("{string} is set to end in week {int}")
-    public void is_set_to_end_in_week(String string, Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @When("the employee sets the fixed activity {string} to start the year {int}")
-    public void the_employee_sets_the_fixed_activity_to_start_the_year(String string, Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Then("the fixed activity is not added")
-    public void the_fixed_activity_is_not_added() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Then("the message {string} is shown")
-    public void the_message_is_shown(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+
+    @Then("the user has {int} fixed activities")
+    public void theUserHasFixedActivities(Integer int1) {
+        assertEquals(int1, app.getFixedActivities().size());
     }
 }

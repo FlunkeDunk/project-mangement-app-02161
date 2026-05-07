@@ -47,7 +47,7 @@ public class Activity extends AbstractActivity {
         employeeTimeLedgers.get(initials).editTime(date, newTime);
     }
 
-    public void addEmployee(String assignedInitials) {
+    protected void addEmployee(String assignedInitials) {
         employees.add(assignedInitials);
     }
 
@@ -85,5 +85,10 @@ public class Activity extends AbstractActivity {
 
     public double getBudgetedTime() {
         return budgetedTime;
+    }
+
+    @Override
+    public String toString() {
+        return getId() + " - " + getName();
     }
 }

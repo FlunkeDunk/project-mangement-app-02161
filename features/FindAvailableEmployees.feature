@@ -2,27 +2,32 @@ Feature: Find available employees
   Description: A project leader finds available employees
   Actor: Project leader
 
-#   Scenario: Project leader finds available employees in week range
-#     Given a project
-#     And an activity
-#     And a project leader
-#     And the following employees exist
-#       | Employee1 |
-#       | Employee2 |
-#       | Employee3 |
-#       | Employee4 |
-#     And the following activities exist
-#       | 2 - 4 |
-#       | 5 - 7 |
-#     And the following fixed activities exist
-#       | 5 to 7 |
-#     And "Employee1" has 1 activity 2 to 4
-#     And "Employee1" has 1 activity 5 to 7
-#     And "Employee2" has 2 activities 5 to 7
-#     And "Employee3" has 1 fixed activity 5 to 7
-#     When the user searches for available employees in between week 5 and 7
-#     Then the employees are returned in the following order
-#       | Employee4 |
-#       | Employee1 |
-#       | Employee2 |
-#       | Employee3 |
+   Scenario: Project leader finds available employees in week range
+     Given a project
+     And a user is logged in
+     And the user is the project leader
+     And the following employees exist
+       | Balin  |
+       | Dwalin |
+       | Bifur  |
+       | Bombur |
+     And the project has the activities with the names, start and end weeks
+      | Take the hobbits to Isengard | 2 | 4 |
+      | Simply walk into Mordor      | 5 | 7 |
+      | Retake the lonely mountain   | 5 | 7 |
+      | Reclaim stolen silverware    | 5 | 7 |
+     And "Balin" gets assigned to "Take the hobbits to Isengard"
+     And "Balin" gets assigned to "Simply walk into Mordor"
+     And "Dwalin" gets assigned to "Simply walk into Mordor"
+     And "Dwalin" gets assigned to "Retake the lonely mountain"
+     And "Bifur" has a fixed activity from week 5 to week 7
+     And "huba" has a fixed activity from week 6 to week 18
+     When the user searches for available employees for "Reclaim stolen silverware" in between week 5 and 7
+     Then the employees are returned in the following order
+       | Bombur |
+       | Balin  |
+       | Dwalin |
+
+     # Partial overlap? TODO
+
+  # Sørg for dem der allerede er på listen ikke returneres

@@ -3,7 +3,10 @@ package dtu.example.ui;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+import dtu.example.ui.controllers.ProjectListController;
+import dtu.example.ui.controllers.ViewReportController;
 import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.Report;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,31 +35,38 @@ public class Navigator {
         };
     }
 
-    public void setStage(Stage stage) {
+    private void setStage(Stage stage) {
         this.stage = stage;
 
     }
 
-    public <T> void changeScene(String fxml, Consumer<T> initializer) throws IOException {
-        FXMLLoader loader = loadFXML(fxml);
+    private <T> T changeScene(CustomScene fxmlScene, Consumer<T> initializer) throws IOException {
+        FXMLLoader loader = loadFXML(fxmlScene);
         Parent root = loader.load();
         
         if (initializer != null) {
             initializer.accept(loader.getController());
         }
+        
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(
+            App.class.getResource("style.css").toExternalForm()
+        );
 
-        stage.setScene(new Scene(root));
+        stage.setScene(scene);
         stage.show();
+
+        return loader.getController();
     }
 
-    public <T> void changeScene(String fxml) throws IOException {
-        changeScene(fxml, null);
+    private <T> T changeScene(CustomScene scene) throws IOException {
+        return changeScene(scene, null);
     }
 
-    public FXMLLoader loadFXML(String fxml) throws IOException {
-        var resource = App.class.getResource(fxml + ".fxml");
+    public FXMLLoader loadFXML(CustomScene scene) {
+        var resource = App.class.getResource(scene.getFxmlFile() + ".fxml");
         if (resource == null) {
-            throw new IllegalArgumentException("FXML file not found: " + fxml);
+            throw new IllegalArgumentException("FXML file not found: " + scene.getFxmlFile());
         }
         
         FXMLLoader fxmlLoader = new FXMLLoader(resource);
@@ -66,4 +76,25 @@ public class Navigator {
 
         return fxmlLoader;
     }
+
+    public void toRegisterTimeList() throws IOException{
+        changeScene(CustomScene.REGISTER_TIME_LIST);
+    }
+
+    public void toLogin() throws IOException{
+        changeScene(CustomScene.LOGIN);
+    }
+
+    public void toProjectList() throws IOException{
+        ProjectListController controller = changeScene(CustomScene.PROJECT_LIST);
+        controller.setActivityItemFactory(new ActivityItemFactory());
+    }
+
+public void toViewReport(Report report) throws IOException{
+    changeScene(CustomScene.VIEW_REPORT, controller -> {
+        ViewReportController typedController = (ViewReportController) controller;
+        typedController.setReport(report);
+    });
+}
+
 }

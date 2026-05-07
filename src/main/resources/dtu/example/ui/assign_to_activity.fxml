@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox spacing="20.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.example.ui.controllers.AssignToActivityController">
    <children>
       <VBox alignment="CENTER">
@@ -24,7 +23,6 @@
       <HBox alignment="CENTER" spacing="20.0">
          <children>
             <Button fx:id="assignButton" mnemonicParsing="false" onAction="#handleAssign" text="Assign" />
-            <Button fx:id="exitButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
          </children>
       </HBox>
    </children>

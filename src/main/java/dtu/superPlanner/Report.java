@@ -49,4 +49,11 @@ public class Report {
     public String getProjectName() {
         return PROJECT_NAME;
     }
+
+    public record ReportEntry(double budgetedTime, double timeLeft, double timeSpent, String name) {
+        @Override
+        public String toString() {
+            return "Time budgeted: " + budgetedTime + " hours, Time Spent: " + timeSpent + " hours, timeLeft: " + timeLeft + " hours.";
+        }
+    }
 }

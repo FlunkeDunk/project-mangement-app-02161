@@ -3,9 +3,8 @@ package dtu.example.ui.controllers;
 import java.io.IOException;
 import java.util.Map;
 
-import dtu.example.ui.ReportAware;
+import dtu.example.ui.interfaces.ReportAware;
 import dtu.superPlanner.Report;
-import dtu.superPlanner.ReportEntry;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
@@ -43,10 +42,10 @@ public class ViewReportController extends ProjectManagementAwareController imple
         XYChart.Series<String, Number> timeLeft = new XYChart.Series<>();
         timeSpent.setName("Time spent");
         timeLeft.setName("Time left");
-        for (Map.Entry<Integer, ReportEntry> entry : report.getEntries().entrySet()) {
-            ReportEntry reportEntry = entry.getValue();
-            timeSpent.getData().add(new XYChart.Data<>(entry.getKey() + " - " + reportEntry.getName(), reportEntry.getSpent()));
-            timeLeft.getData().add(new XYChart.Data<>(entry.getKey() + " - " + reportEntry.getName(), reportEntry.getTimeLeft()));
+        for (Map.Entry<Integer, Report.ReportEntry> entry : report.getEntries().entrySet()) {
+            Report.ReportEntry reportEntry = entry.getValue();
+            timeSpent.getData().add(new XYChart.Data<>(entry.getKey() + " - " + reportEntry.name(), reportEntry.timeSpent()));
+            timeLeft.getData().add(new XYChart.Data<>(entry.getKey() + " - " + reportEntry.name(), reportEntry.timeLeft()));
         }
         activityBarChart.getData().add(timeLeft);
         activityBarChart.getData().add(timeSpent);
@@ -56,6 +55,7 @@ public class ViewReportController extends ProjectManagementAwareController imple
         reportNameLabel.setText("Report: " + name);
     }
 
+    @Override
     public void setReport(Report report) {
         setChartData(report);
         setBarChart(report);
@@ -64,6 +64,6 @@ public class ViewReportController extends ProjectManagementAwareController imple
 
     @FXML
     public void onExit() throws IOException{
-        navigator.changeScene("project_list");
+        navigator.toProjectList();;
     }
 }
