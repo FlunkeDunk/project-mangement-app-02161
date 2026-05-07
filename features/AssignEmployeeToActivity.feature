@@ -6,7 +6,7 @@ Feature: Assign employee to activity
 
   Background:
     Given a user is logged in
-    And a project exists
+    And a project
     And the project has activities with the names
       | Invade Mordor |
       | Defend Gondor |
