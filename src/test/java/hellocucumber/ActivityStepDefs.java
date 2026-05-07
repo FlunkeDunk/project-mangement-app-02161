@@ -292,11 +292,6 @@ public class ActivityStepDefs {
         assertTrue(activity.getEmployees().contains(assignee), "Employee " + assignee + " not on activity " + activityName);
     }
 
-    @Given("{string} is the project leader")
-    public void isTheProjectLeader(String user) {
-        assertEquals(user, myProject.getProjectLeader());
-    }
-
     @Given("an activity {string} with a duration of {int} week(s)")
     public void anActivityWithADurationOfWeeks(String string, Integer int1) {
         WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 2049);
@@ -388,5 +383,21 @@ public class ActivityStepDefs {
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         }
+    }
+
+    @Given("a project exists")
+    public void aProjectExists() {
+        if (myApp.getAllProjects().isEmpty()) {
+        myApp.createProject("TestProject");
+        }
+
+        Project testProject = myApp.getAllProjects().iterator().next();
+
+        assertNotNull(testProject);
+    }
+
+    @Given("{string} is the project Leader")
+    public void isTheProjectLeader(String user) {
+        assertEquals(user, myProject.getProjectLeader());
     }
 }
