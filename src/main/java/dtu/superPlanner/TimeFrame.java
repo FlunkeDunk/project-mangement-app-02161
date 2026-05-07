@@ -44,6 +44,9 @@ public class TimeFrame {
         endDate = date;
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public static boolean overlaps(TimeFrame tf1, TimeFrame tf2) {
         WeekBasedCalendar firstStartDate = tf1.getStartDate();
         WeekBasedCalendar firstEndDate = tf1.getEndDate();

@@ -11,6 +11,9 @@ public class Report {
     private double timeLeft = 0;
     private final Map<Integer, ReportEntry> entries = new HashMap<>();
 
+    /**
+     * @author BenjaminEwe
+     */
     public Report(Project project) {
         PROJECT_NAME = project.getName();
         Set<Activity> activities = project.getActivitySet();
@@ -50,6 +53,9 @@ public class Report {
         return PROJECT_NAME;
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public record ReportEntry(double budgetedTime, double timeLeft, double timeSpent, String name) {
         @Override
         public String toString() {

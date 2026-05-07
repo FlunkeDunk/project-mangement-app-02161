@@ -42,6 +42,9 @@ public class Employee {
         return fixedActivities;
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public boolean isAvailable(TimeFrame timeFrame) {
         for (FixedActivity fixedActivity : fixedActivities) {
             if (TimeFrame.overlaps(timeFrame, fixedActivity.getTimeFrame())) {

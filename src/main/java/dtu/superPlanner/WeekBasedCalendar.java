@@ -47,7 +47,7 @@ public class WeekBasedCalendar {
     }
 
     /**
-     * @author Emanuel
+     * @author BenjaminEwe
      */
     public void setWeek(int week) {
         if (week == 0) {

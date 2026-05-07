@@ -31,6 +31,9 @@ public class Project {
         getActivityById(activityId).editTime(employeeInitials, date, newTime);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public Activity createActivity(String name, TimeFrame timeFrame) {
         Activity myActivity = new Activity(name, timeFrame, activities.size() + 1);
         activities.put(myActivity.getId(), myActivity);
