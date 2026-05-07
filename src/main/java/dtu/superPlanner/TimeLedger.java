@@ -15,9 +15,8 @@ public class TimeLedger {
     }
 
     public void registerTime(LocalDate date, double time) {
-        double temp = time + entries.getOrDefault(date, 0.0);
-        totalTime += temp;
-        entries.put(date, temp);
+        totalTime += time;
+        entries.put(date, time + entries.getOrDefault(date, 0.0));
     }
 
     public void editTime(LocalDate date, double newTime) {

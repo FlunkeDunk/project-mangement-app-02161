@@ -69,10 +69,6 @@ public class Project {
         return new HashSet<>(activities.values());
     }
 
-    public Map<Integer, Activity> getActivityMap() {
-        return activities;
-    }
-
     public WeekBasedCalendar getStartDate() {
         return startDate;
     }
