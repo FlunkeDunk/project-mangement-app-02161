@@ -16,6 +16,10 @@ import javafx.stage.Stage;
  * JavaFX App
  */
 public class App extends Application {
+    public static void main(String[] args) {
+        launch();
+    }
+    
     @Override
     public void start(Stage stage) {
 
@@ -27,11 +31,9 @@ public class App extends Application {
             return;
         }
         Navigator navigator = buildNavigator(stage, app);
-        
-        stage.setTitle("Project Management App");
-        stage.setWidth(640);
-        stage.setHeight(540);
-        
+
+        configureStage(stage);
+
         try {
             navigator.toLogin();
         } catch (IOException e) {
@@ -52,8 +54,11 @@ public class App extends Application {
                 new ActivityItemFactory());
     }
 
-    private EmployeeRepository buildEmployeeRepository() throws IOException{
+    private EmployeeRepository buildEmployeeRepository() throws IOException {
         InputStream input = getClass().getClassLoader().getResourceAsStream("initials.txt");
+        if (input == null) {
+            throw new IOException("Resource file initials.txt not found");
+        }
         FileEmployeeRepository repo;
         try {
             repo = new FileEmployeeRepository(input);
@@ -81,4 +86,11 @@ public class App extends Application {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    private void configureStage(Stage stage) {
+        stage.setTitle("Project Management App");
+        stage.setWidth(640);
+        stage.setHeight(540);
+    }
+
 }
