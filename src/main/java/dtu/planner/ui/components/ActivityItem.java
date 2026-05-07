@@ -37,11 +37,11 @@ public class ActivityItem extends TitledPane {
     private Label timeSpentLabel;
 
     @FXML
-    private Label budgetetTimeLabel;
+    private Label budgetedTimeLabel;
 
     private Runnable onRegisterTimeRequested;
     private Runnable onEditActivityRequested;
-    private Runnable onAssignToAcitvityRequested;
+    private Runnable onAssignToActivityRequested;
     private Runnable onEditRegisteredTimeRequested;
 
     public ActivityItem(Activity activity, int id) {
@@ -75,8 +75,8 @@ public class ActivityItem extends TitledPane {
 
     @FXML
     public void onAssignToActivity() {
-        if (onAssignToAcitvityRequested != null) {
-            onAssignToAcitvityRequested.run();
+        if (onAssignToActivityRequested != null) {
+            onAssignToActivityRequested.run();
         }
     }
 
@@ -96,7 +96,7 @@ public class ActivityItem extends TitledPane {
     }
 
     public void setOnAssignToActivityRequested(Runnable handler) {
-        this.onAssignToAcitvityRequested = handler;
+        this.onAssignToActivityRequested = handler;
     }
     public void setOnEditRegisteredTimeRequested(Runnable handler) {
         this.onEditRegisteredTimeRequested = handler;
@@ -109,7 +109,7 @@ public class ActivityItem extends TitledPane {
         setTextId("" + id);
         setName(activity.getName());
         setEmployees(activity.getEmployees());
-        setBudgetetTime(activity.getBudgetedTime());
+        setBudgetedTime(activity.getBudgetedTime());
         setTimeSpent(activity.getTotalTimeSpent());
     }
 
@@ -149,7 +149,7 @@ public class ActivityItem extends TitledPane {
         timeSpentLabel.setText(String.format("%.1f h", timeSpent));
     }
 
-    private void setBudgetetTime(double budgetetTime) {
-        budgetetTimeLabel.setText(String.format("%.1f h", budgetetTime));
+    private void setBudgetedTime(double budgetedTime) {
+        budgetedTimeLabel.setText(String.format("%.1f h", budgetedTime));
     }
 }

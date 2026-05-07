@@ -72,9 +72,9 @@
                </rowConstraints>
                <children>
                   <Label text="Hours spent:" />
-                  <Label text="Budgetet hours:" GridPane.rowIndex="1" />
+                  <Label text="Budgeted hours:" GridPane.rowIndex="1" />
                   <Label fx:id="timeSpentLabel" layoutX="10.0" layoutY="10.0" text="1" GridPane.columnIndex="1" />
-                  <Label fx:id="budgetetTimeLabel" layoutX="88.0" layoutY="10.0" text="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="budgetedTimeLabel" layoutX="88.0" layoutY="10.0" text="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>
