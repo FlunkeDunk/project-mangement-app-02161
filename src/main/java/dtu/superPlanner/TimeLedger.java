@@ -19,9 +19,9 @@ public class TimeLedger {
         entries.put(date, time + entries.getOrDefault(date, 0.0));
     }
 
-    public void editTime(LocalDate date, double newTime) {
+    public void editTime(LocalDate date, double newTime) throws IllegalArgumentException {
         if (!entries.containsKey(date))
-            return;
+            throw new IllegalArgumentException("Cannot edit time for a date where the employee has no time registered");
 
         totalTime += newTime - entries.get(date);
         entries.put(date, newTime);

@@ -27,7 +27,7 @@ public class Project {
         name = newName;
     }
 
-    public void editTime(int activityId, String employeeInitials, LocalDate date, double newTime) {
+    public void editTime(int activityId, String employeeInitials, LocalDate date, double newTime) throws IllegalArgumentException {
         getActivityById(activityId).editTime(employeeInitials, date, newTime);
     }
 
