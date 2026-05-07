@@ -130,7 +130,10 @@ public class ProjectManagementApp {
         getProject(projectId).setActivityTimeFrame(activityId, timeFrame);
     }
 
-    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials) // Ebbe og Benjamin
+    /**
+     * @author Ebbe
+     */
+    public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials)
             throws IllegalAccessException {
         Project proj = projects.get(projectId);
         Employee employee = employeeRepository.get(employeeInitials);
@@ -142,7 +145,10 @@ public class ProjectManagementApp {
         }
     }
 
-    public void setProjectName(int projectId, String name) throws IllegalAccessException { // Ebbe
+    /**
+     * @author Ebbe
+     */
+    public void setProjectName(int projectId, String name) throws IllegalAccessException {
         Project project = getProject(projectId);
         if (!project.isProjectLeader(userInitials))
             throw new IllegalAccessException("Only the project leader can change project names");

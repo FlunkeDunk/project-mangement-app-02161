@@ -59,6 +59,9 @@ public class Activity extends AbstractActivity {
         employeeTimeLedgers.get(initials).editTime(date, newTime);
     }
 
+    /**
+     * @author Ebbe
+     */
     protected void addEmployee(String assignedInitials) {
         employees.add(assignedInitials);
     }
