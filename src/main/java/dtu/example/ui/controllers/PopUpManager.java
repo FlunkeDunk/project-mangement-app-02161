@@ -8,7 +8,6 @@ import dtu.example.ui.Navigator;
 import dtu.example.ui.interfaces.ActivityAware;
 import dtu.example.ui.interfaces.PopupService;
 import dtu.example.ui.interfaces.ProjectAware;
-import dtu.superPlanner.Report;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -121,11 +120,6 @@ public class PopUpManager implements PopupService {
     @Override
     public void addActivity(int projectId) throws IOException{
         popUpWithProject(CustomScene.CREATE_ACTIVITY, CreateActivityController.class, projectId);
-    }
-
-    @Override
-    public void viewReport(Report report) throws IOException{
-        popUp(CustomScene.VIEW_REPORT, ViewReportController.class, c -> c.setReport(report));
     }
 
     @Override

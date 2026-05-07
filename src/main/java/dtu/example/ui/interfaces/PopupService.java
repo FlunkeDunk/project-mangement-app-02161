@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import dtu.example.ui.CustomScene;
-import dtu.superPlanner.Report;
 
 public interface PopupService {
 
@@ -31,8 +30,6 @@ public interface PopupService {
     public void editProject(int projectId) throws IOException;
     
     public void addActivity(int projectId) throws IOException;
-
-    public void viewReport(Report report) throws IOException;
 
     public void createProject() throws IOException;
 

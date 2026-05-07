@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import dtu.example.ui.controllers.ProjectListController;
+import dtu.example.ui.controllers.ViewReportController;
 import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.Report;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -87,5 +89,12 @@ public class Navigator {
         ProjectListController controller = changeScene(CustomScene.PROJECT_LIST);
         controller.setActivityItemFactory(new ActivityItemFactory());
     }
+
+public void toViewReport(Report report) throws IOException{
+    changeScene(CustomScene.VIEW_REPORT, controller -> {
+        ViewReportController typedController = (ViewReportController) controller;
+        typedController.setReport(report);
+    });
+}
 
 }

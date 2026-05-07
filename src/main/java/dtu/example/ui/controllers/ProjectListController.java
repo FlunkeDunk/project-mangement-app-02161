@@ -142,7 +142,7 @@ public class ProjectListController extends ProjectManagementAwareController {
     private void handleViewReport() {
         Report report = app.createReport(getSelectedProjectId());
         executeUiAction(
-            popupService::viewReport,
+            navigator::toViewReport,
             report,
             "Operation failed");
     }
