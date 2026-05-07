@@ -448,10 +448,13 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author Ebbe
+     */
     @Given("a project exists")
     public void aProjectExists() {
         if (myApp.getAllProjects().isEmpty()) {
-        myApp.createProject("TestProject");
+            myApp.createProject("TestProject");
         }
 
         Project testProject = myApp.getAllProjects().iterator().next();
@@ -459,8 +462,12 @@ public class ActivityStepDefs {
         assertNotNull(testProject);
     }
 
+    /**
+     * @author Ebbe
+     */
     @Given("{string} is the project Leader")
-    public void isTheProjectLeader(String user) {
+    public void isTheProjectLeader(String user) throws IllegalAccessException {
+        myApp.setProjectLeader(myProject.getId(), user);
         assertEquals(user, myProject.getProjectLeader());
     }
 }
