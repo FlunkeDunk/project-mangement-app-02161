@@ -49,6 +49,15 @@ public class ProjectStepDefs {
         mth.setDate(date);
     }
 
+    @Given("a project with name {string}")
+    public void aProjectWithName(String string) {
+        try {
+            project = myApp.createProject(string);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
     @When("there are no projects created this year")
     public void thereAreNoProjectCreatedThisYear() {
         int projectCount = myApp.getProjectIdNumerator();
@@ -163,7 +172,8 @@ public class ProjectStepDefs {
     }
 
     @When("the user changes the project name to {string}")
-    public void the_user_changes_the_project_name_to(String employeeInitials, String newProjectName) throws IllegalAccessException {
+    public void the_user_changes_the_project_name_to(String employeeInitials, String newProjectName)
+            throws IllegalAccessException {
         myApp.setProjectName(project.getId(), newProjectName);
     }
 

@@ -1,4 +1,3 @@
-@skip # FJERN DEN HER NÅR DU VIL IMPLEMENTERE
 Feature: Read file with list of employee initials
   Description: The program reads a file containing the initials of all the employees
   Actor: User
@@ -9,7 +8,7 @@ Feature: Read file with list of employee initials
       | huba |
       | anda |
       | wilo |
-    When a user start the program
+    When the file is loaded
     Then the program returns a list containing
       | huba |
       | anda |
@@ -17,17 +16,17 @@ Feature: Read file with list of employee initials
 
   Scenario: A user starts the program and throws an exception
     Given a file "initials.txt" does not exist
-    When a user start the program
-    Then an error is now thrown "File not found!"
-  @skip
+    When the file is loaded
+    Then an error is thrown "File not found!"
+
   Scenario: A user starts the program and is warned about corrupted data
     Given a file "initials.txt" exists
-    And the file contains the following initials
+    And the file "initials.txt" contains the following initials
       | hubau |
       | anda  |
       | wilo  |
-    When a user start the program
-    Then a notification is given to the user
+    When the file is loaded
+    Then a notification is given to the user 
     And the program returns a list containing
       | anda |
       | wilo |

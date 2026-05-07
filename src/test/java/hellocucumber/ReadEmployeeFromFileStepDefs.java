@@ -4,6 +4,7 @@ import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import javafx.print.PrintColor;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,91 +16,79 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import dtu.superPlanner.Employee;
+import dtu.superPlanner.FileEmployeeRepository;
 
 public class ReadEmployeeFromFileStepDefs {
-    public List<String> expectedInitials;
-    public File fileWithInitials;
-    public List<String> actualInitials;
-
-    private EmployeeFileReaderHolder efrh;
+    private File fileWithInitials;
+    private FileEmployeeRepository fer;
+    private Set<String> actualInitials = new HashSet<>();
     private ErrorMessageHolder errorHolder;
 
-    public ReadEmployeeFromFileStepDefs(EmployeeFileReaderHolder efrh, ErrorMessageHolder errorHolder) {
-        this.efrh = efrh;
+    public ReadEmployeeFromFileStepDefs(ErrorMessageHolder errorHolder)
+            throws FileNotFoundException, IOException {
         this.errorHolder = errorHolder;
     }
 
-    private void createFile(List<String> list, String filename) throws IOException {
+    private void createFile(String filename, List<String> list) {
         fileWithInitials = new File(filename);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileWithInitials))) {
             String fileData = "";
-            for (int index = 0; index < list.size(); index++) {
-                fileData += (list.get(index) + "\n");
+            for (String init : list) {
+                fileData += (init + "\n");
             }
             writer.write(fileData);
         } catch (Exception e) {
-            errorHolder.setError(e.getMessage());
-
+            errorHolder.setError("File not found!");
         }
-    }
-
-    private File getFile() {
-        return fileWithInitials;
     }
 
     @Given("a file {string} exists")
     public void aFileExists(String filename) throws IOException {
-        fileWithInitials = new File(filename);
-        fileWithInitials.createNewFile();
-
+        File fileWithInitials = new File(filename);
         assertTrue(fileWithInitials.exists());
     }
 
     @Given("the file {string} contains the following initials")
-    public void theFileContainsTheFollowingInitials(String string, List<String> names) throws IOException {
-        expectedInitials = new ArrayList<>();
-        for (String name : names) {
-            expectedInitials.add(name);
-        }
-        createFile(expectedInitials, string);
-        assertTrue(fileWithInitials.exists()); // I should probably remove this, but I'm unsure how to verify it in a
-                                               // pretty way
+    public void theFileContainsTheFollowingInitials(String filename, List<String> listOfInitials) {
+        createFile(filename, listOfInitials);
     }
-    private void deleteFileWithInitials(){
-        fileWithInitials.delete();
-    }
-    @Given("a file {string} does not exist")
-    public void aFileDoesNotExist(String filename) {
-        fileWithInitials = new File(filename);
-        deleteFileWithInitials();
 
+    @Given("a file {string} does not exist")
+    public void aFileDoesNotExist(String string) {
         assertNull(fileWithInitials);
     }
 
-    @When("a user start the program")
-    public void aUserStartTheProgram() throws IOException {
+    @When("the file is loaded")
+    public void theFileIsLoaded() throws FileNotFoundException, IOException {
         try {
+            this.fer = new FileEmployeeRepository(new FileInputStream(fileWithInitials));
 
-            InputStream inputHolder = null;
-
-            if ((fileWithInitials).exists()) {
-                inputHolder = new FileInputStream(fileWithInitials);
+            List<Employee> employees = fer.getAllEmployees();
+            for (Employee init : employees) {
+                actualInitials.add(init.getInitials());
             }
-            actualInitials = efrh.loadEmployees(new FileInputStream(fileWithInitials));
         } catch (Exception e) {
-            errorHolder.setError(e.getMessage());
+            errorHolder.setError("File not found!");
         }
-
     }
 
     @Then("the program returns a list containing")
-    public void theProgramReturnsAListContaining(List<String> expectedNames) {
-        assertEquals(expectedNames, actualInitials);
+    public void theProgramReturnsAListContaining(List<String> expectedInitialsList) {
+        Set<String> expectedInitials = new HashSet<>();
+        for (String init : expectedInitialsList) {
+            expectedInitials.add(init);
+        }
+        assertEquals(expectedInitials, actualInitials);
     }
 
-    @Then("an error is now thrown {string}")
-    public void anErrorIsThrown(String string) {
-        assertEquals(string, errorHolder.getError());
+    @Then("a notification is given to the user")
+    public void aNotificationIsGivenToTheUser() {
+        assertTrue(fer.getSkippedLines());
     }
 }

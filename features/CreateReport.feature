@@ -3,7 +3,7 @@ Feature: Create report
   Actor: Project leader
 
   Background: There is a project
-    Given a project
+    Given a project with name "My Project"
     And a user is logged in
 
   Scenario: Project leader creates report
@@ -16,6 +16,7 @@ Feature: Create report
     And an employee has spent 7 hours on the activity "Design"
     When the project leader creates a report
     Then a report is created
+    And the report indecates the name of the project is "My Project"
     And the report indicates the time budget is 10 hours
     And the report indicates the time spent is 7 hours
     And the report indicates the estimated time remaining is 3 hours
@@ -32,6 +33,7 @@ Feature: Create report
     And an employee has spent 91 hours on the activity "Testing"
     When the project leader creates a report
     Then a report is created
+    And the report indecates the name of the project is "My Project"
     And the report indicates the time budget is 35 hours
     And the report indicates the time spent is 107 hours
     And the report indicates the estimated time remaining is 0 hours
