@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import dtu.example.ui.App;
+import dtu.planner.ui.App;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import io.cucumber.java.PendingException;
