@@ -13,6 +13,7 @@ import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.Report;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -71,5 +72,10 @@ public class ReportStepDefs {
     @Then("the report indicates the estimated time remaining is {int} hours")
     public void theReportIndicatesTheEstimatedTimeRemainingIsHours(int remaining) {
         assertEquals(remaining, report.getTimeLeft());
+    }
+
+    @Then("the report indecates the name of the project is {string}")
+    public void theReportIndecatesTheNameOfTheProjectIs(String string) {
+        assertEquals(string, report.getProjectName());
     }
 }
