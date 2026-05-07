@@ -22,7 +22,7 @@ public class Report {
             double spent = activity.getTotalTimeSpent();
             double estTimeLeft = spent > thisBudget ? 0 : thisBudget - spent;
 
-            ReportEntry entry = new ReportEntry(thisBudget, spent, estTimeLeft, activity.getName());
+            ReportEntry entry = new ReportEntry(thisBudget, estTimeLeft, spent, activity.getName());
             entries.put(activity.getId(), entry);
 
             budgetedTime += thisBudget;
@@ -59,7 +59,7 @@ public class Report {
     public record ReportEntry(double budgetedTime, double timeLeft, double timeSpent, String name) {
         @Override
         public String toString() {
-            return "Time budgeted: " + budgetedTime + " hours, Time Spent: " + timeSpent + " hours, timeLeft: " + timeLeft + " hours.";
+            return "[" + name + "] Time budgeted: " + budgetedTime + " hours, Time Spent: " + timeSpent + " hours, timeLeft: " + timeLeft + " hours.";
         }
     }
 }

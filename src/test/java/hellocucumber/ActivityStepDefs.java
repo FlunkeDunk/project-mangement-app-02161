@@ -154,7 +154,7 @@ public class ActivityStepDefs {
         assertTrue(myProject.getActivitySet().isEmpty());
     }
 
-    @And("the project has the activities with the names and budgeted times")
+    @And("the project has the activities with the names and durations")
     public void theProjectHasTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> activities) {
         for (int i = 0; i < activities.size(); i++) {
             String name = activities.get(i).get(0);
