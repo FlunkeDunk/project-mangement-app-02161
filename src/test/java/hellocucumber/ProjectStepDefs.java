@@ -24,10 +24,12 @@ public class ProjectStepDefs {
     public ProjectManagementApp myApp;
     public Project project;
     private ErrorMessageHolder errorHolder;
+    private ProjectHolder projectHolder;
 
-    public ProjectStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+    public ProjectStepDefs(TestContext context, ErrorMessageHolder errorHolder, ProjectHolder projectHolder) {
         this.myApp = context.app;
         this.errorHolder = errorHolder;
+        this.projectHolder = projectHolder;
     }
 
     @Given("a user is logged in")
@@ -53,6 +55,7 @@ public class ProjectStepDefs {
     public void aProjectWithName(String string) {
         try {
             project = myApp.createProject(string);
+            projectHolder.setProject(project);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
