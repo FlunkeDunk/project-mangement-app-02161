@@ -19,8 +19,11 @@ public class Project {
         this(startDate, ID);
         this.name = name;
     }
-
-    public void editName(String newName) { // Ebbe
+    
+    /**
+     * @author Ebbe
+     */
+    public void editName(String newName) {
         name = newName;
     }
 
@@ -28,6 +31,9 @@ public class Project {
         getActivityById(activityId).editTime(employeeInitials, date, newTime);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public Activity createActivity(String name, TimeFrame timeFrame) {
         Activity myActivity = new Activity(name, timeFrame, activities.size() + 1);
         activities.put(myActivity.getId(), myActivity);
@@ -63,14 +69,7 @@ public class Project {
     }
 
     public Set<Activity> getActivitySet() {
-        if (activities == null) {
-            return null;
-        }
         return new HashSet<>(activities.values());
-    }
-
-    public Map<Integer, Activity> getActivityMap() {
-        return activities;
     }
 
     public WeekBasedCalendar getStartDate() {

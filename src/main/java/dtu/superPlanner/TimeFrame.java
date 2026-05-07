@@ -4,6 +4,9 @@ public class TimeFrame {
     private WeekBasedCalendar startDate;
     private WeekBasedCalendar endDate;
 
+    /**
+     * @author Emanuel
+     */
     public TimeFrame(WeekBasedCalendar startDate, WeekBasedCalendar endDate) throws IllegalArgumentException {
         if (endDate.before(startDate)) {
             throw new IllegalArgumentException("DateError: End date must be after start date");
@@ -21,6 +24,9 @@ public class TimeFrame {
         return endDate;
     }
 
+    /**
+     * @author Emanuel
+     */
     public void setStartDate(WeekBasedCalendar date) throws IllegalArgumentException {
         if (endDate.before(date)) {
             throw new IllegalArgumentException("DateError: End date must be after start date");
@@ -28,6 +34,9 @@ public class TimeFrame {
         startDate = date;
     }
 
+    /**
+     * @author Emanuel
+     */
     public void setEndDate(WeekBasedCalendar date) {
         if (date.before(startDate)) {
             throw new IllegalArgumentException("DateError: End date must be after start date");
@@ -35,6 +44,9 @@ public class TimeFrame {
         endDate = date;
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public static boolean overlaps(TimeFrame tf1, TimeFrame tf2) {
         WeekBasedCalendar firstStartDate = tf1.getStartDate();
         WeekBasedCalendar firstEndDate = tf1.getEndDate();
@@ -53,7 +65,10 @@ public class TimeFrame {
     public String toString() {
         return "(" + startDate.toString() + " to " + endDate.toString() + ")";
     }
-
+    
+    /**
+     * @author Emanuel
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof TimeFrame))
@@ -63,6 +78,9 @@ public class TimeFrame {
         return other.startDate.equals(this.startDate) && other.endDate.equals(this.endDate);
     }
 
+    /**
+     * @author Emanuel
+     */
     @Override
     public int hashCode() {
         int h1 = startDate.hashCode();

@@ -26,6 +26,9 @@ public class ProjectManagementApp {
         return createProject("");
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public Project createProject(String name) throws RuntimeException {
         if (projectIdNumerator >= 999) {
             throw new RuntimeException("Cannot create more than 999 projects a year");
@@ -51,7 +54,7 @@ public class ProjectManagementApp {
         this.timeServer = timeServer;
     }
 
-        public Project getProject(int projectId) {
+    public Project getProject(int projectId) {
         if (!projects.containsKey(projectId)) {
             throw new IllegalArgumentException("Invalid project id");
         }
@@ -63,8 +66,6 @@ public class ProjectManagementApp {
     }
 
     public Activity createActivity(int projectId, String name, TimeFrame timeFrame) throws IllegalAccessException {
-        // System.out.println("\nCreating activity for project " + projectId + "\nUser:"
-        // + userInitials + "\nLeader:" + projects.get(projectId).getProjectLeader());
         Project myProject = getProject(projectId);
         if (!myProject.isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can create activities");
@@ -91,7 +92,7 @@ public class ProjectManagementApp {
     }
 
     public void editTime(int projectId, int activityId, LocalDate date, double newTime) {
-        if (newTime < 0 ) {
+        if (newTime < 0) {
             throw new IllegalArgumentException("Cannot register negative time");
         }
         getProject(projectId).editTime(activityId, userInitials, date, newTime);
@@ -109,7 +110,8 @@ public class ProjectManagementApp {
         return myProject.createReport();
     }
 
-    public FixedActivity createFixedActivity(FixedActivityType type, TimeFrame timeFrame) throws IllegalArgumentException {
+    public FixedActivity createFixedActivity(FixedActivityType type, TimeFrame timeFrame)
+            throws IllegalArgumentException {
         FixedActivity activity = new FixedActivity(type, timeFrame);
         Employee user = employeeRepository.get(userInitials);
         user.addActivity(activity);
@@ -142,13 +144,15 @@ public class ProjectManagementApp {
 
     public void setProjectName(int projectId, String name) throws IllegalAccessException { // Ebbe
         Project project = getProject(projectId);
-        if(!project.isProjectLeader(userInitials)) throw new IllegalAccessException("Only the project leader can change project names");
+        if (!project.isProjectLeader(userInitials))
+            throw new IllegalAccessException("Only the project leader can change project names");
         project.editName(name);
     }
 
     public void setActivityName(int projectId, int activityId, String name) throws IllegalAccessException {
         Project project = getProject(projectId);
-        if (!project.isProjectLeader(userInitials)) throw new IllegalAccessException("Only the project leader can change activity names");
+        if (!project.isProjectLeader(userInitials))
+            throw new IllegalAccessException("Only the project leader can change activity names");
         project.getActivityById(activityId).setName(name);
     }
 
@@ -169,6 +173,9 @@ public class ProjectManagementApp {
         }
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public List<String> getAvailableEmployees(int projectId, int activityId) throws IllegalAccessException {
         if (!getProject(projectId).isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can see available employees.");
@@ -179,7 +186,7 @@ public class ProjectManagementApp {
         PriorityQueue<priorityEmployee> leastBusyEmployees = new PriorityQueue<>();
 
         for (Employee employee : allEmployees) {
-            if (employee.isOnFixedAcitivity(activityDuration)) {
+            if (employee.isAvailable(activityDuration)) {
                 continue;
             }
 
@@ -195,6 +202,9 @@ public class ProjectManagementApp {
         return availableEmployeesInOrder;
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     private int getActivitiesOverlapping(TimeFrame activityDuration, Employee employee) {
         Set<Activity> alreadyAssignedActivities = employee.getActivities();
         int activitiesOverlapping = 0;
@@ -222,18 +232,24 @@ public class ProjectManagementApp {
         return timeServer;
     }
 
+    /**
+     * @author Emanuel
+     */
     public Set<FixedActivity> getFixedActivities() {
         Employee user = employeeRepository.get(userInitials);
         return user.getFixedActivities();
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     private record priorityEmployee(String userInitials, int priority) implements Comparable<priorityEmployee> {
 
         @Override
-            public int compareTo(priorityEmployee other) {
-                return Integer.compare(this.priority, other.priority);
-            }
+        public int compareTo(priorityEmployee other) {
+            return Integer.compare(this.priority, other.priority);
         }
+    }
 
     public void createEmployee(String initials) {
         employeeRepository.addEmployee(initials);

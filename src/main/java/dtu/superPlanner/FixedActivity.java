@@ -1,5 +1,8 @@
 package dtu.superPlanner;
 
+/**
+ * @author Emanuel
+ */
 public class FixedActivity extends AbstractActivity {
     private int hashCode;
 
