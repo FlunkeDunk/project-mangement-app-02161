@@ -11,16 +11,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" fillWidth="false" prefHeight="480.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.EditRegisteredTimeController">
+<VBox alignment="CENTER" fillWidth="false" prefHeight="480.0" prefWidth="600.0" spacing="20.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.EditRegisteredTimeController">
    <children>
       <HBox>
          <children>
-            <Label text="Edit registered time for:">
+            <Label styleClass="heading" text="Edit registered time for: ">
                <font>
                   <Font name="System Bold Italic" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="10.0">
+            <Label fx:id="activityLabel" layoutX="10.0" layoutY="10.0" styleClass="heading">
                <font>
                   <Font name="System Bold Italic" size="24.0" />
                </font>

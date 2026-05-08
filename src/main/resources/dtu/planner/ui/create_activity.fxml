@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.CreateActivityController">
+<VBox alignment="CENTER" prefHeight="545.0" prefWidth="586.0" spacing="20.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.CreateActivityController">
    <children>
-      <Label text="Add activity" textAlignment="CENTER" textOverrun="CLIP">
+      <Label styleClass="heading" text="Add activity" textAlignment="CENTER" textOverrun="CLIP">
          <font>
             <Font name="System Bold Italic" size="32.0" />
          </font>
@@ -40,9 +40,9 @@
                   <Label text="Name:" />
                   <TextField fx:id="activityNameTextField" promptText="MyActivity" GridPane.columnIndex="1" />
                   <Label text="Start date:" GridPane.rowIndex="1" />
-                  <DatePicker fx:id="startDatePicker" promptText="Start date" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <DatePicker fx:id="startDatePicker" prefWidth="150.0" promptText="Start date" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="End date:" GridPane.rowIndex="2" />
-                  <DatePicker fx:id="endDatePicker" promptText="End date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="endDatePicker" prefWidth="150.0" promptText="End date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Spinner fx:id="budgetSpinner" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <valueFactory>
                         <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="0" max="2147483647" min="0" />

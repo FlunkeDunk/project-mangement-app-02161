@@ -7,7 +7,7 @@ import dtu.superPlanner.FixedActivityType;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
     /**
     * @author Arthur
@@ -15,7 +15,7 @@ import javafx.scene.control.DatePicker;
 public class AddFixedActivityController extends ProjectManagementAwareController{
 
     @FXML
-    private ChoiceBox<FixedActivityType> activityTypeChoiceBox;
+    private ComboBox<FixedActivityType> activityTypeComboBox;
 
     @FXML
     private DatePicker startDatePicker;
@@ -26,7 +26,7 @@ public class AddFixedActivityController extends ProjectManagementAwareController
     @FXML
     public void initialize() {
         // Populate choice box (example values)
-        activityTypeChoiceBox.getItems().addAll(
+        activityTypeComboBox.getItems().addAll(
                 FixedActivityType.values()
         );
 
@@ -36,7 +36,7 @@ public class AddFixedActivityController extends ProjectManagementAwareController
 
     @FXML
     private void addFixedActivity() throws IOException {
-        FixedActivityType type = activityTypeChoiceBox.getValue();
+        FixedActivityType type = activityTypeComboBox.getValue();
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
 

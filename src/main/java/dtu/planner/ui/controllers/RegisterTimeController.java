@@ -27,6 +27,7 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
     @FXML
     private void initialize() {
         registerTimeButton.setDisable(true);
+        datePicker.setValue(app.getTimeServer().getCurrentDate());
 
         datePicker.valueProperty().addListener(((observableValue, oldDate, newDate) -> {
             updateButtonState();
@@ -42,7 +43,11 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
         }
 
         double hours = (double) timeSpinner.getValue().getHour() + (double) timeSpinner.getValue().getMinute() / 60.0;
-        app.registerTime(projectId, activityId, hours, datePicker.getValue());
+        try {
+            app.registerTime(projectId, activityId, hours, datePicker.getValue());
+        } catch (IllegalArgumentException ex) {
+            alertService.show("Failed to register", ex.getMessage());
+        }
         navigator.toProjectList();
     }
 

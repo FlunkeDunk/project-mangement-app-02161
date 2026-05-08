@@ -13,44 +13,48 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root animated="false" type="TitledPane" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root stylesheets="@style.css" type="TitledPane" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <AnchorPane prefHeight="160.0" prefWidth="200.0">
          <children>
-            <Label text="Employees" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label styleClass="subheading" text="Employees" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-3.0">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
             <HBox layoutX="10.0" layoutY="30.0" spacing="10.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <ScrollPane focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="66.0" HBox.hgrow="ALWAYS">
-                     <content>
-                        <VBox fx:id="employeListVBox">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                           <children>
-                              <Label text="huba" />
-                              <Label layoutX="15.0" layoutY="15.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="32.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="49.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="66.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="83.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="100.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="117.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="134.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="151.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="168.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="185.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="202.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="219.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="236.0" text="huba" />
-                              <Label layoutX="15.0" layoutY="253.0" text="huba" />
-                           </children>
-                        </VBox>
-                     </content>
-                  </ScrollPane>
+                  <VBox styleClass="lightgrey" HBox.hgrow="ALWAYS">
+                     <children>
+                        <ScrollPane focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="66.0" VBox.vgrow="ALWAYS">
+                           <content>
+                              <VBox fx:id="employeListVBox">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                                 <children>
+                                    <Label text="huba" />
+                                    <Label layoutX="15.0" layoutY="15.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="32.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="49.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="66.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="83.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="134.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="151.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="168.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="202.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="219.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="236.0" text="huba" />
+                                    <Label layoutX="15.0" layoutY="253.0" text="huba" />
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                     <padding>
+                        <Insets bottom="-1.0" right="-2.0" top="-1.0" />
+                     </padding>
+                  </VBox>
                   <VBox spacing="5.0">
                      <children>
                         <Button fx:id="registimerTimeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRegisterTime" text="Register time" />
@@ -85,7 +89,7 @@
         <children>
             <GridPane fx:id="graphicGridPane" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                 <columnConstraints>
-                    <ColumnConstraints hgrow="ALWAYS" />
+                    <ColumnConstraints fillWidth="false" hgrow="ALWAYS" />
                     <ColumnConstraints hgrow="NEVER" minWidth="50.0" prefWidth="80.0" />
                     <ColumnConstraints hgrow="NEVER" minWidth="50.0" prefWidth="80.0" />
                     <ColumnConstraints hgrow="NEVER" minWidth="20.0" prefWidth="20.0" />

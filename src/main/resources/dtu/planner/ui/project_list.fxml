@@ -54,11 +54,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.ProjectListController">
+<AnchorPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.ProjectListController">
    <children>
       <VBox fx:id="rootVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
-            <MenuBar>
+            <MenuBar styleClass="darkgrey">
               <menus>
                 <Menu mnemonicParsing="false" text="User">
                   <items>
@@ -74,26 +74,26 @@
                 </Menu>
               </menus>
             </MenuBar>
-          <SplitPane dividerPositions="0.3" focusTraversable="false" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+          <SplitPane dividerPositions="0.24610244988864144" focusTraversable="false" prefHeight="-1.0" prefWidth="-1.0" styleClass="darkgrey" VBox.vgrow="ALWAYS">
             <items>
-                  <AnchorPane>
+                  <AnchorPane styleClass="darkgrey">
                      <children>
-                <Label alignment="CENTER" style="&#10;" text="Projects" wrapText="false" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+                <Label alignment="CENTER" style="&#10;" styleClass="heading" text="Projects" wrapText="false" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
                            <font>
                       <Font size="18.0" fx:id="x1" />
                            </font>
                         </Label>
-                    <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+                    <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" styleClass="darkgrey-scroll-pane" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
                            <content>
-                              <ListView fx:id="projectList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                              <ListView fx:id="projectList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="darkgrey" />
                            </content>
                     </ScrollPane>
-                        <Button fx:id="addProjectButton" mnemonicParsing="false" onAction="#handleAddProject" text="Add Project" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
+                        <Button fx:id="addProjectButton" mnemonicParsing="false" onAction="#handleAddProject" text="Create Project" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
                      </children>
                   </AnchorPane>
-              <AnchorPane>
+              <AnchorPane styleClass="grey">
                 <children>
-                  <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+                  <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" styleClass="heading" text="Details" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
                            <font>
                               <Font size="18.0" fx:id="x22" />
                            </font>
@@ -124,7 +124,7 @@
                                  </children>
                               </GridPane>
                               <Separator prefWidth="200.0" />
-                              <Label text="Activities">
+                              <Label styleClass="heading" text="Activities">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -146,14 +146,18 @@
                                     <Label text="ID" textAlignment="RIGHT" GridPane.columnIndex="3" />
                                  </children>
                                  <VBox.margin>
-                                    <Insets left="26.0" right="9.0" />
+                                    <Insets left="26.0" right="20.0" />
                                  </VBox.margin>
                               </GridPane>
-                              <ScrollPane fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
-                                 <content>
-                                    <Accordion fx:id="activityListAccordion" focusTraversable="false" />
-                                 </content>
-                              </ScrollPane>
+                              <VBox styleClass="lightgrey" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ScrollPane fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+                                       <content>
+                                          <Accordion fx:id="activityListAccordion" focusTraversable="false" />
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
                            </children>
                         </VBox>
                         <HBox spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
@@ -169,12 +173,12 @@
           </SplitPane>
         </children>
       </VBox>
-      <StackPane fx:id="popUpContainer" onMouseClicked="#checkClickedOutsidePopUp" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="popUpContainer" onMouseClicked="#checkClickedOutsidePopUp" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="480.0">
                <children>
-                  <AnchorPane fx:id="popUpPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="480.0" styleClass="popup-pane" stylesheets="@style.css" />
-                  <Button fx:id="closePopUpButton" mnemonicParsing="false" onAction="#closePopUpClicked" text="Close" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                  <AnchorPane fx:id="popUpPane" layoutX="-10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="480.0" styleClass="popup-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="closePopUpButton" mnemonicParsing="false" onAction="#closePopUpClicked" styleClass="close-button" text="x" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                </children>
             </AnchorPane>
          </children>

@@ -7,6 +7,7 @@ import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -28,6 +29,7 @@ public class RegisterTimeListController extends ProjectManagementAwareController
 
     @FXML
     private void initialize() {
+        activityGridPane.getChildren().clear();
         datePicker = new DatePicker(app.getTimeServer().getCurrentDate());
         datePicker.setPrefWidth(120);
         timeSpinner = new TimeSpinner();
@@ -62,10 +64,11 @@ public class RegisterTimeListController extends ProjectManagementAwareController
     private void setupProjectLabel(Project project) {
         addSeparator();
         Label projectLabel = new Label(project.toString());
-        projectLabel.getStyleClass().add("subtitle-label");
+        projectLabel.getStyleClass().add("subheading");
         activityGridPane.addRow(activityGridPane.getRowCount(), projectLabel);
         GridPane.setColumnSpan(projectLabel, 2);
         addSeparator();
+        projectLabel.setAlignment(Pos.CENTER);
     }
 
     private void addSeparator() {
@@ -82,9 +85,13 @@ public class RegisterTimeListController extends ProjectManagementAwareController
         Label activityLabel = new Label(activity.toString());
         Button registerButton = new Button("Register");
         activityGridPane.addRow(activityGridPane.getRowCount(), activityLabel, registerButton);
-
+        activityLabel.setAlignment(Pos.BASELINE_RIGHT);
         registerButton.setOnAction(event -> {
-            app.registerTime(project.getId(), activity.getId(), timeSpinner.getHours(), datePicker.getValue());
+            try {
+                app.registerTime(project.getId(), activity.getId(), timeSpinner.getHours(), datePicker.getValue());
+            } catch (IllegalArgumentException ex) {
+                alertService.show("Failed to register", ex.getMessage());
+            }
         });
     }
 

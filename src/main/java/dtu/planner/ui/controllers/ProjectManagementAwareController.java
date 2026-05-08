@@ -40,6 +40,7 @@ public abstract class ProjectManagementAwareController implements ProjectManagem
         }
     }
 
+
     public <T> void executeUiAction(
             ThrowingConsumer<T> action,
             T arg,

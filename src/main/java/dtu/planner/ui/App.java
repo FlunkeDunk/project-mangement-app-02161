@@ -6,6 +6,7 @@ import dtu.superPlanner.ProjectManagementApp;
 import javafx.application.Application;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * JavaFX App
@@ -49,5 +50,6 @@ public class App extends Application {
         stage.setTitle("Project Management App");
         stage.setWidth(640);
         stage.setHeight(540);
+        stage.initStyle(StageStyle.UNIFIED);
     }
 }

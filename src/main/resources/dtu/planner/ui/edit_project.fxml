@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.EditProjectController">
+<VBox alignment="CENTER" spacing="20.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.EditProjectController">
    <children>
-      <Label text="Edit Project" textAlignment="CENTER" textOverrun="CLIP">
+      <Label styleClass="heading" text="Edit Project" textAlignment="CENTER" textOverrun="CLIP">
          <font>
             <Font name="System Bold Italic" size="32.0" />
          </font>
@@ -37,7 +37,7 @@
             <ComboBox fx:id="projectLeaderComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <Button onAction="#onSave" text="Save &amp; exit" />
+      <Button onAction="#onSave" text="Save" />
    </children>
    <padding>
       <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />

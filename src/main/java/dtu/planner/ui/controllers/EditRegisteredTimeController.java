@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import dtu.planner.ui.components.TimeSpinner;
 import dtu.planner.ui.interfaces.ActivityAware;
+import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeLedger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -20,12 +21,22 @@ public class EditRegisteredTimeController extends ProjectManagementAwareControll
     @FXML
     private GridPane dateGridPane;
 
+    @FXML
+    private Label activityLabel;
+
     private int projectId;
 
     private int activityId;
 
+    private void setActivityLabelName() {
+        Activity activity = app.getActivity(projectId, activityId);
+        if (activity != null) {
+            activityLabel.setText(activity.getName());
+        }
+    }
+
     private void loadLedger() {
-        TimeLedger timeLedger = app.getProject(projectId).getActivityById(activityId)
+        TimeLedger timeLedger = app.getActivity(projectId, activityId)
                 .getTimeLedger(app.getUserInitials());
         if (timeLedger == null) {
             return;
@@ -68,6 +79,7 @@ public class EditRegisteredTimeController extends ProjectManagementAwareControll
         this.activityId = activityId;
         if (projectId != 0) {
             loadLedger();
+            setActivityLabelName();
         }
     }
 

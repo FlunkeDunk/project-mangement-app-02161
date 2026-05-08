@@ -8,7 +8,7 @@ import dtu.superPlanner.Project;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
     /**
@@ -21,22 +21,22 @@ public class CreateProjectController extends ProjectManagementAwareController {
     TextField projectNameTextField;
 
     @FXML
-    ChoiceBox<Employee> projectLeaderChoiceBox;
+    ComboBox<Employee> projectLeaderComboBox;
 
     @FXML
     private void initialize() {
         ObservableList<Employee> employees = FXCollections.observableArrayList(app.getEmployees());
         employees.add(0, null);
-        projectLeaderChoiceBox.setItems(employees);
+        projectLeaderComboBox.setItems(employees);
 
-        projectLeaderChoiceBox.setConverter(new EmployeeStringConverter());
+        projectLeaderComboBox.setConverter(new EmployeeStringConverter());
     }
 
     @FXML
     private void createProject() throws IOException, IllegalAccessException {
         Project project = app.createProject(projectNameTextField.getText());
-        if (projectLeaderChoiceBox.getValue() != null) {
-            app.setProjectLeader(project.getId(), projectLeaderChoiceBox.getValue().getInitials());
+        if (projectLeaderComboBox.getValue() != null) {
+            app.setProjectLeader(project.getId(), projectLeaderComboBox.getValue().getInitials());
         }
         navigator.toProjectList();;
     }
