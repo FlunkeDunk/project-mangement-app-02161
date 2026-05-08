@@ -1,5 +1,6 @@
 package hellocucumber;
 
+import io.cucumber.java.After;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -51,6 +52,7 @@ public class ReadEmployeeFromFileStepDefs {
     @Given("a file {string} exists")
     public void aFileExists(String filename) throws IOException {
         File fileWithInitials = new File(filename);
+        fileWithInitials.createNewFile();
         assertTrue(fileWithInitials.exists());
     }
 
@@ -90,5 +92,12 @@ public class ReadEmployeeFromFileStepDefs {
     @Then("a notification is given to the user")
     public void aNotificationIsGivenToTheUser() {
         assertTrue(fer.getSkippedLines());
+    }
+
+    @After
+    public void cleanup() {
+        if (fileWithInitials != null && fileWithInitials.exists()) {
+            fileWithInitials.delete();
+        }
     }
 }

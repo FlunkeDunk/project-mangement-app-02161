@@ -196,7 +196,10 @@ public class ProjectManagementApp {
         PriorityQueue<priorityEmployee> leastBusyEmployees = new PriorityQueue<>();
 
         for (Employee employee : allEmployees) {
-            if (employee.isAvailable(activityDuration)) {
+            if (!employee.isAvailable(activityDuration)) {
+                continue;
+            }
+            if (employee.getActivities().contains(getActivity(projectId, activityId))) {
                 continue;
             }
 

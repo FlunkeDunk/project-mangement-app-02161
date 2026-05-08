@@ -49,10 +49,10 @@ public class Employee {
     public boolean isAvailable(TimeFrame timeFrame) {
         for (FixedActivity fixedActivity : fixedActivities) {
             if (TimeFrame.overlaps(timeFrame, fixedActivity.getTimeFrame())) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public String getInitials() {
