@@ -49,6 +49,10 @@ public class ProjectManagementApp {
     public int getProjectIdNumerator() {
         return projectIdNumerator;
     }
+    
+    public Activity getActivity(int projectId, int activityId) {
+        return getProject(projectId).getActivityById(activityId);
+    }
 
     public void setTimeServer(TimeServer timeServer) {
         this.timeServer = timeServer;
