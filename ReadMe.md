@@ -1,9 +1,14 @@
-explains how to build and run the tests and the application and any necessary information to use the information, e.g., a short user manual and a description of any preset logins with password, if required.
-
 # Run the application
 
-To run the application
+To run the application press `mvn javafx:run`
+Alternatively, in an IDE, go to ``/src/java/dtu/planner.ui`` and run ``App.java``
+
+You will have to log in as one of the users in the database, one of which is ``huba``
+
 
 # Run tests
 
-To run the tests, go to ``src/test/java/hellocucumber`` and run ``RunCucumberTest.java``
+To run the tests, press `mvn clean test`
+Alternatively, in an IDE, go to ``/src/test/java/hellocucumber`` and run ``RunCucumberTest.java``
+
+[^1]: Note it is still possible to register time to unassigned activities, just not in the quick menu.

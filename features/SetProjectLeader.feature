@@ -4,16 +4,14 @@ Feature: Set project leader
 
   Actors: Project leader, Employee
 
-#   Scenario: Promote an employee to a project leader
-#       Given a project
-#       And the project has at least one member
-#       And the project has no project leader
-#       When an employee promotes an employee to a project leader
-#       Then the promoted employee is a project leader in the project
+  Scenario: Promote an employee to a project leader
+      Given a project with name "Delivery Service"
+      And the project has no project leader
+      When an employee promotes an employee "huba" to a project leader
+      Then the promoted employee "huba" is a project leader in the project
 
-#   Scenario: Attempt to promote employee with already existing project leader
-#       Given a project
-#       And the project has at least one member
-#       And the project has a project leader
-#       When a employee attempts to promote an employee to a project leader
-#       Then the promoted employee is not a project leader in the project
+  Scenario: Attempt to promote employee with already existing project leader
+      Given a project with name "Delivery Service"
+      And the project has a project leader "buba"
+      When an employee promotes an employee "huba" to a project leader
+      Then the promoted employee "huba" is not a project leader in the project

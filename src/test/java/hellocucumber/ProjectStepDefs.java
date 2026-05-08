@@ -1,6 +1,7 @@
 package hellocucumber;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -22,10 +24,12 @@ public class ProjectStepDefs {
     public ProjectManagementApp myApp;
     public Project project;
     private ErrorMessageHolder errorHolder;
+    private ProjectHolder projectHolder;
 
-    public ProjectStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+    public ProjectStepDefs(TestContext context, ErrorMessageHolder errorHolder, ProjectHolder projectHolder) {
         this.myApp = context.app;
         this.errorHolder = errorHolder;
+        this.projectHolder = projectHolder;
     }
 
     @Given("a user is logged in")
@@ -51,6 +55,7 @@ public class ProjectStepDefs {
     public void aProjectWithName(String string) {
         try {
             project = myApp.createProject(string);
+            projectHolder.setProject(project);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -87,8 +92,12 @@ public class ProjectStepDefs {
         assertEquals(expectedId, project.getId());
     }
 
+    /**
+     * @author Ebbe
+     */
     @Then("the project has no project leader")
     public void the_projects_has_no_project_leader() {
+        project.setProjectLeader(null);
         assertNull(project.getProjectLeader());
     }
 
@@ -136,6 +145,9 @@ public class ProjectStepDefs {
         project = myApp.createProject(string);
     }
 
+    /**
+     * @author Ebbe
+     */
     @Then("the project has the name {string}")
     public void theProjectHasTheName(String string) {
         assertEquals(string, project.getName());
@@ -154,20 +166,66 @@ public class ProjectStepDefs {
         assertEquals(int1, projects.size());
     }
 
+    /**
+     * @author Ebbe
+     */
     @Given("the user is the project leader")
     public void the_user_is_a_project_leader() throws IllegalAccessException {
         myApp.setProjectLeader(project.getId(), myApp.getUserInitials());
         assertEquals(user, project.getProjectLeader());
     }
 
+    /**
+     * @author Ebbe
+     */
     @Given("the user is not a project leader")
-    public void the_user_is_not_a_project_leader(String employeeInitials) {
-        assertNotEquals(employeeInitials, project.getProjectLeader());
+    public void the_user_is_not_a_project_leader() {
+        assertNotEquals(myApp.getUserInitials(), project.getProjectLeader());
     }
 
+    /**
+     * @author Ebbe
+     */
     @When("the user changes the project name to {string}")
-    public void the_user_changes_the_project_name_to(String employeeInitials, String newProjectName)
-            throws IllegalAccessException {
-        myApp.setProjectName(project.getId(), newProjectName);
+    public void the_user_changes_the_project_name_to(String newName) {
+        try {
+            myApp.setProjectName(project.getId(), newName);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
+    /**
+     * @author Ebbe
+     */
+    @Given("a project with the name {string}")
+    public void aProjectWithTheName(String projectName) {
+        try {
+            project = myApp.createProject(projectName);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+
+        assertNotNull(project, "Project was not created");
+    }
+
+
+    /**
+     * @author Ebbe
+     */
+    @Given("the project has the activities with the names")
+    public void theProjectHasTheActivitiesWithTheNames(List<String> activityNames) {
+
+        for (String name : activityNames) {
+            WeekBasedCalendar startWeek = new WeekBasedCalendar(1, 2026);
+            WeekBasedCalendar endWeek = new WeekBasedCalendar(2, 2026);
+            TimeFrame timeFrame = new TimeFrame(startWeek, endWeek);
+
+            try {
+                myApp.createActivity(project.getId(), name, timeFrame);
+            } catch (IllegalAccessException e) {
+                errorHolder.setError(e.getMessage());
+            }
+        }
     }
 }
