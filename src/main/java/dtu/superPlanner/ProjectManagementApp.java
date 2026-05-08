@@ -96,9 +96,6 @@ public class ProjectManagementApp {
     }
 
     public void editTime(int projectId, int activityId, LocalDate date, double newTime) throws IllegalArgumentException {
-        if (newTime < 0) {
-            throw new IllegalArgumentException("Cannot register negative time");
-        }
         getProject(projectId).editTime(activityId, userInitials, date, newTime);
     }
 
@@ -138,7 +135,7 @@ public class ProjectManagementApp {
      * @author Ebbe
      */
     public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials)
-            throws IllegalAccessException {
+            throws IllegalAccessException, IllegalArgumentException {
         Project proj = projects.get(projectId);
         Employee employee = getEmployee(employeeInitials);
         Activity activity = proj.getActivityById(activityId);
@@ -169,7 +166,7 @@ public class ProjectManagementApp {
         project.getActivityById(activityId).setName(name);
     }
 
-    public Employee getEmployee(String initials) {
+    public Employee getEmployee(String initials) throws IllegalArgumentException {
         if (!employeeRepository.contains(initials)) {
             throw new IllegalArgumentException("Invalid employee initials");
         }

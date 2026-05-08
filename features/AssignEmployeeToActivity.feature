@@ -1,4 +1,3 @@
-@skip #fjern denne linje ved implementering
 Feature: Assign employee to activity
   Description: An employee with Project-Leader permissions (Project leader or any employee when no project leader exists)
   can assign another employee (including themselves) to an activity
@@ -58,3 +57,8 @@ Feature: Assign employee to activity
     And "sawh" is not assigned to activity "Defend Gondor"
     When "gagr" assigns "sawh" to "Defend Gondor"
     Then "sawh" is assigned to "Defend Gondor"
+
+  Scenario: Project leader tries to assign an employee that does not exist to an activity
+    Given "gagr" is the project Leader
+    When "gagr" assigns "help" to "Defend Gondor"
+    Then an exception is thrown "Invalid employee initials"

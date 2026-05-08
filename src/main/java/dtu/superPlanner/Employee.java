@@ -13,11 +13,11 @@ public class Employee {
      */
     public Employee(String initials) {
         this.initials = initials;
-        
+
         activities = new HashSet<>();
         fixedActivities = new HashSet<>();
     }
-    
+
     /**
      * @author Emanuel
      */
@@ -27,16 +27,18 @@ public class Employee {
                 activities.add(a);
                 break;
             case FixedActivity a:
-                if (!fixedActivities.add(a)) throw new IllegalArgumentException("The employee already has that fixed activity");
+                if (!fixedActivities.add(a)) {
+                    throw new IllegalArgumentException("The employee already has that fixed activity");
+                }
                 break;
             default:
-        } 
+        }
     }
 
     public Set<Activity> getActivities() {
         return activities;
     }
-    
+
     public Set<FixedActivity> getFixedActivities() {
         return fixedActivities;
     }

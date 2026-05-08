@@ -306,9 +306,6 @@ public class ActivityStepDefs {
      */
     @When("{string} assigns {string} to {string}")
     public void theEmployeeAssignsTo(String assigner, String assignee, String activityName) {
-        myApp.createEmployee(assigner);
-        myApp.createEmployee(assignee);
-
         String prevUser = myApp.getUserInitials();
 
         myApp.login(assigner);
