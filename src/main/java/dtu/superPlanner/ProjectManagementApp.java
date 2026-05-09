@@ -191,22 +191,22 @@ public class ProjectManagementApp {
         Project project = getProject(projectId);
         TimeFrame activityDuration = project.getActivityTimeFrame(activityId);
 
-        // Assert that Precondition that project and acitvityDuration is not null 
+        // Assert that Precondition that project and acitvityDuration is not null
         assert project != null : "Project does not exist";
         assert activityDuration != null : "Activity does not exist";
 
-        if (!project.isProjectLeader(userInitials)) {                                                   // 1
+        if (!project.isProjectLeader(userInitials)) { // 1
             throw new IllegalAccessException("Only the project leader can see available employees.");
         }
 
         List<Employee> allEmployees = EMPLOYEE_REPOSITORY.getAllEmployees();
         PriorityQueue<priorityEmployee> leastBusyEmployees = new PriorityQueue<>();
 
-        for (Employee employee : allEmployees) {                                                        // 2
-            if (!employee.isAvailable(activityDuration)) {                                              // 3
+        for (Employee employee : allEmployees) { // 2
+            if (!employee.isAvailable(activityDuration)) { // 3
                 continue;
             }
-            if (employee.getActivities().contains(getActivity(projectId, activityId))) {                // 4
+            if (employee.getActivities().contains(getActivity(projectId, activityId))) { // 4
                 continue;
             }
 
@@ -215,14 +215,19 @@ public class ProjectManagementApp {
         }
 
         List<String> availableEmployeesInOrder = new ArrayList<>();
-        while (!leastBusyEmployees.isEmpty()) {                                                         // 5
+        while (!leastBusyEmployees.isEmpty()) { // 5
             availableEmployeesInOrder.add(leastBusyEmployees.poll().userInitials());
         }
 
         List<String> result = availableEmployeesInOrder;
-        // Assert that all employees are either in the result or not avaiable or already assigned the activity
-        assert EMPLOYEE_REPOSITORY.getAllEmployees().stream().allMatch((employee) ->
-            result.contains(employee.getInitials()) || !employee.isAvailable(activityDuration) || !employee.getActivities().contains(getActivity(projectId, activityId)))
+        // Assert that all employees are either
+        // (in the result and available and not already assigned)
+        // or (not in result and (not avaiable or already assigned the activity))
+        assert EMPLOYEE_REPOSITORY.getAllEmployees().stream().allMatch(
+                (employee) -> (result.contains(employee.getInitials()) && employee.isAvailable(activityDuration)
+                                    && !employee.getActivities().contains(getActivity(projectId, activityId)))
+                                || (!result.contains(employee.getInitials()) && (!employee.isAvailable(activityDuration)
+                                    || employee.getActivities().contains(getActivity(projectId, activityId)))))
                 : "not all employees are either in the result or not avaiable or already assigned the activity";
 
         // Assert result is ordered post condition
