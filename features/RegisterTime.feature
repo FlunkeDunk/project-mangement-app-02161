@@ -31,7 +31,6 @@ Feature: Register Time
     When the employee registers 5.0 hours on "Invade Mordor" on the date "1-1-2025"
     Then the employee's timeLedger for "Invade Mordor" has an entry with the date "1-1-2025" for 5.0 hours
     And the employee's total time on "Invade Mordor" is 5.0 hours
-
     When the employee registers 4.0 hours on "Invade Mordor" on the date "2-2-2025"
     Then the employee's timeLedger for "Invade Mordor" has an entry with the date "2-2-2025" for 4.0 hours
     And the employee's total time on "Invade Mordor" is 9.0 hours

@@ -41,9 +41,7 @@ public class SetProjectLeaderStepDefs {
 
         project = projectHolder.getProject();
         try {
-            if (project.isProjectLeader(initials)) {
-                pma.setProjectLeader(project.getId(), initials);
-            }
+            pma.setProjectLeader(project.getId(), initials);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
 

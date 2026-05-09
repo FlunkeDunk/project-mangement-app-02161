@@ -29,7 +29,6 @@ Feature: Create project
     And the project has the id 28001
     And the project has no project leader
 
-
   Scenario: Create 2 projects with different names
     Given there are no projects created this year
     And the date is "24-01-2027"

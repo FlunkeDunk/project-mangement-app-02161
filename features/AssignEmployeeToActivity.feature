@@ -7,8 +7,8 @@ Feature: Assign employee to activity
     Given a user is logged in
     And a project
     And the following employees exist
-    | gagr |
-    | sawh |
+      | gagr |
+      | sawh |
     And the project has the activities with the names
       | Invade Mordor |
       | Defend Gondor |
@@ -47,18 +47,23 @@ Feature: Assign employee to activity
     And "sawh" is assigned to "Invade Mordor"
 
   Scenario: Employee assigns themselves to an activity in a project they are the project leader of
-    Given "gagr" is the project Leader
+    Given "gagr" is the project leader
     And "gagr" is not assigned to activity "Defend Gondor"
     When "gagr" assigns "gagr" to "Defend Gondor"
     Then "gagr" is assigned to "Defend Gondor"
 
   Scenario: Employee assigns another employee to an activity in a project they are the project leader of
-    Given "gagr" is the project Leader
+    Given "gagr" is the project leader
     And "sawh" is not assigned to activity "Defend Gondor"
     When "gagr" assigns "sawh" to "Defend Gondor"
     Then "sawh" is assigned to "Defend Gondor"
 
   Scenario: Project leader tries to assign an employee that does not exist to an activity
-    Given "gagr" is the project Leader
+    Given "gagr" is the project leader
     When "gagr" assigns "help" to "Defend Gondor"
     Then an exception is thrown "Invalid employee initials"
+
+  Scenario: Activity added to Employee's assigned activities twice
+    When "Defend Gondor" is added to the assigned activities of "gagr"
+    And "Defend Gondor" is added to the assigned activities of "gagr"
+    Then an exception is thrown "The employee already has that activity"

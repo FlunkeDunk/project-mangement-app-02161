@@ -196,7 +196,7 @@ public class ProjectManagementApp {
         assert activityDuration != null : "Activity does not exist";
 
         if (!project.isProjectLeader(userInitials)) { // 1
-            throw new IllegalAccessException("Only the project leader can see available employees.");
+            throw new IllegalAccessException("Only the project leader can see available employees");
         }
 
         List<Employee> allEmployees = EMPLOYEE_REPOSITORY.getAllEmployees();

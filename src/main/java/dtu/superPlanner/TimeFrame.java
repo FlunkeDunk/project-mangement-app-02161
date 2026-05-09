@@ -58,6 +58,8 @@ public class TimeFrame {
          * If the second activity starts after the first one ends, it is impossible to overlap
          * If the second activity end before the first one starts, it is impossible to overlap
          */
+        System.out.println("Second start before first end: " + secondStartDate.before(firstEndDate));
+        System.out.println("Second end after first start: " + !secondEndDate.before(firstStartDate));
         return secondStartDate.before(firstEndDate) && !secondEndDate.before(firstStartDate);
     }
 

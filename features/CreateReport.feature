@@ -54,6 +54,6 @@ Feature: Create report
     Then a report is created
     And the report has the entries
       | [Knitting] Time budgeted: 8234.0 hours, Time Spent: 12.0 hours, timeLeft: 8222.0 hours. |
-      | [Sewing] Time budgeted: 91.5 hours, Time Spent: 82.0 hours, timeLeft: 9.5 hours. |
-      | [Tying knots] Time budgeted: 82.0 hours, Time Spent: 0.0 hours, timeLeft: 82.0 hours. |
-      | [Scroll TikTok] Time budgeted: 5.0 hours, Time Spent: 62.0 hours, timeLeft: 0.0 hours. |
+      | [Sewing] Time budgeted: 91.5 hours, Time Spent: 82.0 hours, timeLeft: 9.5 hours.        |
+      | [Tying knots] Time budgeted: 82.0 hours, Time Spent: 0.0 hours, timeLeft: 82.0 hours.   |
+      | [Scroll TikTok] Time budgeted: 5.0 hours, Time Spent: 62.0 hours, timeLeft: 0.0 hours.  |

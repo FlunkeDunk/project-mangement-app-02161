@@ -24,7 +24,9 @@ public class Employee {
     public void addActivity(AbstractActivity activity) throws IllegalArgumentException {
         switch (activity) {
             case Activity a:
-                activities.add(a);
+                if (!activities.add(a)) {
+                    throw new IllegalArgumentException("The employee already has that activity");
+                }
                 break;
             case FixedActivity a:
                 if (!fixedActivities.add(a)) {

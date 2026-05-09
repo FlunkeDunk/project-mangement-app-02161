@@ -8,10 +8,14 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dtu.superPlanner.Activity;
+import dtu.superPlanner.Employee;
+import dtu.superPlanner.FileEmployeeRepository;
+
 import static dtu.superPlanner.FixedActivityType.Emergency;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
@@ -100,7 +104,7 @@ public class ActivityStepDefs {
     /**
      * @author BenjaminEwe
      */
-    @When("an employee tries to add activity {string} with budgeted time {int} weeks")
+    @When("an employee tries to add activity {string} with a duration of {int} weeks")
     public void anEmployeeTriesToAddActivity(String name, int weeks) {
         addActivityWithNameAndDuration(name, weeks, false);
     }
@@ -117,7 +121,7 @@ public class ActivityStepDefs {
     /**
      * @author BenjaminEwe
      */
-    @Then("the project should have the activities with the names and budgeted times")
+    @Then("the project should have the activities with the names and durations")
     public void theProjectShouldHaveTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> expectedActivities) {
         Set<Activity> actualActivities = myProject.getActivitySet();
         List<String> actual = new ArrayList<>(actualActivities.stream()
@@ -421,9 +425,10 @@ public class ActivityStepDefs {
     public void the_user_searches_for_available_employees_in_between_week_and(String activityName, Integer startWeek,
             Integer endWeek) {
         Activity myActivity = getActivitybyName(activityName);
-        myActivity = getActivitybyName(activityName);
+        myActivity.getTimeFrame().getStartDate().setWeek(startWeek);
+        myActivity.getTimeFrame().getEndDate().setWeek(endWeek);
+        assertNotNull(myActivity);
         try {
-            assert myActivity != null;
             availableEmployees = myApp.getAvailableEmployees(myProject.getId(), myActivity.getId());
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
@@ -436,9 +441,7 @@ public class ActivityStepDefs {
     @Then("the employees are returned in the following order")
     public void the_employees_are_returned_in_the_following_order(List<String> employees) {
         assertEquals(employees.size(), availableEmployees.size());
-        for (int i = 0; i < employees.size(); i++) {
-            assertEquals(employees.get(i), availableEmployees.get(i));
-        }
+        assertIterableEquals(employees, availableEmployees);
     }
 
     /**
@@ -458,7 +461,7 @@ public class ActivityStepDefs {
     /**
      * @author Ebbe
      */
-    @Given("{string} is the project Leader")
+    @Given("{string} is the project leader")
     public void isTheProjectLeader(String employee) throws IllegalAccessException {
         addEmployee(employee);
         myApp.setProjectLeader(myProject.getId(), employee);
@@ -482,16 +485,15 @@ public class ActivityStepDefs {
 
         assertNotNull(activity, "Activity does not exist");
 
-        if (activity.getEmployees().contains(employeeInitials)) {
-            activity.removeEmployee(employeeInitials);
-        }
+        assertFalse(activity.getEmployees().contains(employeeInitials));
     }
 
     /**
      * @author Emanuel
      */
     @When("the user changes the registered time on activity {string} at date {string} to {double}")
-    public void theUserChangesTheRegisteredTimeOnActivityAtDateTo(String activityName, String dateString, Double hours) {
+    public void theUserChangesTheRegisteredTimeOnActivityAtDateTo(String activityName, String dateString,
+            Double hours) {
         String[] splitString = dateString.split("-");
         int day = Integer.parseInt(splitString[0]);
         int month = Integer.parseInt(splitString[1]);
@@ -503,6 +505,26 @@ public class ActivityStepDefs {
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
+    }
+
+    @When("{string} is added to the assigned activities of {string}")
+    public void isAddedToTheAssignedActivitiesOf(String activityName, String employeeInitials) {
+        Activity activity = getActivitybyName(activityName);
+        Employee employee = myApp.getEmployee(employeeInitials);
+
+        try {
+            employee.addActivity(activity);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
+    /**
+     * @author Emanuel
+     */
+    @Then("the activity with id {int} should be {string}")
+    public void theActivityWithIdShouldBe(Integer id, String name) {
+        assertEquals(name, myProject.getActivityMap().get(id).getName());
     }
 
 }

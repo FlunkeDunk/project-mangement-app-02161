@@ -13,15 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-;
+import java.util.TreeMap;;
 
-public class FileEmployeeRepository implements EmployeeRepository{
+public class FileEmployeeRepository implements EmployeeRepository {
 
-    private Map<String, Employee> employees ;
+    private Map<String, Employee> employees;
     private boolean skippedLines;
 
-    public FileEmployeeRepository(InputStream input) throws IOException{
+    public FileEmployeeRepository(InputStream input) throws IOException {
         skippedLines = false;
         employees = loadEmployees(input);
     }
@@ -29,7 +28,6 @@ public class FileEmployeeRepository implements EmployeeRepository{
     public FileEmployeeRepository() {
         employees = new TreeMap<>();
     }
-
 
     public Set<String> getEmployeeInitials() {
         return employees.keySet();
@@ -59,18 +57,15 @@ public class FileEmployeeRepository implements EmployeeRepository{
         return loadedEmployees;
     }
 
-
     @Override
     public Employee get(String initials) {
         return employees.get(initials);
     }
 
-
     @Override
     public boolean contains(String initials) {
         return employees.containsKey(initials);
     }
-
 
     @Override
     public List<Employee> getAllEmployees() {
@@ -81,7 +76,6 @@ public class FileEmployeeRepository implements EmployeeRepository{
     public void addEmployee(String initials) {
         employees.put(initials, new Employee(initials));
     }
-
 
     public boolean getSkippedLines() {
         return skippedLines;

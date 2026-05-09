@@ -9,8 +9,8 @@ Feature: Add activity
     Given a project
     And the project has no project leader
     And the project has no activities
-    When an employee tries to add activity "Visit Gondor" with budgeted time 12 weeks
-    Then the project should have the activities with the names and budgeted times
+    When an employee tries to add activity "Visit Gondor" with a duration of 12 weeks
+    Then the project should have the activities with the names and durations
       | Visit Gondor | 12 |
 
   Scenario: Add activity to a project with no project leader and existing activities
@@ -18,9 +18,9 @@ Feature: Add activity
     And the project has no project leader
     And the project has the activities with the names and durations
       | Attack Mordor | 5 |
-    When an employee tries to add activity "Destroy the ring" with budgeted time 8 weeks
-    Then the project should have the activities with the names and budgeted times
-      | Attack Mordor | 5 |
+    When an employee tries to add activity "Destroy the ring" with a duration of 8 weeks
+    Then the project should have the activities with the names and durations
+      | Attack Mordor    | 5 |
       | Destroy the ring | 8 |
 
   Scenario: Add activity to a project with a project leader and existing activities
@@ -28,8 +28,8 @@ Feature: Add activity
     And the project has a project leader
     And the project has the activities with the names and durations
       | Attack Mordor | 5 |
-    When an employee tries to add activity "Destroy the ring" with budgeted time 8 weeks
-    Then the project should have the activities with the names and budgeted times
+    When an employee tries to add activity "Destroy the ring" with a duration of 8 weeks
+    Then the project should have the activities with the names and durations
       | Attack Mordor | 5 |
     And an error is thrown "Only the project leader can create activities"
 
@@ -38,7 +38,8 @@ Feature: Add activity
     And the user is the project leader
     And the project has the activities with the names and durations
       | Attack Mordor | 5 |
-    When an employee tries to add activity "Destroy the ring" with budgeted time 8 weeks
-    Then the project should have the activities with the names and budgeted times
+    When an employee tries to add activity "Destroy the ring" with a duration of 8 weeks
+    Then the project should have the activities with the names and durations
       | Attack Mordor    | 5 |
       | Destroy the ring | 8 |
+    And the activity with id 1 should be "Attack Mordor"

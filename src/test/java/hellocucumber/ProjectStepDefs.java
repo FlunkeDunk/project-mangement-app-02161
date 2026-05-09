@@ -209,7 +209,6 @@ public class ProjectStepDefs {
         assertNotNull(project, "Project was not created");
     }
 
-
     /**
      * @author Ebbe
      */
@@ -226,6 +225,31 @@ public class ProjectStepDefs {
             } catch (IllegalAccessException e) {
                 errorHolder.setError(e.getMessage());
             }
+        }
+    }
+
+    /**
+     * @author Emanuel
+     */
+    @When("the user tries to get the project with id {int}")
+    public void theUserTriesToGetTheProjectWithId(Integer id) {
+        try {
+            myApp.getProject(id);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
+    /**
+     * @author Emanuel
+     */
+    @Given("the project leader is {string}")
+    public void theProjectLeaderIs(String initials) {
+        myApp.createEmployee(initials);
+        try {
+            myApp.setProjectLeader(project.getId(), initials);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
         }
     }
 }
