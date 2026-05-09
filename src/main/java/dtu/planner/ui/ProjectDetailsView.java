@@ -16,7 +16,7 @@ public class ProjectDetailsView {
     }
 
     private String defaultValue(String value) {
-        return value != null ? value : "none";
+        return value != null ? value : "None";
     }
 
     public String getId() {

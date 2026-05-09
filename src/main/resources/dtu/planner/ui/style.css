@@ -34,7 +34,7 @@
     -fx-background-color: #403e41;
 }
 
-.darkgrey .grey .lightgrey{
+.darkgrey .grey .lightgrey {
     -fx-border-width: 0;
     -fx-border-radius: 0;
     -fx-border-color: transparent;
@@ -85,7 +85,8 @@
     -fx-font-weight: bold;
 }
 
-.discrete-button, .close-button{
+.discrete-button,
+.close-button {
     -fx-background-color: transparent;
 }
 
@@ -122,6 +123,7 @@
     -fx-border-radius: 4;
     -fx-border-width: 1;
 }
+
 /* =========================================================
    Spinner
    ========================================================= */
@@ -137,10 +139,12 @@
 .spinner .decrement-arrow-button {
     -fx-background-color: #403e41;
 }
+
 .spinner .increment-arrow,
 .spinner .decrement-arrow {
     -fx-background-color: #ffd866;
 }
+
 .spinner .increment-arrow-button:hover,
 .spinner .decrement-arrow-button:hover {
     -fx-background-color: #5b595c;
@@ -241,6 +245,7 @@
     -fx-background-color: #2d2a2e;
     -fx-text-fill: #f4f4f4;
 }
+
 .combo-box .list-cell {
     -fx-background-color: #2d2a2e;
     -fx-text-fill: #f4f4f4;
@@ -253,6 +258,7 @@
     -fx-text-fill: #a39292;
 
 }
+
 .combo-box-popup .list-cell:selected {
     -fx-background-color: #2d2a2e;
     -fx-text-fill: #ffd866;
@@ -266,12 +272,14 @@
    Accordion
    ========================================================= */
 
-.accordion >.viewport {
-    -fx-background-color:#403e41;
+.accordion>.viewport {
+    -fx-background-color: #403e41;
 }
+
 .accordion {
-    -fx-background-color:#403e41;
+    -fx-background-color: #403e41;
 }
+
 /* =========================================================
    SplitPane
    ========================================================= */
@@ -293,29 +301,31 @@
 /* =========================================================
    Titled Pane
    ========================================================= */
-   .titled-pane > .title {
-       -fx-background-color: #221f22;
-}
-
-.titled-pane:hover > .title {
-    -fx-background-color: #2d2a2e;
-}
-.titled-pane:expanded > .title {
+.titled-pane>.title {
     -fx-background-color: #221f22;
 }
 
-.titled-pane > .title > .arrow-button {
+.titled-pane:hover>.title {
+    -fx-background-color: #2d2a2e;
+}
+
+.titled-pane:expanded>.title {
+    -fx-background-color: #221f22;
+}
+
+.titled-pane>.title>.arrow-button {
     -fx-background-color: transparent;
 }
 
-.titled-pane > .title > .arrow-button > .arrow {
+.titled-pane>.title>.arrow-button>.arrow {
     -fx-background-color: #ffd866;
 }
 
-.titled-pane > .content {
+.titled-pane>.content {
     -fx-background-color: #2d2a2e;
     -fx-border-color: transparent;
-    }
+}
+
 /* =========================================================
    LISTS / TABLES
    ========================================================= */
@@ -351,15 +361,18 @@
     -fx-padding: 0;
     -fx-background-insets: 0;
 }
+
 .menu-bar .menu {
     -fx-background-color: #2d2a2e;
 }
+
 .menu-bar .menu:hover,
 .menu-bar .menu:showing {
     -fx-background-color: #ffd866;
 }
-.menu-bar > .container > .menu-button:hover > .label,
-.menu-bar > .container > .menu-button:showing > .label{
+
+.menu-bar>.container>.menu-button:hover>.label,
+.menu-bar>.container>.menu-button:showing>.label {
     -fx-text-fill: #2d2a2e;
 }
 
@@ -376,7 +389,8 @@
 .menu-item:focused {
     -fx-background-color: #ffd866;
 }
-.menu-item:focused .label{
+
+.menu-item:focused .label {
     -fx-text-fill: #2d2a2e;
 }
 
@@ -384,6 +398,7 @@
     -fx-background-color: transparent;
     -fx-border-width: 0;
 }
+
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-width: 0;
@@ -422,10 +437,34 @@
     -fx-background-radius: 4;
 }
 
+/* =========================================================
+   CHARTS
+   ========================================================= */
 .chart {
     -fx-background-color: #221f22;
+    -fx-border-color: transparent;
+}
+.chart-pie {
+    -fx-border-color: transparent;
 }
 
 .chart-plot-background {
     -fx-background-color: #221f22;
+    -fx-border-color: transparent;
+}
+
+.axis-label {
+    -fx-text-fill: #f4f4f4;
+    -fx-background-color: transparent;
+}
+
+.chart-legend {
+    -fx-background-color: #403e41;
+    -fx-padding: 10px;
+}
+
+.axis {
+    -fx-tick-label-fill: #f4f4f4;
+    -fx-tick-length: 10;
+    -fx-minor-tick-length: 6;
 }

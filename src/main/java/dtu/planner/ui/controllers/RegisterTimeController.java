@@ -27,11 +27,11 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
     @FXML
     private void initialize() {
         registerTimeButton.setDisable(true);
-        datePicker.setValue(app.getTimeServer().getCurrentDate());
-
+        
         datePicker.valueProperty().addListener(((observableValue, oldDate, newDate) -> {
             updateButtonState();
         }));
+        datePicker.setValue(app.getTimeServer().getCurrentDate());
 
         timeSpinner.setValueFactory(new TimeSpinnerValueFactory());
     }
