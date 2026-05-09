@@ -25,6 +25,7 @@ public class ProjectStepDefs {
     public Project project;
     private ErrorMessageHolder errorHolder;
     private ProjectHolder projectHolder;
+    private int year;
 
     public ProjectStepDefs(TestContext context, ErrorMessageHolder errorHolder, ProjectHolder projectHolder) {
         this.myApp = context.app;
@@ -44,7 +45,7 @@ public class ProjectStepDefs {
         String[] splitString = string.split("-");
         int day = Integer.parseInt(splitString[0]);
         int month = Integer.parseInt(splitString[1]);
-        int year = Integer.parseInt(splitString[2]);
+        year = Integer.parseInt(splitString[2]);
         LocalDate date = LocalDate.of(year, month, day);
 
         MockTimeHolder mth = new MockTimeHolder(myApp);
@@ -63,7 +64,7 @@ public class ProjectStepDefs {
 
     @When("there are no projects created this year")
     public void thereAreNoProjectCreatedThisYear() {
-        int projectCount = myApp.getProjectIdNumerator();
+        int projectCount = myApp.getProjectCount(year);
         assert projectCount == 0;
     }
 
@@ -122,7 +123,7 @@ public class ProjectStepDefs {
         for (int i = 0; i < int1; i++) {
             myApp.createProject();
         }
-        assertEquals(myApp.getProjectIdNumerator(), int1);
+        assertEquals(int1, myApp.getProjectCount(year));
     }
 
     @Then("an error is thrown {string}")
@@ -132,7 +133,7 @@ public class ProjectStepDefs {
 
     @Then("under {int} project(s) have been created this year")
     public void underProjectsHaveBeenCreatedThisYear(Integer int1) {
-        assertTrue(myApp.getProjectIdNumerator() < int1);
+        assertTrue(myApp.getProjectCount(year) < int1);
     }
 
     @Given("no projects have been created")

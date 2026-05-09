@@ -5,12 +5,15 @@ import java.io.InputStream;
 
 import dtu.superPlanner.EmployeeRepository;
 import dtu.superPlanner.FileEmployeeRepository;
+import dtu.superPlanner.MemoryProjectRepository;
 import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.ProjectRepository;
 
 public class AppFactory {
     public ProjectManagementApp createApp() throws IOException {
-        EmployeeRepository repo = createEmployeeRepository();
-        return new ProjectManagementApp(repo);
+        EmployeeRepository employeeRepository = createEmployeeRepository();
+        ProjectRepository projectRepository = createProjectRepository();
+        return new ProjectManagementApp(employeeRepository, projectRepository);
     }
 
     private EmployeeRepository createEmployeeRepository() throws IOException {
@@ -22,5 +25,9 @@ public class AppFactory {
         }
 
         return new FileEmployeeRepository(input);
+    }
+
+    private ProjectRepository createProjectRepository() throws IOException {
+        return new MemoryProjectRepository();
     }
 }

@@ -2,14 +2,17 @@ package dtu.superPlanner;
 
 import java.util.Set;
 
-public class ProjectRepository {
-    private Set<Project> projectSet;
 
-    public Set<Project> getProjectSet() {
-        return projectSet;
-    }
+public interface ProjectRepository {
 
-    public Project getProject() {
-        throw new UnsupportedOperationException("Not implemented");
-    }
+    public Project get(int projectId);
+    
+    public boolean contains(int projectId);
+
+    public Set<Project> getAllProjects();
+
+    public int getProjectCount(int year);
+
+    public Project createProject(String name, WeekBasedCalendar date);
+
 }

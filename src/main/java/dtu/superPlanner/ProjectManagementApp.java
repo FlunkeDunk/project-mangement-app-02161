@@ -2,23 +2,20 @@ package dtu.superPlanner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
 public class ProjectManagementApp {
-    private Map<Integer, Project> projects;
     private String userInitials;
-    private int projectIdNumerator;
     private TimeServer timeServer;
     private final EmployeeRepository EMPLOYEE_REPOSITORY;
+    private final ProjectRepository PROJECT_REPOSITORY;
 
-    public ProjectManagementApp(EmployeeRepository EMPLOYEE_REPOSITORY) {
-        this.EMPLOYEE_REPOSITORY = EMPLOYEE_REPOSITORY;
-        projects = new HashMap<>();
+    public ProjectManagementApp(EmployeeRepository employeeRepository, ProjectRepository projectRepository) {
+        this.EMPLOYEE_REPOSITORY = employeeRepository;
+        this.PROJECT_REPOSITORY = projectRepository;
         timeServer = new TimeServer();
     }
 
@@ -30,24 +27,13 @@ public class ProjectManagementApp {
      * @author BenjaminEwe
      */
     public Project createProject(String name) throws RuntimeException {
-        if (projectIdNumerator >= 999) {
-            throw new RuntimeException("Cannot create more than 999 projects a year");
-        }
-        projectIdNumerator++;
-        int id = getProjectId();
-        Project project = new Project(timeServer.getCurrentWeekDate(), id, name);
-        projects.put(id, project);
-
-        return project;
+        return PROJECT_REPOSITORY.createProject(name, timeServer.getCurrentWeekDate());
     }
 
-    private int getProjectId() {
-        WeekBasedCalendar date = timeServer.getCurrentWeekDate();
-        return (date.getYear() % 100) * 1000 + projectIdNumerator;
-    }
 
-    public int getProjectIdNumerator() {
-        return projectIdNumerator;
+
+    public int getProjectCount(int year) {
+        return PROJECT_REPOSITORY.getProjectCount(year);
     }
 
     public Activity getActivity(int projectId, int activityId) {
@@ -59,14 +45,14 @@ public class ProjectManagementApp {
     }
 
     public Project getProject(int projectId) {
-        if (!projects.containsKey(projectId)) {
+        if (!PROJECT_REPOSITORY.contains(projectId)) {
             throw new IllegalArgumentException("Invalid project id");
         }
-        return projects.get(projectId);
+        return PROJECT_REPOSITORY.get(projectId);
     }
 
     public Set<Project> getAllProjects() {
-        return new HashSet<>(projects.values());
+        return PROJECT_REPOSITORY.getAllProjects();
     }
 
     public Activity createActivity(int projectId, String name, TimeFrame timeFrame) throws IllegalAccessException {
@@ -104,7 +90,7 @@ public class ProjectManagementApp {
         if (!getProject(projectId).isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can set a new project leader");
         }
-        projects.get(projectId).setProjectLeader(newLeaderInitials);
+        PROJECT_REPOSITORY.get(projectId).setProjectLeader(newLeaderInitials);
     }
 
     public Report createReport(int projectId) {
@@ -125,7 +111,7 @@ public class ProjectManagementApp {
         Project project = getProject(projectId);
         if (!project.isProjectLeader(userInitials))
             throw new IllegalAccessException("Only the project leader can set budgeted time for activities");
-        projects.get(projectId).setBudgetedTime(activityId, budgetedTime);
+        PROJECT_REPOSITORY.get(projectId).setBudgetedTime(activityId, budgetedTime);
     }
 
     public void setActivityTimeFrame(int projectId, int activityId, TimeFrame timeFrame) {
@@ -137,7 +123,7 @@ public class ProjectManagementApp {
      */
     public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials)
             throws IllegalAccessException, IllegalArgumentException {
-        Project proj = projects.get(projectId);
+        Project proj = PROJECT_REPOSITORY.get(projectId);
         Employee employee = getEmployee(employeeInitials);
         Activity activity = proj.getActivityById(activityId);
         if (!proj.isProjectLeader(userInitials)) {

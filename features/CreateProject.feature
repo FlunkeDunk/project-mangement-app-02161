@@ -15,6 +15,7 @@ Feature: Create project
     And the project has no project leader
 
   Scenario: User try creating the 1000th
+    Given the date is "24-01-2027"
     When there are 999 projects created this year
     And the user creates a project
     Then an error is thrown "Cannot create more than 999 projects a year"
