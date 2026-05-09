@@ -37,14 +37,14 @@ Feature: Add fixed activity
       |       2027 |     2027 |          5 |        8 |
       |       2026 |     2027 |         51 |        1 |
 
-  # Scenario Outline: User sets duration of an activity unsuccessfully
-  #   When the user creates a fixed activity "Vacation" with timeframe
-  #     | <start week> | <start year> |
-  #     | <end week>   | <end year>   |
-  #   Then an exception is thrown "???"
-
-  #   Examples:
-  #     | start year | end year | start week | end week |
-  #     |       2027 |    -2027 |          5 |        8 |
-  #     |       2026 |     2027 |        -51 |        1 |
-  #     |       2026 |     2027 |         51 |       -1 |
+   Scenario Outline: User sets duration of an activity unsuccessfully
+     When the user creates a fixed activity "Vacation" with timeframe
+       | <start week> | <start year> |
+       | <end week>   | <end year>   |
+     Then an exception is thrown "DateError: End date must be after start date"
+     Examples:
+       | start year | end year | start week | end week |
+       |       2027 |    -2027 |          5 |        8 |
+       |         -1 |       -2 |          1 |       40 |
+       |       1987 |     1987 |          5 |        4 |
+       |       1653 |     1654 |         52 |      -16 |
