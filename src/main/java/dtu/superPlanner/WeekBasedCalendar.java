@@ -49,7 +49,7 @@ public class WeekBasedCalendar {
     }
 
     /**
-     * @author Mikkel
+     * @author Arthur
      */
     public LocalDate toLocalDate() {
         WeekFields weekFields = WeekFields.ISO;
@@ -100,7 +100,7 @@ public class WeekBasedCalendar {
     private record WeekAndYear(int week, int year) {}
 
     /**
-     * @author Mikkel
+     * @author Arthur
      */
     @Override
     public String toString() {
