@@ -14,7 +14,7 @@ public class WeekBasedCalendar {
      * @author BenjaminEwe
      */
     public WeekBasedCalendar(int week, int year) {
-        WeekAndYear normalized = normalizeInput(week, year);
+        WeekAndYear normalized = normalizeDate(week, year);
         this.week = normalized.week();
         this.year = normalized.year();
     }
@@ -43,7 +43,7 @@ public class WeekBasedCalendar {
      * @author BenjaminEwe
      */
     public void setWeek(int week) {
-        WeekAndYear normalized = normalizeInput(week, this.year);
+        WeekAndYear normalized = normalizeDate(week, this.year);
         this.week = normalized.week();
         setYear(normalized.year());
     }
@@ -70,7 +70,7 @@ public class WeekBasedCalendar {
     /**
      * @author BenjaminEwe
      */
-    private WeekAndYear normalizeInput(int week, int year) {
+    private WeekAndYear normalizeDate(int week, int year) {
         assert true;
         if (week == 0) {
             throw new IllegalArgumentException(String.format("DateError: Invalid week: %d", week));
