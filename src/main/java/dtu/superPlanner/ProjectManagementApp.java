@@ -191,22 +191,22 @@ public class ProjectManagementApp {
         Project project = getProject(projectId);
         TimeFrame activityDuration = project.getActivityTimeFrame(activityId);
 
-        // Aseert that Precondition that project and acitvityDuration is not null 
+        // Assert that Precondition that project and acitvityDuration is not null 
         assert project != null : "Project does not exist";
         assert activityDuration != null : "Activity does not exist";
 
-        if (!project.isProjectLeader(userInitials)) {
+        if (!project.isProjectLeader(userInitials)) {                                                   // 1
             throw new IllegalAccessException("Only the project leader can see available employees.");
         }
 
         List<Employee> allEmployees = EMPLOYEE_REPOSITORY.getAllEmployees();
         PriorityQueue<priorityEmployee> leastBusyEmployees = new PriorityQueue<>();
 
-        for (Employee employee : allEmployees) {
-            if (!employee.isAvailable(activityDuration)) {
+        for (Employee employee : allEmployees) {                                                        // 2
+            if (!employee.isAvailable(activityDuration)) {                                              // 3
                 continue;
             }
-            if (employee.getActivities().contains(getActivity(projectId, activityId))) {
+            if (employee.getActivities().contains(getActivity(projectId, activityId))) {                // 4
                 continue;
             }
 
@@ -215,7 +215,7 @@ public class ProjectManagementApp {
         }
 
         List<String> availableEmployeesInOrder = new ArrayList<>();
-        while (!leastBusyEmployees.isEmpty()) {
+        while (!leastBusyEmployees.isEmpty()) {                                                         // 5
             availableEmployeesInOrder.add(leastBusyEmployees.poll().userInitials());
         }
 
