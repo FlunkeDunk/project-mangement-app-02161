@@ -1,10 +1,8 @@
 package dtu.superPlanner;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Set;
 
 public class ProjectManagementApp {
@@ -29,8 +27,6 @@ public class ProjectManagementApp {
     public Project createProject(String name) throws RuntimeException {
         return PROJECT_REPOSITORY.createProject(name, timeServer.getCurrentWeekDate());
     }
-
-
 
     public int getProjectCount(int year) {
         return PROJECT_REPOSITORY.getProjectCount(year);
@@ -173,80 +169,22 @@ public class ProjectManagementApp {
     /**
      * @author BenjaminEwe
      */
-    public List<String> getAvailableEmployees(int projectId, int activityId) throws IllegalAccessException {
+
+    public List<String> getAvailableEmployees(int projectId, int activityId)
+            throws IllegalAccessException {
+
         Project project = getProject(projectId);
-        TimeFrame activityDuration = project.getActivityTimeFrame(activityId);
 
-        // Assert that Precondition that project and acitvityDuration is not null
-        assert project != null : "Project does not exist";
-        assert activityDuration != null : "Activity does not exist";
-
-        if (!project.isProjectLeader(userInitials)) { // 1
-            throw new IllegalAccessException("Only the project leader can see available employees");
+        if (!project.isProjectLeader(userInitials)) {
+            throw new IllegalAccessException(
+                    "Only the project leader can see available employees");
         }
 
-        List<Employee> allEmployees = EMPLOYEE_REPOSITORY.getAllEmployees();
-        PriorityQueue<priorityEmployee> leastBusyEmployees = new PriorityQueue<>();
+        Activity activity = getActivity(projectId, activityId);
 
-        for (Employee employee : allEmployees) { // 2
-            if (!employee.isAvailable(activityDuration)) { // 3
-                continue;
-            }
-            if (employee.getActivities().contains(getActivity(projectId, activityId))) { // 4
-                continue;
-            }
-
-            int alreadyAssignedActivitiesInTimeFrame = getActivitiesOverlapping(activityDuration, employee);
-            leastBusyEmployees.add(new priorityEmployee(employee.getInitials(), alreadyAssignedActivitiesInTimeFrame));
-        }
-
-        List<String> availableEmployeesInOrder = new ArrayList<>();
-        while (!leastBusyEmployees.isEmpty()) { // 5
-            availableEmployeesInOrder.add(leastBusyEmployees.poll().userInitials());
-        }
-
-        List<String> result = availableEmployeesInOrder;
-        // Assert that all employees are either
-        // (in the result and available and not already assigned)
-        // or (not in result and (not avaiable or already assigned the activity))
-        assert EMPLOYEE_REPOSITORY.getAllEmployees().stream().allMatch(
-                (employee) -> (result.contains(employee.getInitials()) && employee.isAvailable(activityDuration)
-                                    && !employee.getActivities().contains(getActivity(projectId, activityId)))
-                                || (!result.contains(employee.getInitials()) && (!employee.isAvailable(activityDuration)
-                                    || employee.getActivities().contains(getActivity(projectId, activityId)))))
-                : "not all employees are either in the result or not avaiable or already assigned the activity";
-
-        // Assert result is ordered post condition
-        for (int i = 1; i < result.size(); i++) {
-            Employee prev = EMPLOYEE_REPOSITORY.get(result.get(i - 1));
-            Employee curr = EMPLOYEE_REPOSITORY.get(result.get(i));
-
-            int prevLoad = getActivitiesOverlapping(activityDuration, prev);
-            int currLoad = getActivitiesOverlapping(activityDuration, curr);
-
-            assert prevLoad <= currLoad
-                    : "Employees are not ordered by workload";
-        }
-        return result;
+        return EMPLOYEE_REPOSITORY.findAvailableEmployeeInitials(activity);
     }
 
-    /**
-     * @author BenjaminEwe
-     */
-    private int getActivitiesOverlapping(TimeFrame activityDuration, Employee employee) {
-        Set<Activity> alreadyAssignedActivities = employee.getActivities();
-        int activitiesOverlapping = 0;
-
-        for (Activity activity : alreadyAssignedActivities) {
-            TimeFrame existingActivityDuration = activity.getTimeFrame();
-
-            if (TimeFrame.overlaps(existingActivityDuration, activityDuration)) {
-                activitiesOverlapping++;
-            }
-        }
-
-        return activitiesOverlapping;
-    }
 
     public String getUserInitials() {
         return userInitials;
@@ -266,17 +204,6 @@ public class ProjectManagementApp {
     public Set<FixedActivity> getFixedActivities() {
         Employee user = EMPLOYEE_REPOSITORY.get(userInitials);
         return user.getFixedActivities();
-    }
-
-    /**
-     * @author BenjaminEwe
-     */
-    private record priorityEmployee(String userInitials, int priority) implements Comparable<priorityEmployee> {
-
-        @Override
-        public int compareTo(priorityEmployee other) {
-            return Integer.compare(this.priority, other.priority);
-        }
     }
 
     public void createEmployee(String initials) {

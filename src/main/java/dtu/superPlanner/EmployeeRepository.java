@@ -14,4 +14,6 @@ public interface EmployeeRepository {
 
     public void addEmployee(String initials);
 
+    public List<String> findAvailableEmployeeInitials(Activity activity);
+
 }
