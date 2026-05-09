@@ -14,10 +14,10 @@ public class ProjectManagementApp {
     private String userInitials;
     private int projectIdNumerator;
     private TimeServer timeServer;
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository EMPLOYEE_REPOSITORY;
 
-    public ProjectManagementApp(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public ProjectManagementApp(EmployeeRepository EMPLOYEE_REPOSITORY) {
+        this.EMPLOYEE_REPOSITORY = EMPLOYEE_REPOSITORY;
         projects = new HashMap<>();
         timeServer = new TimeServer();
     }
@@ -49,7 +49,7 @@ public class ProjectManagementApp {
     public int getProjectIdNumerator() {
         return projectIdNumerator;
     }
-    
+
     public Activity getActivity(int projectId, int activityId) {
         return getProject(projectId).getActivityById(activityId);
     }
@@ -95,7 +95,8 @@ public class ProjectManagementApp {
         getProject(projectId).registerTime(activityId, userInitials, timeServer.getCurrentDate(), time);
     }
 
-    public void editTime(int projectId, int activityId, LocalDate date, double newTime) throws IllegalArgumentException {
+    public void editTime(int projectId, int activityId, LocalDate date, double newTime)
+            throws IllegalArgumentException {
         getProject(projectId).editTime(activityId, userInitials, date, newTime);
     }
 
@@ -114,7 +115,7 @@ public class ProjectManagementApp {
     public FixedActivity createFixedActivity(FixedActivityType type, TimeFrame timeFrame)
             throws IllegalArgumentException {
         FixedActivity activity = new FixedActivity(type, timeFrame);
-        Employee user = employeeRepository.get(userInitials);
+        Employee user = EMPLOYEE_REPOSITORY.get(userInitials);
         user.addActivity(activity);
 
         return activity;
@@ -167,10 +168,10 @@ public class ProjectManagementApp {
     }
 
     public Employee getEmployee(String initials) throws IllegalArgumentException {
-        if (!employeeRepository.contains(initials)) {
+        if (!EMPLOYEE_REPOSITORY.contains(initials)) {
             throw new IllegalArgumentException("Invalid employee initials");
         }
-        return employeeRepository.get(initials);
+        return EMPLOYEE_REPOSITORY.get(initials);
     }
 
     public void login(String employeeInitials) {
@@ -187,12 +188,18 @@ public class ProjectManagementApp {
      * @author BenjaminEwe
      */
     public List<String> getAvailableEmployees(int projectId, int activityId) throws IllegalAccessException {
-        if (!getProject(projectId).isProjectLeader(userInitials)) {
+        Project project = getProject(projectId);
+        TimeFrame activityDuration = project.getActivityTimeFrame(activityId);
+
+        // Aseert that Precondition that project and acitvityDuration is not null 
+        assert project != null : "Project does not exist";
+        assert activityDuration != null : "Activity does not exist";
+
+        if (!project.isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can see available employees.");
         }
 
-        List<Employee> allEmployees = employeeRepository.getAllEmployees();
-        TimeFrame activityDuration = projects.get(projectId).getActivityTimeFrame(activityId);
+        List<Employee> allEmployees = EMPLOYEE_REPOSITORY.getAllEmployees();
         PriorityQueue<priorityEmployee> leastBusyEmployees = new PriorityQueue<>();
 
         for (Employee employee : allEmployees) {
@@ -212,7 +219,24 @@ public class ProjectManagementApp {
             availableEmployeesInOrder.add(leastBusyEmployees.poll().userInitials());
         }
 
-        return availableEmployeesInOrder;
+        List<String> result = availableEmployeesInOrder;
+        // Assert that all employees are either in the result or not avaiable or already assigned the activity
+        assert EMPLOYEE_REPOSITORY.getAllEmployees().stream().allMatch((employee) ->
+            result.contains(employee.getInitials()) || !employee.isAvailable(activityDuration) || !employee.getActivities().contains(getActivity(projectId, activityId)))
+                : "not all employees are either in the result or not avaiable or already assigned the activity";
+
+        // Assert result is ordered post condition
+        for (int i = 1; i < result.size(); i++) {
+            Employee prev = EMPLOYEE_REPOSITORY.get(result.get(i - 1));
+            Employee curr = EMPLOYEE_REPOSITORY.get(result.get(i));
+
+            int prevLoad = getActivitiesOverlapping(activityDuration, prev);
+            int currLoad = getActivitiesOverlapping(activityDuration, curr);
+
+            assert prevLoad <= currLoad
+                    : "Employees are not ordered by workload";
+        }
+        return result;
     }
 
     /**
@@ -238,7 +262,7 @@ public class ProjectManagementApp {
     }
 
     public Set<Employee> getEmployees() {
-        return new HashSet<>(employeeRepository.getAllEmployees());
+        return new HashSet<>(EMPLOYEE_REPOSITORY.getAllEmployees());
     }
 
     public TimeServer getTimeServer() {
@@ -249,7 +273,7 @@ public class ProjectManagementApp {
      * @author Emanuel
      */
     public Set<FixedActivity> getFixedActivities() {
-        Employee user = employeeRepository.get(userInitials);
+        Employee user = EMPLOYEE_REPOSITORY.get(userInitials);
         return user.getFixedActivities();
     }
 
@@ -265,6 +289,6 @@ public class ProjectManagementApp {
     }
 
     public void createEmployee(String initials) {
-        employeeRepository.addEmployee(initials);
+        EMPLOYEE_REPOSITORY.addEmployee(initials);
     }
 }
