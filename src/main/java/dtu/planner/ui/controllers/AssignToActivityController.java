@@ -18,7 +18,7 @@ public class AssignToActivityController extends ProjectManagementAwareController
     private UiState uiState;
 
     @FXML
-    private void loadInitials() {
+    private void initialize() {
         employeeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         List<String> initialsList = new ArrayList<>();
         try {
