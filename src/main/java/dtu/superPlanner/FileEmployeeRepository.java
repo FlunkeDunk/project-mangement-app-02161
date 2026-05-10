@@ -38,8 +38,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
         Map<String, Employee> loadedEmployees = new TreeMap<>();
 
         if (input == null) {
-            throw new IOException("Input file was null");
-
+            throw new IllegalArgumentException("Input file was null");
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
