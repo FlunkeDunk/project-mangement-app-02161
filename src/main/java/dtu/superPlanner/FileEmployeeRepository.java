@@ -34,6 +34,9 @@ public class FileEmployeeRepository implements EmployeeRepository {
         return employees.keySet();
     }
 
+    /**
+     * @author Arthur
+     */
     private final Map<String, Employee> loadEmployees(InputStream input) throws IOException {
         Map<String, Employee> loadedEmployees = new TreeMap<>();
 
@@ -151,6 +154,9 @@ public class FileEmployeeRepository implements EmployeeRepository {
         return activitiesOverlapping;
     }
 
+    /**
+     * @author Arthur
+     */
     private boolean isEligibleForTimeActivity(Employee employee, Activity activity) {
         return employee.isAvailable(activity.getTimeFrame()) && !employee.getActivities().contains(activity);
     }

@@ -2,7 +2,9 @@ package dtu.superPlanner;
 
 import java.util.Set;
 
-
+/**
+ * @author Arthur
+ */
 public interface ProjectRepository {
 
     public Project get(int projectId);

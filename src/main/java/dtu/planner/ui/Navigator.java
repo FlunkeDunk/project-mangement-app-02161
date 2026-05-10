@@ -8,6 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * @author Arthur
+ */
 public class Navigator {
     Stage stage;
     private ControllerFactory controllerFactory;

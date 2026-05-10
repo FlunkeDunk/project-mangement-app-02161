@@ -3,7 +3,7 @@ package dtu.superPlanner;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WeekBasedCalendarTest {
+public class NormalizeWeekTest {
 
     @Test
     public void testNormalizeWeekZeroThrowsException() {

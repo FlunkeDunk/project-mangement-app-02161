@@ -79,11 +79,14 @@ public class WeekBasedCalendar {
         this.week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
         this.year = date.getYear();
 
-        // The new week number must at most be the last week of the year we are in and at least 1 to be a valid week number
+        // The new week number must at most be the last week of the year we are in and
+        // at least 1 to be a valid week number
         assert(this.week <= LocalDate.of(this.year, 12, 28).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
                 && this.week > 0);
+        // Year 0 does not exist, all other integers are valid
+        assert (this.year != 0);
         // The new date is 'week' weeks after the input years first week
-        assert(ChronoUnit.WEEKS.between(
+        assert (ChronoUnit.WEEKS.between(
                 LocalDate.of(year, 1, 4).with(WeekFields.ISO.dayOfWeek(), 1),
                 LocalDate.of(this.year, 1, 4)
                         .withYear(this.year)
