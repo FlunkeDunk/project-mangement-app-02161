@@ -49,7 +49,7 @@ public class Project {
     }
 
     public void setBudgetedTime(int activityId, double budgetedTime) {
-        activities.get(activityId).setBudgetedTime(budgetedTime);
+        getActivityById(activityId).setBudgetedTime(budgetedTime);
     }
 
     public void setActivityTimeFrame(int activityId, TimeFrame timeFrame) {
@@ -57,7 +57,7 @@ public class Project {
     }
 
     public void addEmployeeToActivity(int activityId, String employeeInitials) {
-        activities.get(activityId).addEmployee(employeeInitials);
+        getActivityById(activityId).addEmployee(employeeInitials);
     }
 
     public TimeFrame getActivityTimeFrame(int activityId) {
@@ -65,6 +65,10 @@ public class Project {
     }
 
     public Activity getActivityById(int activityId) {
+        if (!activities.containsKey(activityId)) {
+            throw new IllegalArgumentException("Activity with ID: " + activityId + " does not exist");
+        }
+        
         return activities.get(activityId);
     }
 
