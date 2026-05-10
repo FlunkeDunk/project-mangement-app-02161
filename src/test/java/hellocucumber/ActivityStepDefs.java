@@ -42,6 +42,7 @@ public class ActivityStepDefs {
         this.errorHolder = errorHolder;
 
         Set<Project> projects = myApp.getAllProjects();
+        System.out.println("projectcount =" + projects.size());
         if (projects.size() > 1) {
             throw new IllegalStateException("Expected at most one project");
         }
@@ -502,12 +503,14 @@ public class ActivityStepDefs {
         int month = Integer.parseInt(splitString[1]);
         int year = Integer.parseInt(splitString[2]);
         LocalDate date = LocalDate.of(year, month, day);
-
+        int activityId = myProject.getActivitySet().stream().filter(a -> a.getName().equals(activityName)).findFirst().orElseThrow().getId();
         try {
-            myApp.editTime(myProject.getId(), myActivity.getId(), date, hours);
+            
+            myApp.editTime(myProject.getId(), activityId, date, hours);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
+
     }
 
     /**

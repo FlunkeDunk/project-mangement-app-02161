@@ -53,7 +53,12 @@ public class RegisterTimeStepDefs {
 
     @Given("the project has activities with the names:")
     public void theProjectHasActivitiesWithTheNames(List<String> activityNames) throws IllegalAccessException {
-        project = myApp.createProject();
+        if (myApp.getAllProjects().isEmpty()) {
+            project = myApp.createProject();
+        } else {
+            project = myApp.getAllProjects().iterator().next();
+        }
+
         activities = new ArrayList<>();
 
         WeekBasedCalendar startDate = new WeekBasedCalendar(4, 2026);
