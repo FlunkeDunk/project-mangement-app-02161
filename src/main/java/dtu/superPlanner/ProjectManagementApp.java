@@ -40,6 +40,9 @@ public class ProjectManagementApp {
         this.timeServer = timeServer;
     }
 
+    /**
+     * @author Arthur
+     */
     public Project getProject(int projectId) {
         if (!PROJECT_REPOSITORY.contains(projectId)) {
             throw new IllegalArgumentException("Invalid project id");
@@ -51,6 +54,9 @@ public class ProjectManagementApp {
         return PROJECT_REPOSITORY.getAllProjects();
     }
 
+    /**
+     * @author Mikkel
+     */
     public Activity createActivity(int projectId, String name, TimeFrame timeFrame) throws IllegalAccessException {
         Project myProject = getProject(projectId);
         if (!myProject.isProjectLeader(userInitials)) {
@@ -60,6 +66,9 @@ public class ProjectManagementApp {
         return myProject.createActivity(name, timeFrame);
     }
 
+    /**
+     * @author Mikkel
+     */
     public void registerTime(int projectId, int activityId, double time, LocalDate date) {
         if (time < 0 || time > 24) {
             throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
@@ -70,6 +79,9 @@ public class ProjectManagementApp {
         getProject(projectId).registerTime(activityId, userInitials, date, time);
     }
 
+    /**
+     * @author Mikkel
+     */
     public void registerTime(int projectId, int activityId, double time) {
         if (time < 0 || time > 24) {
             throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
@@ -77,11 +89,17 @@ public class ProjectManagementApp {
         getProject(projectId).registerTime(activityId, userInitials, timeServer.getCurrentDate(), time);
     }
 
+    /**
+     * @author Arthur
+     */
     public void editTime(int projectId, int activityId, LocalDate date, double newTime)
             throws IllegalArgumentException {
         getProject(projectId).editTime(activityId, userInitials, date, newTime);
     }
 
+    /**
+     * @author Arthur
+     */
     public void setProjectLeader(int projectId, String newLeaderInitials) throws IllegalAccessException {
         if (!getProject(projectId).isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can set a new project leader");
@@ -89,11 +107,17 @@ public class ProjectManagementApp {
         PROJECT_REPOSITORY.get(projectId).setProjectLeader(newLeaderInitials);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public Report createReport(int projectId) {
         Project myProject = getProject(projectId);
         return myProject.createReport();
     }
 
+    /**
+     * @author Emanuel
+     */
     public FixedActivity createFixedActivity(FixedActivityType type, TimeFrame timeFrame)
             throws IllegalArgumentException {
         FixedActivity activity = new FixedActivity(type, timeFrame);
@@ -103,6 +127,9 @@ public class ProjectManagementApp {
         return activity;
     }
 
+    /**
+     * @author Emanuel
+     */
     public void setBudgetedTime(int projectId, int activityId, double budgetedTime) throws IllegalAccessException {
         Project project = getProject(projectId);
         if (!project.isProjectLeader(userInitials))
@@ -142,6 +169,9 @@ public class ProjectManagementApp {
         project.editName(name);
     }
 
+    /**
+     * @author Emanuel
+     */
     public void setActivityName(int projectId, int activityId, String name) throws IllegalAccessException {
         Project project = getProject(projectId);
         if (!project.isProjectLeader(userInitials))
@@ -149,6 +179,9 @@ public class ProjectManagementApp {
         project.getActivityById(activityId).setName(name);
     }
 
+    /**
+     * @author Arthur
+     */
     public Employee getEmployee(String initials) throws IllegalArgumentException {
         if (!EMPLOYEE_REPOSITORY.contains(initials)) {
             throw new IllegalArgumentException("Invalid employee initials");
@@ -156,6 +189,9 @@ public class ProjectManagementApp {
         return EMPLOYEE_REPOSITORY.get(initials);
     }
 
+    /**
+     * @author Arthur
+     */
     public void login(String employeeInitials) {
         if (getEmployees()
                 .stream()
@@ -169,15 +205,12 @@ public class ProjectManagementApp {
     /**
      * @author BenjaminEwe
      */
-
-    public List<String> getAvailableEmployees(int projectId, int activityId)
-            throws IllegalAccessException {
+    public List<String> getAvailableEmployees(int projectId, int activityId) throws IllegalAccessException {
 
         Project project = getProject(projectId);
 
         if (!project.isProjectLeader(userInitials)) {
-            throw new IllegalAccessException(
-                    "Only the project leader can see available employees");
+            throw new IllegalAccessException("Only the project leader can see available employees");
         }
 
         Activity activity = getActivity(projectId, activityId);

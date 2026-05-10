@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+/**
+ * @author Arthur
+ */
 public class MemoryProjectRepository implements ProjectRepository {
     private Map<Integer, Project> projects;
     private Map<Integer, Integer> projectIdNumerators;

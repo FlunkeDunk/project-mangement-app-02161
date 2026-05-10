@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root stylesheets="@style.css" type="TitledPane" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root animated="false" stylesheets="@style.css" type="TitledPane" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <AnchorPane prefHeight="160.0" prefWidth="200.0">
          <children>
@@ -57,10 +57,10 @@
                   </VBox>
                   <VBox spacing="5.0">
                      <children>
-                        <Button fx:id="registimerTimeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRegisterTime" text="Register time" />
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRegisterTime" text="Register time" />
+                        <Button layoutX="10.0" layoutY="70.0" maxWidth="1.7976931348623157E308" minWidth="0.0" mnemonicParsing="false" onAction="#onEditRegisteredTime" text="Edit registered time" />
                         <Button fx:id="editButton" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditActivity" text="Edit activity" />
                         <Button fx:id="assignButton" maxWidth="1.7976931348623157E308" minWidth="0.0" mnemonicParsing="false" onAction="#onAssignToActivity" text="Assign employee" />
-                        <Button layoutX="10.0" layoutY="70.0" maxWidth="1.7976931348623157E308" minWidth="0.0" mnemonicParsing="false" onAction="#onEditRegisteredTime" text="Edit registered time" />
                      </children>
                   </VBox>
                </children>

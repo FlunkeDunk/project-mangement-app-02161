@@ -10,6 +10,9 @@ import dtu.planner.ui.interfaces.UiActionExecutor;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 
+/**
+ * @author Arthur
+ */
 public class ActivityItemFactoryImplementation implements ActivityItemFactory {
 
     public ActivityItemFactoryImplementation() {
@@ -19,6 +22,7 @@ public class ActivityItemFactoryImplementation implements ActivityItemFactory {
 
     public List<ActivityItem> create(
             Project project,
+            boolean hasAcces,
             PopupService popupService,
             UiActionExecutor uiActionExecutor) {
 
@@ -28,12 +32,22 @@ public class ActivityItemFactoryImplementation implements ActivityItemFactory {
             int activityId = entry.getKey();
             Activity activity = entry.getValue();
 
-            ActivityItem activityItem = new ActivityItem(activity, activityId);
+            ActivityItem activityItem = new ActivityItem(activity, activityId, hasAcces);
+            activityItem.expandedProperty().set(false);
+            items.add(activityItem);
+
 
             activityItem.setOnRegisterTimeRequested(
                     () -> {
                         uiActionExecutor.execute(
                                 popupService::popUp, CustomScene.REGISTER_TIME,
+                                ERROR_TITLE);
+                    });
+
+            activityItem.setOnEditRegisteredTimeRequested(
+                    () -> {
+                        uiActionExecutor.execute(
+                                popupService::popUp, CustomScene.EDIT_REGISTERED_TIME,
                                 ERROR_TITLE);
                     });
 
@@ -51,14 +65,6 @@ public class ActivityItemFactoryImplementation implements ActivityItemFactory {
                                 ERROR_TITLE);
                     });
 
-            activityItem.setOnEditRegisteredTimeRequested(
-                    () -> {
-                        uiActionExecutor.execute(
-                                popupService::popUp, CustomScene.EDIT_REGISTERED_TIME,
-                                ERROR_TITLE);
-                    });
-
-            items.add(activityItem);
         }
 
         return items;

@@ -67,3 +67,7 @@ Feature: Assign employee to activity
     When "Defend Gondor" is added to the assigned activities of "gagr"
     And "Defend Gondor" is added to the assigned activities of "gagr"
     Then an exception is thrown "The employee already has that activity"
+  
+  Scenario: Unsupported type of activity added to Employee's assigned activities
+    When an unsupported type of activity is added to the assigned activities of "gagr"
+    Then an exception is thrown "Not a valid type of activity"

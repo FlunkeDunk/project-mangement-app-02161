@@ -17,11 +17,21 @@ public class ViewReportController extends ProjectManagementAwareController imple
 
     @FXML
     private PieChart timeOverviewPieChart;
+
     @FXML
     private Label reportNameLabel;
 
     @FXML
     private StackedBarChart<String, Number> activityBarChart;
+    private Report report;
+
+
+    @FXML
+    private void initialize() {
+        setChartData(report);
+        setBarChart(report);
+        setReportName(report.getProjectName());
+    }
 
     private void setChartData(Report report) {
         if (report == null) {
@@ -63,9 +73,7 @@ public class ViewReportController extends ProjectManagementAwareController imple
 
     @Override
     public void setReport(Report report) {
-        setChartData(report);
-        setBarChart(report);
-        setReportName(report.getProjectName());
+        this.report = report;
     }
 
     @FXML

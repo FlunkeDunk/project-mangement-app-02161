@@ -34,6 +34,9 @@ public class FileEmployeeRepository implements EmployeeRepository {
         return employees.keySet();
     }
 
+    /**
+     * @author Arthur
+     */
     private final Map<String, Employee> loadEmployees(InputStream input) throws IOException {
         Map<String, Employee> loadedEmployees = new TreeMap<>();
 
@@ -94,7 +97,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
         assert activity != null                                         // activity is not null
                 && activity.getTimeFrame() != null                      // activitys TimeFrame is not null
                 && employees != null                                    // employees map is not null
-                && employees.values().stream().allMatch(e -> e != null) // no employees are null
+                && !employees.values().contains(null) // no employees are null
                 : "Preconditions not met";
 
         TimeFrame timeFrame = activity.getTimeFrame();
@@ -150,6 +153,9 @@ public class FileEmployeeRepository implements EmployeeRepository {
         return activitiesOverlapping;
     }
 
+    /**
+     * @author Arthur
+     */
     private boolean isEligibleForTimeActivity(Employee employee, Activity activity) {
         return employee.isAvailable(activity.getTimeFrame()) && !employee.getActivities().contains(activity);
     }

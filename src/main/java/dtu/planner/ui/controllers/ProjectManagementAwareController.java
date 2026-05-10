@@ -28,6 +28,7 @@ public abstract class ProjectManagementAwareController implements ProjectManagem
         this.navigator = navigator;
     }
 
+    @Override
     public void setAlertService(AlertService alertService) {
         this.alertService = alertService;
     }
@@ -49,6 +50,7 @@ public abstract class ProjectManagementAwareController implements ProjectManagem
         try {
             action.accept(arg);
         } catch (IOException e) {
+            System.getLogger(ProjectManagementAware.class.getName()).log(System.Logger.Level.ERROR, (String) null, e);
             alertService.show(AlertType.WARNING, errorTitle, e.getMessage());
         }
     }
@@ -57,6 +59,7 @@ public abstract class ProjectManagementAwareController implements ProjectManagem
         try {
             action.accept(arg, arg2);
         } catch (IOException e) {
+            System.getLogger(ProjectManagementAware.class.getName()).log(System.Logger.Level.ERROR, (String) null, e);
             alertService.show(AlertType.WARNING, errorTitle, e.getMessage());
         }
     }

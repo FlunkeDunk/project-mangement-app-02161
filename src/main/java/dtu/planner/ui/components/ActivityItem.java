@@ -8,6 +8,7 @@ import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeFrame;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
@@ -39,12 +40,18 @@ public class ActivityItem extends TitledPane {
     @FXML
     private Label budgetedTimeLabel;
 
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button assignButton;
+
     private Runnable onRegisterTimeRequested;
     private Runnable onEditActivityRequested;
     private Runnable onAssignToActivityRequested;
     private Runnable onEditRegisteredTimeRequested;
 
-    public ActivityItem(Activity activity, int id) {
+    public ActivityItem(Activity activity, int id, boolean hasAcces) {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("activity_item.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -57,6 +64,10 @@ public class ActivityItem extends TitledPane {
 
         setActivity(activity, id);
         graphicGridPane.prefWidthProperty().bind(this.widthProperty().subtract(42));
+
+        editButton.setDisable(!hasAcces);
+        assignButton.setDisable(!hasAcces);
+
     }
 
     @FXML
@@ -98,6 +109,7 @@ public class ActivityItem extends TitledPane {
     public void setOnAssignToActivityRequested(Runnable handler) {
         this.onAssignToActivityRequested = handler;
     }
+
     public void setOnEditRegisteredTimeRequested(Runnable handler) {
         this.onEditRegisteredTimeRequested = handler;
     }

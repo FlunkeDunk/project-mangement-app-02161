@@ -8,6 +8,9 @@ import dtu.superPlanner.ProjectManagementApp;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
+/**
+ * @author Arthur
+ */
 public class AppBootstrap {
 
     public AppBootstrap() {
