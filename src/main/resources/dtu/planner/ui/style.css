@@ -113,15 +113,15 @@
     -fx-text-fill: #f4f4f4;
     -fx-prompt-text-fill: #828282;
     -fx-background-radius: 4;
-    -fx-border-width: 0;
+    -fx-border-width: 1;         
+    -fx-border-color: transparent;  
+    -fx-border-radius: 4;
 }
 
 .text-field:focused,
 .password-field:focused,
 .text-area:focused {
     -fx-border-color: #aaaaaa;
-    -fx-border-radius: 4;
-    -fx-border-width: 1;
 }
 
 /* =========================================================

@@ -13,11 +13,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 
-    /**
-    * @author Arthur
-    */
-public class CreateActivityController extends ProjectManagementAwareController implements UiStateAware{
+/**
+ * @author Arthur
+ */
+public class CreateActivityController extends ProjectManagementAwareController implements UiStateAware {
 
     @FXML
     TextField activityNameTextField;
@@ -34,8 +35,17 @@ public class CreateActivityController extends ProjectManagementAwareController i
     private void initialize() {
         startDatePicker.setValue(app.getTimeServer().getCurrentDate());
         endDatePicker.setValue(app.getTimeServer().getCurrentDate());
-    }
+        TextFormatter<Integer> formatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
 
+            if (newText.matches("\\d*")) {
+                return change;
+            }
+
+            return null;
+        });
+        budgetSpinner.getEditor().setTextFormatter(formatter);
+    }
 
     @FXML
     private void onCreateActivity() throws IOException, IllegalAccessException {
@@ -54,7 +64,7 @@ public class CreateActivityController extends ProjectManagementAwareController i
                 activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
             }
             navigator.changeScene(CustomScene.PROJECT_LIST);
-        } catch (IllegalArgumentException e ) {
+        } catch (IllegalArgumentException e) {
             alertService.show("Invalid date", e.getMessage());
         } catch (IllegalAccessException e) {
             alertService.show("Invalid access", e.getMessage());
@@ -65,6 +75,5 @@ public class CreateActivityController extends ProjectManagementAwareController i
     public void setUiState(UiState uiState) {
         this.uiState = uiState;
     }
-
 
 }

@@ -54,7 +54,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.ProjectListController">
+<AnchorPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.planner.ui.controllers.ProjectListController">
    <children>
       <VBox fx:id="rootVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
@@ -103,7 +103,7 @@
                               <GridPane hgap="20.0" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="NEVER">
                                 <columnConstraints>
                                   <ColumnConstraints minWidth="10.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
@@ -113,14 +113,14 @@
                                 </rowConstraints>
                                  <children>
                                     <Label text="Project Name" />
-                                    <Label fx:id="selectedProjectNameLabel" layoutX="10.0" layoutY="17.0" text="Project Mangement App" GridPane.columnIndex="1" />
+                                    <Label fx:id="selectedProjectNameLabel" layoutX="10.0" layoutY="17.0" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" text="Project Management App" GridPane.columnIndex="1" />
                                     <Label layoutX="247.0" layoutY="17.0" text="Project ID:" GridPane.rowIndex="2" />
-                                    <Label fx:id="selectedProjectIdLabel" layoutX="10.0" layoutY="47.0" text="26001" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label fx:id="selectedProjectIdLabel" layoutX="10.0" layoutY="47.0" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" text="26001" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Label layoutX="247.0" layoutY="47.0" text="Project Start Date:" GridPane.rowIndex="3" />
-                                    <Label fx:id="selectedProjectStartDateLabel" layoutX="10.0" layoutY="77.0" text="2026-W18" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Label fx:id="selectedProjectStartDateLabel" layoutX="10.0" layoutY="77.0" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" text="2026-W18" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Label layoutX="10.0" layoutY="9.0" text="Project Name:" />
                                     <Label layoutX="10.0" layoutY="9.0" text="Project Leader:" GridPane.rowIndex="1" />
-                                    <Label fx:id="selectedProjectLeaderLabel" layoutX="10.0" layoutY="27.0" text="HUBA" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label fx:id="selectedProjectLeaderLabel" layoutX="10.0" layoutY="27.0" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" text="HUBA" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                               <Separator prefWidth="200.0" />

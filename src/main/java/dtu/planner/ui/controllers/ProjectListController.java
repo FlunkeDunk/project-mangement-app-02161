@@ -117,7 +117,6 @@ public class ProjectListController extends ProjectManagementAwareController
             return;
         boolean isUserLeader = project.isProjectLeader(app.getUserInitials());
         uiState.setProjectId(project.getId());
-        System.out.println("activityid = " + uiState.getActivityId());
 
         setProjectDetails(new ProjectDetailsView(project));
         activityAccordion.getPanes()
@@ -213,7 +212,7 @@ public class ProjectListController extends ProjectManagementAwareController
     @FXML
     private void onAddFixedActivity() {
         executeUiAction(
-                navigator::changeScene,
+                popupService::popUp,
                 CustomScene.ADD_FIXED_ACTIVITY,
                 ERROR_MESSAGE);
     }
