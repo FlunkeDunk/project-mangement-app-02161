@@ -25,11 +25,6 @@ public class ProjectManagementApp {
      * @author BenjaminEwe
      */
     public Project createProject(String name) throws RuntimeException {
-        System.out.println("create a project: " + name + "\n");
-
-        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-        System.out.println(ste + "\n");
-}
         return PROJECT_REPOSITORY.createProject(name, timeServer.getCurrentWeekDate());
     }
 
@@ -82,6 +77,11 @@ public class ProjectManagementApp {
         if (date.isAfter(timeServer.getCurrentDate())) {
             throw new IllegalArgumentException("Cannot register time in the future");
         }
+
+        if (getTimeRegisteredForDate(date) + time > 24) {
+            throw new IllegalArgumentException("Cannot register more than 24 hour in a day");
+        }
+
         getProject(projectId).registerTime(activityId, userInitials, date, time);
     }
 
@@ -251,8 +251,8 @@ public class ProjectManagementApp {
         System.out.println("date is: " + date);
         return getAllProjects().stream()
                 .mapToDouble(p -> p.getActivitySet().stream()
-                        .mapToDouble(a -> a.getTimeLedger(userInitials) != null ? 
-                                a.getTimeLedger(getUserInitials()).getTime(date):0)
+                        .mapToDouble(a -> a.getTimeLedger(getUserInitials()) != null ? 
+                                a.getTimeLedger(getUserInitials()).getTime(date) : 0)
                         .sum())
                 .sum();
     }
