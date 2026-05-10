@@ -1,0 +1,47 @@
+package dtu.planner.ui;
+
+import java.io.IOException;
+
+import dtu.planner.ui.interfaces.ActivityItemFactory;
+import dtu.planner.ui.interfaces.PopupServiceFactory;
+import dtu.superPlanner.ProjectManagementApp;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
+
+public class AppBootstrap {
+
+    public AppBootstrap() {
+    }
+
+    void start(Stage stage) {
+        AlertService alertService = new AlertService();
+        ProjectManagementApp app;
+        UiState uiState = new UiState();
+        try {
+            app = new AppFactory().createApp();
+        } catch (IOException e) {
+            alertService.show(AlertType.ERROR, "Failed creating app", e.getMessage());
+            return;
+        }
+        
+        ActivityItemFactory activityItemFactory = new ActivityItemFactoryImplementation();
+        PopupServiceFactory popupServiceFactory = new DefaultPopupServiceFactory();
+
+        ControllerFactory controllerFactory = new ControllerFactory(
+                app,
+                alertService,
+                null,
+                uiState,
+                activityItemFactory,
+                popupServiceFactory);
+        Navigator navigator = new Navigator(stage, controllerFactory);
+        controllerFactory.setNavigator(navigator);
+        try {
+            navigator.changeScene(CustomScene.LOGIN);
+        } catch (IOException e) {
+            alertService.show(AlertType.ERROR, "Failed loading scene", e.getMessage());
+        }
+    }
+}
+
+

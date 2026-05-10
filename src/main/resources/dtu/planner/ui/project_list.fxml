@@ -83,7 +83,7 @@
                       <Font size="18.0" fx:id="x1" />
                            </font>
                         </Label>
-                    <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" styleClass="darkgrey-scroll-pane" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
+                    <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" styleClass="darkgrey-scroll-pane" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0">
                            <content>
                               <ListView fx:id="projectList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="darkgrey" />
                            </content>

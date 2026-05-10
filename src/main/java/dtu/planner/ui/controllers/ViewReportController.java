@@ -3,6 +3,7 @@ package dtu.planner.ui.controllers;
 import java.io.IOException;
 import java.util.Map;
 
+import dtu.planner.ui.CustomScene;
 import dtu.planner.ui.interfaces.ReportAware;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
@@ -69,8 +70,7 @@ public class ViewReportController extends ProjectManagementAwareController imple
 
     @FXML
     public void onExit() throws IOException {
-        navigator.toProjectList();
-        ;
+        navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 
     private void scaleYAxis(NumberAxis yAxis, double maxValue) {

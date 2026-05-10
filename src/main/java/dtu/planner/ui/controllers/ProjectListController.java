@@ -1,10 +1,15 @@
 package dtu.planner.ui.controllers;
 
-import dtu.planner.ui.ActivityItemFactory;
+import dtu.planner.ui.ActivityItemFactoryAware;
+import dtu.planner.ui.CustomScene;
 import dtu.planner.ui.NodeUtils;
 import dtu.planner.ui.ProjectDetailsView;
+import dtu.planner.ui.UiState;
+import dtu.planner.ui.interfaces.ActivityItemFactory;
 import dtu.planner.ui.interfaces.PopupService;
 import dtu.planner.ui.interfaces.PopupServiceFactory;
+import dtu.planner.ui.interfaces.PopupServiceFactoryAware;
+import dtu.planner.ui.interfaces.UiStateAware;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.Report;
 import javafx.fxml.FXML;
@@ -22,10 +27,11 @@ import javafx.scene.layout.VBox;
  * @author Arthur
  */
 
-public class ProjectListController extends ProjectManagementAwareController {
+public class ProjectListController extends ProjectManagementAwareController
+        implements UiStateAware, ActivityItemFactoryAware, PopupServiceFactoryAware {
 
-    private final ActivityItemFactory ACTIVITY_ITEM_FACTORY;
-    private final PopupServiceFactory popupService_FACTORY;
+    private ActivityItemFactory activityItemFactory;
+    private PopupServiceFactory popupServiceFactory;
 
     private PopupService popupService;
 
@@ -55,25 +61,21 @@ public class ProjectListController extends ProjectManagementAwareController {
     @FXML
     private Button viewReportButton;
 
-
-    public ProjectListController(PopupServiceFactory popupServiceFactory, ActivityItemFactory activityItemFactory) {
-        this.ACTIVITY_ITEM_FACTORY = activityItemFactory;
-        this.popupService_FACTORY = popupServiceFactory;
-    }
+    private UiState uiState;
 
     @FXML
     private void initialize() {
-        popupService = popupService_FACTORY.create(popUpPane, popUpContainer, rootVBox, navigator);
+        popupService = popupServiceFactory.create(popUpPane, popUpContainer, rootVBox, navigator);
         setSelectedProjectButtonsDisabled(true);
         clearProjectDetails();
         clearActivityList();
-        loadProjects();
         popupService.popDown();
         projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 showProject(newSelection);
             }
         });
+        loadProjects();
     }
 
     private void setSelectedProjectButtonsDisabled(Boolean disabled) {
@@ -83,17 +85,25 @@ public class ProjectListController extends ProjectManagementAwareController {
     }
 
     private void loadProjects() {
+        int i = 0;
         projectList.getItems().addAll(app.getAllProjects());
+        for (Project project : projectList.getItems()) {
+            if (uiState.getProjectId() == project.getId()) {
+                System.out.println("selected: " + i);
+                projectList.getSelectionModel().select(i);
+                break;
+            }
+            i++;
+        }
     }
 
-    @FXML
     private void showProject(Project project) {
         if (project == null)
             return;
-
+        uiState.setProjectId(project.getId());
         setProjectDetails(new ProjectDetailsView(project));
         activityListAccordion.getPanes()
-                .setAll(ACTIVITY_ITEM_FACTORY.createActivityItems(project, popupService, this::executeUiAction));
+                .setAll(activityItemFactory.create(project, popupService, this::executeUiAction));
         setSelectedProjectButtonsDisabled(false);
     }
 
@@ -117,27 +127,33 @@ public class ProjectListController extends ProjectManagementAwareController {
         activityListAccordion.getPanes().clear();
     }
 
+    private int getSelectedProjectId() {
+        Project project = projectList.getSelectionModel().getSelectedItem();
+        return project != null ? project.getId() : 0;
+    }
+
     // --- Button Handlers ---
     @FXML
     private void handleAddActivity() {
         executeUiAction(
-                popupService::addActivity,
-                getSelectedProjectId(),
+                popupService::popUp,
+                CustomScene.CREATE_ACTIVITY,
                 "Operation failed");
     }
 
     @FXML
     private void handleEditProject() {
         executeUiAction(
-                popupService::editProject,
-                getSelectedProjectId(),
+                popupService::popUp,
+                CustomScene.EDIT_PROJECT,
                 "Operation failed");
     }
 
     @FXML
     private void handleAddProject() {
         executeUiAction(
-                popupService::createProject,
+                popupService::popUp,
+                CustomScene.CREATE_PROJECT,
                 "Operation failed");
     }
 
@@ -145,29 +161,32 @@ public class ProjectListController extends ProjectManagementAwareController {
     private void handleViewReport() {
         Report report = app.createReport(getSelectedProjectId());
         executeUiAction(
-                navigator::toViewReport,
-                report,
+                navigator::changeScene,
+                CustomScene.VIEW_REPORT,
                 "Operation failed");
     }
 
     @FXML
     private void onLogout() {
         executeUiAction(
-                navigator::toLogin,
+                navigator::changeScene,
+                CustomScene.LOGIN,
                 "Operation failed");
     }
 
     @FXML
     private void onAddFixedActivity() {
         executeUiAction(
-                popupService::addFixedActivity,
+                navigator::changeScene,
+                CustomScene.ADD_FIXED_ACTIVITY,
                 "Operation failed");
     }
 
     @FXML
     private void onUserRegisterTime() {
         executeUiAction(
-                navigator::toRegisterTimeList,
+                navigator::changeScene,
+                CustomScene.REGISTER_TIME_LIST,
                 "Operation failed");
     }
 
@@ -185,8 +204,19 @@ public class ProjectListController extends ProjectManagementAwareController {
         popupService.popDown();
     }
 
-    private int getSelectedProjectId() {
-        Project project = projectList.getSelectionModel().getSelectedItem();
-        return project != null ? project.getId() : 0;
+
+    @Override
+    public void setUiState(UiState uiState) {
+        this.uiState = uiState;
+    }
+
+    @Override
+    public void setPopupServiceFactory(PopupServiceFactory popupServiceFactory) {
+        this.popupServiceFactory = popupServiceFactory;
+    }
+
+    @Override
+    public void setActivityItemFactory(ActivityItemFactory activityItemFactory) {
+        this.activityItemFactory = activityItemFactory;
     }
 }

@@ -3,14 +3,16 @@ package dtu.planner.ui.controllers;
 import java.io.IOException;
 import java.time.LocalTime;
 
+import dtu.planner.ui.CustomScene;
 import dtu.planner.ui.TimeSpinnerValueFactory;
-import dtu.planner.ui.interfaces.ActivityAware;
+import dtu.planner.ui.UiState;
+import dtu.planner.ui.interfaces.UiStateAware;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 
-public class RegisterTimeController extends ProjectManagementAwareController implements ActivityAware {
+public class RegisterTimeController extends ProjectManagementAwareController implements UiStateAware {
 
     @FXML
     private Spinner<LocalTime> timeSpinner;
@@ -21,8 +23,7 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
     @FXML
     private Button registerTimeButton;
 
-    int projectId;
-    int activityId;
+    private UiState uiState;
 
     @FXML
     private void initialize() {
@@ -44,26 +45,23 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
 
         double hours = (double) timeSpinner.getValue().getHour() + (double) timeSpinner.getValue().getMinute() / 60.0;
         try {
-            app.registerTime(projectId, activityId, hours, datePicker.getValue());
+            app.registerTime(uiState.getProjectId(), uiState.getActivityId(), hours, datePicker.getValue());
         } catch (IllegalArgumentException ex) {
             alertService.show("Failed to register", ex.getMessage());
         }
-        navigator.toProjectList();
+        navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 
-    @Override
-    public void setActivityId(int id) {
-        activityId = id;
-    }
 
-    @Override
-    public void setProjectId(int id) {
-        projectId = id;
-    }
 
     private void updateButtonState() {
         boolean valid = datePicker.getValue() != null;
         registerTimeButton.setDisable(!valid);
+    }
+
+    @Override
+    public void setUiState(UiState uiState) {
+        this.uiState = uiState;
     }
 
 }

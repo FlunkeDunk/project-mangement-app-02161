@@ -2,6 +2,7 @@ package dtu.planner.ui.controllers;
 
 import java.io.IOException;
 
+import dtu.planner.ui.CustomScene;
 import dtu.planner.ui.components.TimeSpinner;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
@@ -24,6 +25,9 @@ public class RegisterTimeListController extends ProjectManagementAwareController
     @FXML
     private HBox timeHBox;
 
+    @FXML
+    private Label dailyTimeRegisteredLabel;
+
     private DatePicker datePicker;
     private TimeSpinner timeSpinner;
 
@@ -34,8 +38,8 @@ public class RegisterTimeListController extends ProjectManagementAwareController
         datePicker.setPrefWidth(120);
         timeSpinner = new TimeSpinner();
         timeSpinner.setPrefWidth(120);
-
         timeHBox.getChildren().addAll(datePicker, timeSpinner);
+        
 
         if (app.getAllProjects().isEmpty()) {
             return;
@@ -58,7 +62,7 @@ public class RegisterTimeListController extends ProjectManagementAwareController
 
     @FXML
     private void onBack() throws IOException {
-        navigator.toProjectList();
+        navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 
     private void setupProjectLabel(Project project) {
@@ -89,10 +93,17 @@ public class RegisterTimeListController extends ProjectManagementAwareController
         registerButton.setOnAction(event -> {
             try {
                 app.registerTime(project.getId(), activity.getId(), timeSpinner.getHours(), datePicker.getValue());
+                setDailyTimeRegisteredLabel();
+                
             } catch (IllegalArgumentException ex) {
                 alertService.show("Failed to register", ex.getMessage());
             }
         });
+    }
+
+    private void setDailyTimeRegisteredLabel() {
+        // double timeRegistered = app.getDailyRegisteredTime();
+        // dailyTimeRegisteredLabel.setText(timeRegistered + " hours");
     }
 
 }

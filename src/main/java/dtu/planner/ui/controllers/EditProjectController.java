@@ -2,8 +2,10 @@ package dtu.planner.ui.controllers;
 
 import java.io.IOException;
 
+import dtu.planner.ui.CustomScene;
 import dtu.planner.ui.EmployeeStringConverter;
-import dtu.planner.ui.interfaces.ProjectAware;
+import dtu.planner.ui.UiState;
+import dtu.planner.ui.interfaces.UiStateAware;
 import dtu.superPlanner.Employee;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +17,7 @@ import javafx.scene.control.TextField;
     /**
     * @author Arthur
     */
-public class EditProjectController extends ProjectManagementAwareController implements ProjectAware {
+public class EditProjectController extends ProjectManagementAwareController implements UiStateAware {
 
     @FXML
     private TextField projectNameTextField;
@@ -44,7 +46,7 @@ public class EditProjectController extends ProjectManagementAwareController impl
         String leaderInitials = leader != null ? leader.getInitials() : null;
         try {
             app.setProjectName(projectId, projectName);
-            navigator.toProjectList();
+            navigator.changeScene(CustomScene.PROJECT_LIST);
         } catch (IllegalAccessException ex) {
             alertService.show("Invalid access", ex.getMessage());
             System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
@@ -60,9 +62,9 @@ public class EditProjectController extends ProjectManagementAwareController impl
         }
     }
 
+
     @Override
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-        setup();
+    public void setUiState(UiState uiState) {
+        this.projectId = uiState.getProjectId();
     }
 }

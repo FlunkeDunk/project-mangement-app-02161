@@ -20,6 +20,20 @@
          </font>
       </Label>
       <Separator prefWidth="200.0" />
+      <HBox spacing="10.0">
+         <children>
+            <Label styleClass="subheading" text="Registered time today:">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="dailyTimeRegisteredLabel" styleClass="subheading" text="18 hours">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
       <HBox fx:id="timeHBox" alignment="CENTER" spacing="20.0" />
       <AnchorPane VBox.vgrow="ALWAYS">
          <children>

@@ -1,4 +1,4 @@
-package dtu.planner.ui;
+package dtu.planner.ui.interfaces;
 
 import dtu.superPlanner.ProjectManagementApp;
 

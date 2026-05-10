@@ -14,25 +14,4 @@ public interface PopupService {
 
     public void popDown();
 
-    public <T extends ActivityAware> void popUpWithActivity(CustomScene registerTime,
-            int projectId, int activityId) throws IOException;
-
-    public void registerTime(int projectId, int activityId) throws IOException;
-
-    public void editActivity(int projectId, int activityId) throws IOException;
-
-    public void editRegisteredTime(int projectId, int activityId) throws IOException;
-
-    public void assignToActivity(int projectId, int activityId) throws IOException;
-
-    public <T extends ProjectAware> void popUpWithProject(CustomScene registerTime, int projectId) throws IOException;
-
-    public void editProject(int projectId) throws IOException;
-    
-    public void addActivity(int projectId) throws IOException;
-
-    public void createProject() throws IOException;
-
-    public void addFixedActivity() throws IOException;
-
 }
