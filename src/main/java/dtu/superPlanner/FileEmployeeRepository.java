@@ -91,7 +91,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
      * @author Arthur
      */
     public List<Employee> findAvailableEmployees(Activity activity) {
-        // Assert prconditions
+        // Assert preconditions
         assert activity != null                                         // activity is not null
                 && activity.getTimeFrame() != null                      // activitys TimeFrame is not null
                 && employees != null                                    // employees map is not null

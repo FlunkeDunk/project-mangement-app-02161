@@ -61,8 +61,8 @@ public class ProjectManagementApp {
     }
 
     public void registerTime(int projectId, int activityId, double time, LocalDate date) {
-        if (time < 0) {
-            throw new IllegalArgumentException("Cannot register negative time");
+        if (time < 0 || time > 24) {
+            throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
         }
         if (date.isAfter(timeServer.getCurrentDate())) {
             throw new IllegalArgumentException("Cannot register time in the future");
@@ -71,8 +71,8 @@ public class ProjectManagementApp {
     }
 
     public void registerTime(int projectId, int activityId, double time) {
-        if (time < 0) {
-            throw new IllegalArgumentException("Cannot register negative time");
+        if (time < 0 || time > 24) {
+            throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
         }
         getProject(projectId).registerTime(activityId, userInitials, timeServer.getCurrentDate(), time);
     }

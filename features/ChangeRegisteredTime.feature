@@ -21,7 +21,13 @@ Feature: Change Registered Time
     Given the user has registered 2 hours on "Run tests"
     When the user changes the registered time on activity "Run tests" to -3
     Then the activity "Run tests" has 2 hours worked
-    And an exception is thrown "Cannot register negative time"
+    And an exception is thrown "Time registered has to be between 0 and 24 hours"
+  
+    Scenario: Change registered time to more than 24 hours
+    Given the user has registered 2 hours on "Run tests"
+    When the user changes the registered time on activity "Run tests" to 25
+    Then the activity "Run tests" has 2 hours worked
+    And an exception is thrown "Time registered has to be between 0 and 24 hours"
 
   Scenario: Change time for an activity where user has no time registered
     When the user changes the registered time on activity "Run tests" to 6.7

@@ -30,12 +30,12 @@ Feature: Create report
     And the activity "Testing" gets 16 hours budgeted
     And an employee has spent 7 hours on the activity "Design"
     And an employee has spent 9 hours on the activity "Implementation"
-    And an employee has spent 91 hours on the activity "Testing"
+    And an employee has spent 21 hours on the activity "Testing"
     When the project leader creates a report
     Then a report is created
     And the report indecates the name of the project is "My Project"
     And the report indicates the time budget is 35 hours
-    And the report indicates the time spent is 107 hours
+    And the report indicates the time spent is 37 hours
     And the report indicates the estimated time remaining is 0 hours
 
   Scenario: Project leader creates report with budgeted time and checks entries
@@ -44,16 +44,16 @@ Feature: Create report
     And the project has the activity "Tying knots"
     And the project has the activity "Scroll TikTok"
     And the activity "Knitting" gets 8234 hours budgeted
-    And the activity "Sewing" gets 91.5 hours budgeted
+    And the activity "Sewing" gets 31.5 hours budgeted
     And the activity "Tying knots" gets 82 hours budgeted
     And the activity "Scroll TikTok" gets 5 hours budgeted
     And an employee has spent 12 hours on the activity "Knitting"
-    And an employee has spent 82 hours on the activity "Sewing"
-    And an employee has spent 62 hours on the activity "Scroll TikTok"
+    And an employee has spent 22 hours on the activity "Sewing"
+    And an employee has spent 12 hours on the activity "Scroll TikTok"
     When the project leader creates a report
     Then a report is created
     And the report has the entries
       | [Knitting] Time budgeted: 8234.0 hours, Time Spent: 12.0 hours, timeLeft: 8222.0 hours. |
-      | [Sewing] Time budgeted: 91.5 hours, Time Spent: 82.0 hours, timeLeft: 9.5 hours.        |
+      | [Sewing] Time budgeted: 31.5 hours, Time Spent: 22.0 hours, timeLeft: 9.5 hours.        |
       | [Tying knots] Time budgeted: 82.0 hours, Time Spent: 0.0 hours, timeLeft: 82.0 hours.   |
-      | [Scroll TikTok] Time budgeted: 5.0 hours, Time Spent: 62.0 hours, timeLeft: 0.0 hours.  |
+      | [Scroll TikTok] Time budgeted: 5.0 hours, Time Spent: 12.0 hours, timeLeft: 0.0 hours.  |
