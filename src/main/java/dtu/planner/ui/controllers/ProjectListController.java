@@ -18,6 +18,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -70,15 +71,24 @@ public class ProjectListController extends ProjectManagementAwareController
         clearProjectDetails();
         clearActivityList();
         popupService.popDown();
+
         projectList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 showProject(newSelection);
             }
         });
+
+        // Updates activity ui in uiState
+        activityListAccordion.expandedPaneProperty().addListener((obs, oldPane, newPane) -> {
+            int activityId = activityListAccordion.getPanes().indexOf(newPane) + 1;
+            System.out.println(activityId);
+            uiState.setActivityId(activityId);
+        });
+
         loadProjects();
     }
 
-    private void setSelectedProjectButtonsDisabled(Boolean disabled) {
+    private void setSelectedProjectButtonsDisabled(boolean disabled) {
         addActivityButton.setDisable(disabled);
         editProjectButton.setDisable(disabled);
         viewReportButton.setDisable(disabled);
@@ -89,7 +99,6 @@ public class ProjectListController extends ProjectManagementAwareController
         projectList.getItems().addAll(app.getAllProjects());
         for (Project project : projectList.getItems()) {
             if (uiState.getProjectId() == project.getId()) {
-                System.out.println("selected: " + i);
                 projectList.getSelectionModel().select(i);
                 break;
             }
@@ -100,15 +109,29 @@ public class ProjectListController extends ProjectManagementAwareController
     private void showProject(Project project) {
         if (project == null)
             return;
+        boolean isUserLeader = project.isProjectLeader(app.getUserInitials());
         uiState.setProjectId(project.getId());
         setProjectDetails(new ProjectDetailsView(project));
         activityListAccordion.getPanes()
-                .setAll(activityItemFactory.create(project, popupService, this::executeUiAction));
-        setSelectedProjectButtonsDisabled(false);
+                .setAll(activityItemFactory.create(project, isUserLeader, popupService, this::executeUiAction));
+        selectActivity();
+                
+        setSelectedProjectButtonsDisabled(!project.isProjectLeader(app.getUserInitials()));
     }
 
-    // --- Public method to update UI when a project is selected ---
-    public void setProjectDetails(ProjectDetailsView details) {
+    private void selectActivity() {
+        int paneIndex = uiState.getActivityId() - 1;
+        if (0 <= paneIndex && paneIndex < activityListAccordion.getPanes().size()) {
+            TitledPane pane = activityListAccordion.getPanes().get(paneIndex);
+            if (pane != null) {
+                activityListAccordion.expandedPaneProperty().set(pane);
+            }
+
+        }
+
+    }
+
+    private void setProjectDetails(ProjectDetailsView details) {
         selectedProjectNameLabel.setText(details.getName());
         selectedProjectIdLabel.setText(details.getId());
         selectedProjectStartDateLabel.setText(details.getStartDate());
@@ -203,7 +226,6 @@ public class ProjectListController extends ProjectManagementAwareController
     private void closePopUpClicked() {
         popupService.popDown();
     }
-
 
     @Override
     public void setUiState(UiState uiState) {

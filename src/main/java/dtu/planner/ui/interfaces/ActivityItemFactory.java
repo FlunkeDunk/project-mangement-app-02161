@@ -9,6 +9,7 @@ public interface ActivityItemFactory {
         
     public List<ActivityItem> create(
             Project project,
+            boolean hasAcces,
             PopupService popupService,
             UiActionExecutor uiActionExecutor);
 }

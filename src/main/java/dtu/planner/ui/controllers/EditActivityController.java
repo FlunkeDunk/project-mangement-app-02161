@@ -27,7 +27,6 @@ public class EditActivityController extends ProjectManagementAwareController imp
     @FXML
     Spinner<Integer> budgetSpinner;
 
-
     private Activity activity;
     private UiState uiState;
 
@@ -71,6 +70,7 @@ public class EditActivityController extends ProjectManagementAwareController imp
         if (budgetSpinner.valueProperty().getValue() > 0) {
             activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
         }
+
         navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 

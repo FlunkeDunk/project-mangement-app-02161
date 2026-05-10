@@ -27,7 +27,8 @@ public class EditProjectController extends ProjectManagementAwareController impl
 
     private int projectId;
 
-    private void setup() {
+    @FXML
+    private void initialize() {
         ObservableList<Employee> employees = FXCollections.observableArrayList(app.getEmployees());
         employees.add(0, null);
         projectLeaderComboBox.setItems(employees);
@@ -46,20 +47,20 @@ public class EditProjectController extends ProjectManagementAwareController impl
         String leaderInitials = leader != null ? leader.getInitials() : null;
         try {
             app.setProjectName(projectId, projectName);
-            navigator.changeScene(CustomScene.PROJECT_LIST);
         } catch (IllegalAccessException ex) {
             alertService.show("Invalid access", ex.getMessage());
             System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             return;
         }
-
+        
         try {
             app.setProjectLeader(projectId, leaderInitials);
         } catch (IllegalAccessException ex) {
             alertService.show("Invalid access", ex.getMessage());
             System.getLogger(EditProjectController.class.getName()).log(System.Logger.Level.ERROR, (String) null,
-                    ex);
+            ex);
         }
+        navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 
 
