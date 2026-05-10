@@ -1,7 +1,7 @@
 # Run the application
 
 To run the application press `mvn javafx:run`
-Alternatively, in an IDE, go to ``/src/java/dtu/planner.ui`` and run ``App.java``
+Alternatively, in an IDE, go to ``/src/main/java/dtu/planner.ui`` and run ``App.java``
 
 You will have to log in as one of the users in the database, one of which is ``huba``
 
