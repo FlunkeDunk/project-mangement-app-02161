@@ -25,6 +25,11 @@ public class ProjectManagementApp {
      * @author BenjaminEwe
      */
     public Project createProject(String name) throws RuntimeException {
+        System.out.println("create a project: " + name + "\n");
+
+        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+        System.out.println(ste + "\n");
+}
         return PROJECT_REPOSITORY.createProject(name, timeServer.getCurrentWeekDate());
     }
 
@@ -70,6 +75,7 @@ public class ProjectManagementApp {
      * @author Mikkel
      */
     public void registerTime(int projectId, int activityId, double time, LocalDate date) {
+
         if (time < 0 || 24 < time) {
             throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
         }
@@ -215,7 +221,6 @@ public class ProjectManagementApp {
         return EMPLOYEE_REPOSITORY.findAvailableEmployeeInitials(activity);
     }
 
-
     public String getUserInitials() {
         return userInitials;
     }
@@ -238,5 +243,15 @@ public class ProjectManagementApp {
 
     public void createEmployee(String initials) {
         EMPLOYEE_REPOSITORY.addEmployee(initials);
+    }
+
+    public double getTimeRegisteredForDate(LocalDate date) {
+        System.out.println("date is: " + date);
+        return getAllProjects().stream()
+                .mapToDouble(p -> p.getActivitySet().stream()
+                        .mapToDouble(a -> a.getTimeLedger(userInitials) != null ? 
+                                a.getTimeLedger(getUserInitials()).getTime(date):0)
+                        .sum())
+                .sum();
     }
 }
