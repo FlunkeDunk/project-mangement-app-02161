@@ -81,7 +81,6 @@ public class ProjectListController extends ProjectManagementAwareController
         // Updates activity ui in uiState
         activityListAccordion.expandedPaneProperty().addListener((obs, oldPane, newPane) -> {
             int activityId = activityListAccordion.getPanes().indexOf(newPane) + 1;
-            System.out.println(activityId);
             uiState.setActivityId(activityId);
         });
 

@@ -70,7 +70,7 @@ public class ProjectManagementApp {
      * @author Mikkel
      */
     public void registerTime(int projectId, int activityId, double time, LocalDate date) {
-        if (time > 0 || time < 24) {
+        if (time < 0 || 24 < time) {
             throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
         }
         if (date.isAfter(timeServer.getCurrentDate())) {
@@ -83,10 +83,7 @@ public class ProjectManagementApp {
      * @author Mikkel
      */
     public void registerTime(int projectId, int activityId, double time) {
-        if (time > 0 || time < 24) {
-            throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
-        }
-        getProject(projectId).registerTime(activityId, userInitials, timeServer.getCurrentDate(), time);
+        registerTime(projectId, activityId, time, timeServer.getCurrentDate());
     }
 
     /**

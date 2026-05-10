@@ -31,7 +31,7 @@ public class EditActivityController extends ProjectManagementAwareController imp
     private UiState uiState;
 
     @FXML
-    public void loadActivity() {
+    public void initialize() {
         activity = app.getActivity(uiState.getProjectId(), uiState.getActivityId());
         activityNameTextField.setText(activity.getName());
         startDatePicker.setValue(activity.getTimeFrame().getStartDate().toLocalDate());

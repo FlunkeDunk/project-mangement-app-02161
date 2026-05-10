@@ -38,6 +38,7 @@ public abstract class ProjectManagementAwareController implements ProjectManagem
             action.run();
         } catch (IOException e) {
             alertService.show(AlertType.WARNING, errorTitle, e.getMessage());
+            System.getLogger(ProjectManagementAware.class.getName()).log(System.Logger.Level.ERROR, (String) null, e);
         }
     }
 

@@ -19,9 +19,8 @@ public class TimeSpinnerValueFactory
 
     private static List<LocalTime> createTimes() {
         List<LocalTime> times = new ArrayList<>();
-        times.add(LocalTime.of(0, 30));
 
-        for (int h = 1; h < 24; h++) {
+        for (int h = 0; h < 24; h++) {
             times.add(LocalTime.of(h, 0));
             times.add(LocalTime.of(h, 30));
         }

@@ -24,6 +24,7 @@ public class AppBootstrap {
             app = new AppFactory().createApp();
         } catch (IOException e) {
             alertService.show(AlertType.ERROR, "Failed creating app", e.getMessage());
+            System.getLogger(AppBootstrap.class.getName()).log(System.Logger.Level.ERROR, (String) null, e);
             return;
         }
         
@@ -42,6 +43,7 @@ public class AppBootstrap {
         try {
             navigator.changeScene(CustomScene.LOGIN);
         } catch (IOException e) {
+            System.getLogger(AppBootstrap.class.getName()).log(System.Logger.Level.ERROR, (String) null, e);
             alertService.show(AlertType.ERROR, "Failed loading scene", e.getMessage());
         }
     }

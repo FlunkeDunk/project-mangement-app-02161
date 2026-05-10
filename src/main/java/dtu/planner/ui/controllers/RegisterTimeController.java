@@ -48,6 +48,7 @@ public class RegisterTimeController extends ProjectManagementAwareController imp
             app.registerTime(uiState.getProjectId(), uiState.getActivityId(), hours, datePicker.getValue());
         } catch (IllegalArgumentException ex) {
             alertService.show("Failed to register", ex.getMessage());
+            return;
         }
         navigator.changeScene(CustomScene.PROJECT_LIST);
     }

@@ -15,14 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import dtu.superPlanner.AbstractActivity;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Employee;
-import dtu.superPlanner.FileEmployeeRepository;
-
 import static dtu.superPlanner.FixedActivityType.Emergency;
 import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -283,8 +280,12 @@ public class ActivityStepDefs {
      */
     @Given("the user has registered {double} hours on {string}")
     public void theUserHasRegisteredHoursOn(double hours, String activityName) {
-        myApp.registerTime(myProject.getId(), myActivity.getId(), hours);
-        currentDate = LocalDate.now();
+        currentDate = myApp.getTimeServer().getCurrentDate();
+        try {
+            myApp.registerTime(myProject.getId(), myActivity.getId(), hours);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
     }
 
     /**
