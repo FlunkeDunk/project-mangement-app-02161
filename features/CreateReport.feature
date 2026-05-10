@@ -16,7 +16,7 @@ Feature: Create report
     And an employee has spent 7 hours on the activity "Design"
     When the project leader creates a report
     Then a report is created
-    And the report indecates the name of the project is "My Project"
+    And the report indicates the name of the project is "My Project"
     And the report indicates the time budget is 10 hours
     And the report indicates the time spent is 7 hours
     And the report indicates the estimated time remaining is 3 hours
@@ -33,7 +33,7 @@ Feature: Create report
     And an employee has spent 21 hours on the activity "Testing"
     When the project leader creates a report
     Then a report is created
-    And the report indecates the name of the project is "My Project"
+    And the report indicates the name of the project is "My Project"
     And the report indicates the time budget is 35 hours
     And the report indicates the time spent is 37 hours
     And the report indicates the estimated time remaining is 3 hours

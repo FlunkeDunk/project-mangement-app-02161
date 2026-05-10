@@ -30,8 +30,11 @@ public class TimeLedger {
         entries.put(date, newTime);
     }
 
+    /**
+     * @author BenjaminEwe
+     */
     public double getTime(LocalDate date) {
-        return entries.get(date);
+        return entries.containsKey(date) ? entries.get(date) : 0;
     }
 
     public double getTotalTime() {

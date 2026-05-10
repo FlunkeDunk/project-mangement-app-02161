@@ -105,8 +105,8 @@ public class ReportStepDefs {
         assertEquals(expectedEntries, actualEntries);
     }
 
-    @Then("the report indecates the name of the project is {string}")
-    public void theReportIndecatesTheNameOfTheProjectIs(String string) {
+    @Then("the report indicates the name of the project is {string}")
+    public void theReportIndicatesTheNameOfTheProjectIs(String string) {
         assertEquals(string, report.getProjectName());
     }
 }

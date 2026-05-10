@@ -33,6 +33,7 @@ public class ActivityStepDefs {
     private Activity myActivity;
     private LocalDate currentDate;
     private List<String> availableEmployees;
+    private int userIterator = 0;
 
     /**
      * @author BenjaminEwe
@@ -257,12 +258,13 @@ public class ActivityStepDefs {
     @Given("an employee has spent {double} hours on the activity {string}")
     public void anEmployeeHasSpentHoursOnTheActivity(double hours, String name) {
         Activity currentActivity = getActivitybyName(name);
-        String debugUser = "Gandalf";
+        String debugUser = "Gandalf_" + userIterator;
+        userIterator++;
 
         String prevUser = myApp.getUserInitials();
         if (myApp.getProject(myProject.getId()).getProjectLeader() != null) {
             myApp.login(myProject.getProjectLeader());
-        } // TODO
+        }
 
         try {
             addEmployee(debugUser);
