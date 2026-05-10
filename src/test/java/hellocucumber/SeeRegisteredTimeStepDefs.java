@@ -1,5 +1,5 @@
 package hellocucumber;
-
+    
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,13 +9,15 @@ import dtu.superPlanner.ProjectManagementApp;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
+    /**
+     * @author Mikkel
+     */
 public class SeeRegisteredTimeStepDefs {
     ProjectManagementApp myApp;
     ErrorMessageHolder errorHolder;
     ProjectHolder projectHolder;
     double result;
-
+    
     public SeeRegisteredTimeStepDefs(TestContext context, ErrorMessageHolder errorHolder, ProjectHolder projectHolder) {
         this.myApp = context.app;
         this.errorHolder = errorHolder;

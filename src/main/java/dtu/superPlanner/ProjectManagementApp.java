@@ -244,7 +244,9 @@ public class ProjectManagementApp {
     public void createEmployee(String initials) {
         EMPLOYEE_REPOSITORY.addEmployee(initials);
     }
-
+    /**
+     * @author Arthur
+     */
     public double getTimeRegisteredForDate(LocalDate date) {
         System.out.println("date is: " + date);
         return getAllProjects().stream()
