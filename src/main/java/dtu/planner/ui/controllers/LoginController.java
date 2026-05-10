@@ -2,6 +2,7 @@ package dtu.planner.ui.controllers;
 
 import java.io.IOException;
 
+import dtu.planner.ui.CustomScene;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -42,6 +43,6 @@ public class LoginController extends ProjectManagementAwareController{
             return;
         }
 
-        navigator.toProjectList();
+        navigator.changeScene(CustomScene.PROJECT_LIST);
     }
 }

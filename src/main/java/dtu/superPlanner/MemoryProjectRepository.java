@@ -4,13 +4,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class MemoryProjectRepository implements ProjectRepository {
     private Map<Integer, Project> projects;
     private Map<Integer, Integer> projectIdNumerators;
 
     public MemoryProjectRepository() {
-        projects = new HashMap<>();
+        projects = new TreeMap<>();
         projectIdNumerators = new HashMap<>();
     }
 

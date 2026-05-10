@@ -3,7 +3,9 @@ package dtu.planner.ui.controllers;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import dtu.planner.ui.interfaces.ProjectAware;
+import dtu.planner.ui.CustomScene;
+import dtu.planner.ui.UiState;
+import dtu.planner.ui.interfaces.UiStateAware;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
@@ -15,7 +17,7 @@ import javafx.scene.control.TextField;
     /**
     * @author Arthur
     */
-public class CreateActivityController extends ProjectManagementAwareController implements ProjectAware{
+public class CreateActivityController extends ProjectManagementAwareController implements UiStateAware{
 
     @FXML
     TextField activityNameTextField;
@@ -26,7 +28,7 @@ public class CreateActivityController extends ProjectManagementAwareController i
     @FXML
     Spinner<Integer> budgetSpinner;
 
-    private int projectId;
+    private UiState uiState;
 
     @FXML
     private void initialize() {
@@ -47,11 +49,11 @@ public class CreateActivityController extends ProjectManagementAwareController i
 
         try {
             TimeFrame timeFrame = new TimeFrame(startDate, endDate);
-            Activity activity = app.createActivity(projectId, activityNameTextField.getText(), timeFrame);
+            Activity activity = app.createActivity(uiState.getProjectId(), activityNameTextField.getText(), timeFrame);
             if (budgetSpinner.valueProperty().getValue() > 0) {
                 activity.setBudgetedTime(budgetSpinner.valueProperty().getValue());
             }
-            navigator.toProjectList();
+            navigator.changeScene(CustomScene.PROJECT_LIST);
         } catch (IllegalArgumentException e ) {
             alertService.show("Invalid date", e.getMessage());
         } catch (IllegalAccessException e) {
@@ -60,8 +62,8 @@ public class CreateActivityController extends ProjectManagementAwareController i
     }
 
     @Override
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setUiState(UiState uiState) {
+        this.uiState = uiState;
     }
 
 

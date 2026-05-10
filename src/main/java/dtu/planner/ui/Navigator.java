@@ -1,69 +1,20 @@
 package dtu.planner.ui;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
-import dtu.planner.ui.controllers.ProjectListController;
-import dtu.planner.ui.controllers.ViewReportController;
-import dtu.planner.ui.interfaces.AlertServiceAware;
-import dtu.planner.ui.interfaces.PopupServiceFactory;
-import dtu.superPlanner.ProjectManagementApp;
-import dtu.superPlanner.Report;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 public class Navigator {
     Stage stage;
-    private Callback<Class<?>, Object> controllerFactory;
+    private ControllerFactory controllerFactory;
 
-    public Navigator(Stage stage, ProjectManagementApp app, PopupServiceFactory popupServiceFactory,
-            ActivityItemFactory activityItemFactory, AlertService alertService) {
-        Map<Class<?>, Supplier<?>> controllers = Map.of(
-                ProjectListController.class,
-                () -> new ProjectListController(
-                        popupServiceFactory,
-                        activityItemFactory));
+    public Navigator(Stage stage, ControllerFactory controllerFactory) {
         this.stage = stage;
-        this.controllerFactory = type -> {
-            try {
-
-                Object controller;
-
-                Supplier<?> supplier = controllers.get(type);
-
-                if (supplier != null) {
-                    controller = supplier.get();
-                } else {
-                    controller = type.getDeclaredConstructor().newInstance();
-                }
-
-                if (controller instanceof ProjectManagementAware aware) {
-                    aware.setProjectManagementApp(app);
-                }
-
-                if (controller instanceof NavigatorAware aware) {
-                    aware.setNavigator(this);
-                }
-                if (controller instanceof AlertServiceAware aware) {
-                    aware.setAlertService(alertService);
-                }
-
-
-                return controller;
-
-            } catch (
-
-            Exception e) {
-                throw new RuntimeException(
-                        "Failed to create controller: " + type.getName(),
-                        e);
-            }
-        };
+        this.controllerFactory = controllerFactory;
     }
 
     private void setStage(Stage stage) {
@@ -71,7 +22,7 @@ public class Navigator {
 
     }
 
-    private <T> T changeScene(CustomScene fxmlScene, Consumer<T> initializer) throws IOException {
+    public <T> T changeScene(CustomScene fxmlScene, Consumer<T> initializer) throws IOException {
         FXMLLoader loader = loadFXML(fxmlScene);
         Parent root = loader.load();
 
@@ -89,8 +40,8 @@ public class Navigator {
         return loader.getController();
     }
 
-    private <T> T changeScene(CustomScene scene) throws IOException {
-        return changeScene(scene, null);
+    public <T> T changeScene(CustomScene scene) throws IOException {
+        return changeScene(scene, controller -> {});
     }
 
     public FXMLLoader loadFXML(CustomScene scene) {
@@ -105,25 +56,6 @@ public class Navigator {
         }
 
         return fxmlLoader;
-    }
-
-    public void toRegisterTimeList() throws IOException {
-        changeScene(CustomScene.REGISTER_TIME_LIST);
-    }
-
-    public void toLogin() throws IOException {
-        changeScene(CustomScene.LOGIN);
-    }
-
-    public void toProjectList() throws IOException {
-        changeScene(CustomScene.PROJECT_LIST);
-    }
-
-    public void toViewReport(Report report) throws IOException {
-        changeScene(CustomScene.VIEW_REPORT, controller -> {
-            ViewReportController typedController = (ViewReportController) controller;
-            typedController.setReport(report);
-        });
     }
 
 }
