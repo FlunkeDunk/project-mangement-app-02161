@@ -20,7 +20,8 @@ public class ActivityItemFactoryImplementation implements ActivityItemFactory {
     public List<ActivityItem> create(
             Project project,
             PopupService popupService,
-            UiActionExecutor uiActionExecutor) {
+            UiActionExecutor uiActionExecutor,
+            UiState uiState) {
 
         List<ActivityItem> items = new ArrayList<>();
 
@@ -32,6 +33,7 @@ public class ActivityItemFactoryImplementation implements ActivityItemFactory {
 
             activityItem.setOnRegisterTimeRequested(
                     () -> {
+                        uiState.setActivityId(activityId);
                         uiActionExecutor.execute(
                                 popupService::popUp, CustomScene.REGISTER_TIME,
                                 ERROR_TITLE);
@@ -39,6 +41,7 @@ public class ActivityItemFactoryImplementation implements ActivityItemFactory {
 
             activityItem.setOnEditActivityRequested(
                     () -> {
+                        uiState.setActivityId(activityId);
                         uiActionExecutor.execute(
                                 popupService::popUp, CustomScene.EDIT_ACTIVITY,
                                 ERROR_TITLE);
@@ -46,6 +49,7 @@ public class ActivityItemFactoryImplementation implements ActivityItemFactory {
 
             activityItem.setOnAssignToActivityRequested(
                     () -> {
+                        uiState.setActivityId(activityId);
                         uiActionExecutor.execute(
                                 popupService::popUp, CustomScene.ASSIGN_TO_ACTIVITY,
                                 ERROR_TITLE);
@@ -53,6 +57,7 @@ public class ActivityItemFactoryImplementation implements ActivityItemFactory {
 
             activityItem.setOnEditRegisteredTimeRequested(
                     () -> {
+                        uiState.setActivityId(activityId);
                         uiActionExecutor.execute(
                                 popupService::popUp, CustomScene.EDIT_REGISTERED_TIME,
                                 ERROR_TITLE);

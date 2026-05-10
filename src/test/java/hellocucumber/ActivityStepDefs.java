@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import dtu.superPlanner.AbstractActivity;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Employee;
 import dtu.superPlanner.FileEmployeeRepository;
@@ -21,6 +22,7 @@ import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
+import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -507,6 +509,9 @@ public class ActivityStepDefs {
         }
     }
 
+    /**
+     * @author Emanuel
+     */
     @When("{string} is added to the assigned activities of {string}")
     public void isAddedToTheAssignedActivitiesOf(String activityName, String employeeInitials) {
         Activity activity = getActivitybyName(activityName);
@@ -525,6 +530,21 @@ public class ActivityStepDefs {
     @Then("the activity with id {int} should be {string}")
     public void theActivityWithIdShouldBe(Integer id, String name) {
         assertEquals(name, myProject.getActivityMap().get(id).getName());
+    }
+
+    /**
+     * @author Emanuel
+     */
+    @When("an unsupported type of activity is added to the assigned activities of {string}")
+    public void nullIsAddedToTheAssignedActivitiesOf(String employeeInitials) {
+        Employee employee = myApp.getEmployee(employeeInitials);
+        TimeFrame timeFrame = new TimeFrame(new WeekBasedCalendar(1,1), new WeekBasedCalendar(2,1));
+
+        try {
+            employee.addActivity(new AbstractActivity("Weirdo", timeFrame) {});
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
     }
 
 }

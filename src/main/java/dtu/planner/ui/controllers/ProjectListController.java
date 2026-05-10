@@ -103,7 +103,7 @@ public class ProjectListController extends ProjectManagementAwareController
         uiState.setProjectId(project.getId());
         setProjectDetails(new ProjectDetailsView(project));
         activityListAccordion.getPanes()
-                .setAll(activityItemFactory.create(project, popupService, this::executeUiAction));
+                .setAll(activityItemFactory.create(project, popupService, this::executeUiAction, uiState));
         setSelectedProjectButtonsDisabled(false);
     }
 

@@ -14,9 +14,7 @@ public class WeekBasedCalendar {
      * @author BenjaminEwe
      */
     public WeekBasedCalendar(int week, int year) {
-        WeekAndYear normalized = normalizeDate(week, year);
-        this.week = normalized.week();
-        this.year = normalized.year();
+        setWeekAndYear(week, year);
     }
 
     /**
@@ -43,9 +41,7 @@ public class WeekBasedCalendar {
      * @author BenjaminEwe
      */
     public void setWeek(int week) {
-        WeekAndYear normalized = normalizeDate(week, this.year);
-        this.week = normalized.week();
-        setYear(normalized.year());
+        setWeekAndYear(week, this.year);
     }
 
     /**
@@ -70,7 +66,7 @@ public class WeekBasedCalendar {
     /**
      * @author BenjaminEwe
      */
-    private WeekAndYear normalizeDate(int week, int year) {
+    private void setWeekAndYear(int week, int year) throws IllegalArgumentException {
         assert true;
         if (week == 0) {
             throw new IllegalArgumentException(String.format("DateError: Invalid week: %d", week));
@@ -80,24 +76,20 @@ public class WeekBasedCalendar {
             week++;
         }
         LocalDate date = LocalDate.of(year, 1, 4).plusWeeks(week - 1);
-        int newWeek = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-        int newYear = date.getYear();
+        this.week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        this.year = date.getYear();
 
         // The new week number must at most be the last week of the year we are in and at least 1 to be a valid week number
-        assert(newWeek <= LocalDate.of(newYear, 12, 28).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
-                && newWeek > 0);
+        assert(this.week <= LocalDate.of(this.year, 12, 28).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
+                && this.week > 0);
         // The new date is 'week' weeks after the input years first week
         assert(ChronoUnit.WEEKS.between(
                 LocalDate.of(year, 1, 4).with(WeekFields.ISO.dayOfWeek(), 1),
-                LocalDate.of(newYear, 1, 4)
-                        .withYear(newYear)
-                        .with(WeekFields.ISO.weekOfWeekBasedYear(), newWeek)
+                LocalDate.of(this.year, 1, 4)
+                        .withYear(this.year)
+                        .with(WeekFields.ISO.weekOfWeekBasedYear(), this.week)
                         .with(WeekFields.ISO.dayOfWeek(), 1)) == week - 1);
-
-        return new WeekAndYear(newWeek, newYear);
     }
-
-    private record WeekAndYear(int week, int year) {}
 
     /**
      * @author Arthur

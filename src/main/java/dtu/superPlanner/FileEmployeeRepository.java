@@ -95,7 +95,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
         assert activity != null                                         // activity is not null
                 && activity.getTimeFrame() != null                      // activitys TimeFrame is not null
                 && employees != null                                    // employees map is not null
-                && employees.values().stream().allMatch(e -> e != null) // no employees are null
+                && !employees.values().contains(null) // no employees are null
                 : "Preconditions not met";
 
         TimeFrame timeFrame = activity.getTimeFrame();
