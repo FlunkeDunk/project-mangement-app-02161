@@ -31,8 +31,8 @@ public class WeekBasedCalendarTest {
     }
 
     @Test
-    public void testNormalizeWeekOverflow() {
-        // Set B
+    public void testNormalizeWeekNormal() {
+        // Set C
         WeekBasedCalendar cal = new WeekBasedCalendar(4, 1996);
         assertEquals(4, cal.getWeek());
         assertEquals(1996, cal.getYear());
