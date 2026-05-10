@@ -1,4 +1,4 @@
-package dtu.superPlanner;
+package dtu.whitebox;
 
 import java.util.HashSet;
 import java.util.List;
@@ -6,6 +6,12 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
+
+import dtu.superPlanner.Activity;
+import dtu.superPlanner.Employee;
+import dtu.superPlanner.FileEmployeeRepository;
+import dtu.superPlanner.TimeFrame;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;

@@ -1,6 +1,15 @@
-package dtu.superPlanner;
+package dtu.whitebox;
 
 import org.junit.jupiter.api.Test;
+
+import dtu.superPlanner.Activity;
+import dtu.superPlanner.FileEmployeeRepository;
+import dtu.superPlanner.MemoryProjectRepository;
+import dtu.superPlanner.Project;
+import dtu.superPlanner.ProjectManagementApp;
+import dtu.superPlanner.TimeFrame;
+import dtu.superPlanner.WeekBasedCalendar;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AddEmployeeToActivityTest {

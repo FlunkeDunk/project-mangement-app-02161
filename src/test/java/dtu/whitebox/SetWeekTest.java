@@ -1,12 +1,15 @@
-package dtu.superPlanner;
+package dtu.whitebox;
 
 import org.junit.jupiter.api.Test;
+
+import dtu.superPlanner.WeekBasedCalendar;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NormalizeWeekTest {
+public class SetWeekTest {
 
     @Test
-    public void testNormalizeWeekZeroThrowsException() {
+    public void testSetWeekZeroThrowsException() {
         // Set A
         String errMessage = "";
         String errType = "";
@@ -23,7 +26,7 @@ public class NormalizeWeekTest {
     }
 
     @Test
-    public void testNormalizeNegativeWeek() {
+    public void testSetNegativeWeek() {
         // Set B
         WeekBasedCalendar cal = new WeekBasedCalendar(-3, 2027);
         assertEquals(51, cal.getWeek());
@@ -31,7 +34,7 @@ public class NormalizeWeekTest {
     }
 
     @Test
-    public void testNormalizeWeekNormal() {
+    public void testSetWeekNormal() {
         // Set C
         WeekBasedCalendar cal = new WeekBasedCalendar(4, 1996);
         assertEquals(4, cal.getWeek());
