@@ -47,19 +47,18 @@ public class TimeFrame {
     /**
      * @author BenjaminEwe
      */
-    public static boolean overlaps(TimeFrame tf1, TimeFrame tf2) {
-        WeekBasedCalendar firstStartDate = tf1.getStartDate();
-        WeekBasedCalendar firstEndDate = tf1.getEndDate();
-        WeekBasedCalendar secondStartDate = tf2.getStartDate();
-        WeekBasedCalendar secondEndDate = tf2.getEndDate();
+    public boolean overlaps(TimeFrame other) {
+        WeekBasedCalendar firstStartDate = getStartDate();
+        WeekBasedCalendar firstEndDate = getEndDate();
+        WeekBasedCalendar secondStartDate = other.getStartDate();
+        WeekBasedCalendar secondEndDate = other.getEndDate();
 
         /* If the second activity starts before the first one ends, but does not end before the first one starts,
          * that means that some part of it overlaps.
          * If the second activity starts after the first one ends, it is impossible to overlap
          * If the second activity end before the first one starts, it is impossible to overlap
          */
-        System.out.println("Second start before first end: " + secondStartDate.before(firstEndDate));
-        System.out.println("Second end after first start: " + !secondEndDate.before(firstStartDate));
+
         return secondStartDate.before(firstEndDate) && !secondEndDate.before(firstStartDate);
     }
 

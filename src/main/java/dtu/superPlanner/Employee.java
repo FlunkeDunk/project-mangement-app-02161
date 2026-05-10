@@ -50,7 +50,7 @@ public class Employee {
      */
     public boolean isAvailable(TimeFrame timeFrame) {
         for (FixedActivity fixedActivity : fixedActivities) {
-            if (TimeFrame.overlaps(timeFrame, fixedActivity.getTimeFrame())) {
+            if (timeFrame.overlaps(fixedActivity.getTimeFrame())) {
                 return false;
             }
         }

@@ -90,31 +90,33 @@ public class FileEmployeeRepository implements EmployeeRepository {
     /**
      * @author Arthur
      */
-    private List<Employee> findAvailableEmployees(Activity activity) {
-        // Assert that acitvity and it's TimeFrame is not null and that no employees
-        // have null initials
-        assert activity != null
-                && activity.getTimeFrame() != null
-                && employees.values().stream().allMatch(e -> e.getInitials() != null)
+    public List<Employee> findAvailableEmployees(Activity activity) {
+        // Assert prconditions
+        assert activity != null                                         // activity is not null
+                && activity.getTimeFrame() != null                      // activitys TimeFrame is not null
+                && employees != null                                    // employees map is not null
+                && employees.values().stream().allMatch(e -> e != null) // no employees are null
                 : "Preconditions not met";
 
         TimeFrame timeFrame = activity.getTimeFrame();
 
-        List<Employee> result = employees.values().stream()                         // 1
-                .filter(employee -> isEligibleForTimeActivity(employee, activity))  // 2
-                .sorted(Comparator.comparingInt(
-                        employee -> getActivitiesOverlapping(timeFrame, employee))) // 3
+        Comparator<Employee> bySmallestOverlap = Comparator.comparingInt(e -> getActivitiesOverlapping(timeFrame, e));
+
+        List<Employee> result = getAllEmployees().stream()              // 1
+                .filter(e -> isEligibleForTimeActivity(e, activity))    // 2
+                .sorted(bySmallestOverlap)                              // 3
                 .toList();
 
         // Assert that all employees are either
-        // (in the result and available and not already assigned)
-        // or (not in result and (not avaiable or already assigned the activity))
-        assert getAllEmployees().stream().allMatch(
-                (employee) -> (result.contains(employee) && employee.isAvailable(timeFrame)
-                        && !employee.getActivities().contains(activity))
-                        || (!result.contains(employee) && (!employee.isAvailable(timeFrame)
-                                || employee.getActivities().contains(activity))))
-                : "not all employees are either in the result or not avaiable or already assigned the activity";
+        // in the result and eligible
+        // or not in the result and not eligible
+
+        assert getAllEmployees().stream().allMatch(employee -> {
+            boolean inResult = result.contains(employee);
+            boolean eligible = isEligibleForTimeActivity(employee, activity);
+
+            return inResult == eligible;
+        }) : "Inconsistent employee selection: some employees are neither correctly included nor excluded";
 
         // Assert result is ordered post condition
         for (int i = 1; i < result.size(); i++) {
@@ -127,6 +129,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
             assert prevLoad <= currLoad
                     : "Employees are not ordered by workload";
         }
+
         return result;
     }
 
@@ -140,7 +143,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
         for (Activity activity : alreadyAssignedActivities) {
             TimeFrame existingActivityDuration = activity.getTimeFrame();
 
-            if (TimeFrame.overlaps(existingActivityDuration, activityDuration)) {
+            if (activityDuration.overlaps(existingActivityDuration)) {
                 activitiesOverlapping++;
             }
         }
