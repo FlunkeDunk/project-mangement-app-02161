@@ -27,9 +27,11 @@ public class Report {
 
             budgetedTime += thisBudget;
             timeSpent += spent;
-            timeLeft += budgetedTime - timeSpent;
+            timeLeft += Math.max(thisBudget - spent, 0);
+            
         }
-        timeLeft = timeLeft < 0 ? 0 : timeLeft;
+        timeLeft = Math.max(timeLeft, 0);
+        System.out.println("final timeLeft = " + timeLeft);
 
     }
 

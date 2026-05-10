@@ -5,12 +5,12 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Activity extends AbstractActivity {
-    private final Set<String> employees = new HashSet<>();
+    private final Set<String> employees = new TreeSet<>();
     private Map<String, TimeLedger> employeeTimeLedgers;
     private double budgetedTime;
     private final int ID;

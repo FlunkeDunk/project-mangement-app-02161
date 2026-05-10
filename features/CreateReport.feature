@@ -36,7 +36,7 @@ Feature: Create report
     And the report indecates the name of the project is "My Project"
     And the report indicates the time budget is 35 hours
     And the report indicates the time spent is 37 hours
-    And the report indicates the estimated time remaining is 0 hours
+    And the report indicates the estimated time remaining is 3 hours
 
   Scenario: Project leader creates report with budgeted time and checks entries
     Given the project has the activity "Knitting"
