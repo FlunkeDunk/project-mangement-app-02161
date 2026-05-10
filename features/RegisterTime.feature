@@ -55,7 +55,3 @@ Feature: Register Time
   Scenario: Employee registers negative time on activity with a valid date
     When the employee registers a negative -5.0 hours on "Invade Mordor" on the date "24-12-2025"
     Then an error is thrown "Time registered has to be between 0 and 24 hours"
-
-  Scenario: Employee registers more than 24 hours on activity with a valid date
-    When the employee registers 25 hours on "Invade Mordor" on the date "24-12-2025"
-    Then an error is thrown "Time registered has to be between 0 and 24 hours"

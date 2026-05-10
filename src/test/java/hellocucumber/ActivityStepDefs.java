@@ -16,7 +16,6 @@ import dtu.superPlanner.AbstractActivity;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Employee;
 import static dtu.superPlanner.FixedActivityType.Emergency;
-import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.WeekBasedCalendar;
@@ -29,29 +28,20 @@ public class ActivityStepDefs {
 
     private final ProjectManagementApp myApp;
     private final ErrorMessageHolder errorHolder;
-    private final Project myProject;
     private Activity myActivity;
     private LocalDate currentDate;
     private List<String> availableEmployees;
-    private int userIterator = 0;
+    private ProjectHolder projectHolder;
+    private LocalDate reportDate;
 
     /**
      * @author BenjaminEwe
      */
-    public ActivityStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+    public ActivityStepDefs(TestContext context, ErrorMessageHolder errorHolder, ProjectHolder projectHolder) {
         this.myApp = context.app;
         this.errorHolder = errorHolder;
-
-        Set<Project> projects = myApp.getAllProjects();
-        System.out.println("projectcount =" + projects.size());
-        if (projects.size() > 1) {
-            throw new IllegalStateException("Expected at most one project");
-        }
-        if (!projects.isEmpty()) {
-            myProject = projects.iterator().next();
-        } else {
-            myProject = null;
-        }
+        this.projectHolder = projectHolder;
+        this.reportDate = LocalDate.of(1, 1, 1);
     }
 
     /**
@@ -63,14 +53,14 @@ public class ActivityStepDefs {
         TimeFrame myTimeFrame = new TimeFrame(startWeek, endWeek);
 
         String prevUser = myApp.getUserInitials();
-        if (force && myProject.getProjectLeader() != null) {
-            myApp.login(myProject.getProjectLeader());
+        if (force && projectHolder.getProject().getProjectLeader() != null) {
+            myApp.login(projectHolder.getProject().getProjectLeader());
         }
 
         Activity activity = null;
 
         try {
-            activity = myApp.createActivity(myProject.getId(), projectName, myTimeFrame);
+            activity = myApp.createActivity(projectHolder.getProject().getId(), projectName, myTimeFrame);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         } finally {
@@ -87,7 +77,7 @@ public class ActivityStepDefs {
      */
     private Activity getActivitybyName(String activityName) {
         Set<Activity> activities = null;
-        activities = myApp.getProject(myProject.getId()).getActivitySet();
+        activities = myApp.getProject(projectHolder.getProject().getId()).getActivitySet();
 
         for (Activity activity : activities) {
             if (activity.getName().equals(activityName)) {
@@ -116,7 +106,7 @@ public class ActivityStepDefs {
     @Given("the project has a project leader")
     public void theProjectHasAProjectLeader() throws IllegalAccessException {
         addEmployee("PROJECT_LEADER");
-        myApp.setProjectLeader(myProject.getId(), "PROJECT_LEADER");
+        myApp.setProjectLeader(projectHolder.getProject().getId(), "PROJECT_LEADER");
     }
 
     /**
@@ -124,7 +114,7 @@ public class ActivityStepDefs {
      */
     @Then("the project should have the activities with the names and durations")
     public void theProjectShouldHaveTheActivitiesWithTheNamesAndBudgetedTimes(List<List<String>> expectedActivities) {
-        Set<Activity> actualActivities = myProject.getActivitySet();
+        Set<Activity> actualActivities = projectHolder.getProject().getActivitySet();
         List<String> actual = new ArrayList<>(actualActivities.stream()
                 .map(a -> a.getName() + ":-:" + a.getDuration())
                 .toList());
@@ -141,7 +131,7 @@ public class ActivityStepDefs {
 
     @Then("the project has activities with the names")
     public void theProjectHasActivitiesWithTheNames(List<String> expectedActivityNames) {
-        Set<Activity> activities = myProject.getActivitySet();
+        Set<Activity> activities = projectHolder.getProject().getActivitySet();
         List<String> activityNames = new ArrayList<>(activities.stream().map(a -> a.getName()).toList());
         List<String> expected = new ArrayList<>(expectedActivityNames);
 
@@ -156,7 +146,7 @@ public class ActivityStepDefs {
      */
     @Given("the project has no activities")
     public void theProjectHasNoActivities() {
-        assertTrue(myProject.getActivitySet().isEmpty());
+        assertTrue(projectHolder.getProject().getActivitySet().isEmpty());
     }
 
     @And("the project has the activities with the names and durations")
@@ -176,7 +166,7 @@ public class ActivityStepDefs {
     @When("the user changes the activity name to {string}")
     public void theUserChangesTheActivityNameTo(String name) {
         try {
-            myApp.setActivityName(myProject.getId(), myActivity.getId(), name);
+            myApp.setActivityName(projectHolder.getProject().getId(), myActivity.getId(), name);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -198,7 +188,7 @@ public class ActivityStepDefs {
 
         if (timeFrame == null)
             return;
-        myApp.setActivityTimeFrame(myProject.getId(), activityToModify.getId(), timeFrame);
+        myApp.setActivityTimeFrame(projectHolder.getProject().getId(), activityToModify.getId(), timeFrame);
     }
 
     @When("the project leader sets the activity {string} to end in week {int}, year {int}")
@@ -216,28 +206,36 @@ public class ActivityStepDefs {
 
         if (timeFrame == null)
             return;
-        myApp.setActivityTimeFrame(myProject.getId(), activityToModify.getId(), timeFrame);
+        myApp.setActivityTimeFrame(projectHolder.getProject().getId(), activityToModify.getId(), timeFrame);
     }
 
     @Then("the activity starts in year {int} and week {int}")
     public void theActivityStartsInYearAndWeek(Integer year, Integer week) {
         WeekBasedCalendar expected = new WeekBasedCalendar(week, year);
-        WeekBasedCalendar startDate = myProject.getActivityTimeFrame(myActivity.getId()).getStartDate();
+        WeekBasedCalendar startDate = projectHolder.getProject().getActivityTimeFrame(myActivity.getId()).getStartDate();
         assertEquals(expected, startDate);
     }
 
     @Then("the activity ends in year {int} and week {int}")
     public void theActivityEndsInYearAndWeek(Integer year, Integer week) {
-        WeekBasedCalendar endDate = myProject.getActivityTimeFrame(myActivity.getId()).getEndDate();
+        WeekBasedCalendar endDate = projectHolder.getProject().getActivityTimeFrame(myActivity.getId()).getEndDate();
         assertEquals(year, endDate.getYear());
         assertEquals(week, endDate.getWeek());
+    }
+
+    @Then("an exception is thrown containing {string}")
+    public void anExceptionIsThrownContaining(String exception) {
+        assertNotNull(errorHolder.getError());
+        assertTrue(errorHolder.getError().contains(exception));
     }
 
     @Then("an exception is thrown {string}")
     public void anExceptionIsThrown(String exception) {
         assertNotNull(errorHolder.getError());
-        assertTrue(errorHolder.getError().contains(exception));
+        assertEquals(exception, errorHolder.getError());
     }
+
+    
 
     /**
      * @author BenjaminEwe
@@ -246,7 +244,7 @@ public class ActivityStepDefs {
     public void theActivityGetsHoursBudgeted(String name, double hours) {
         Activity currentActivity = getActivitybyName(name);
         try {
-            myApp.setBudgetedTime(myProject.getId(), currentActivity.getId(), hours);
+            myApp.setBudgetedTime(projectHolder.getProject().getId(), currentActivity.getId(), hours);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -258,19 +256,19 @@ public class ActivityStepDefs {
     @Given("an employee has spent {double} hours on the activity {string}")
     public void anEmployeeHasSpentHoursOnTheActivity(double hours, String name) {
         Activity currentActivity = getActivitybyName(name);
-        String debugUser = "Gandalf_" + userIterator;
-        userIterator++;
+        String debugUser = "Gandalf";
 
         String prevUser = myApp.getUserInitials();
-        if (myApp.getProject(myProject.getId()).getProjectLeader() != null) {
-            myApp.login(myProject.getProjectLeader());
-        }
+        if (myApp.getProject(projectHolder.getProject().getId()).getProjectLeader() != null) {
+            myApp.login(projectHolder.getProject().getProjectLeader());
+        } // TODO
 
         try {
             addEmployee(debugUser);
             myApp.login(debugUser);
-            myApp.addEmployeeToActivity(myProject.getId(), currentActivity.getId(), debugUser);
-            myApp.registerTime(myProject.getId(), currentActivity.getId(), hours);
+            myApp.addEmployeeToActivity(projectHolder.getProject().getId(), currentActivity.getId(), debugUser);
+            myApp.registerTime(projectHolder.getProject().getId(), currentActivity.getId(), hours, reportDate);
+            reportDate = reportDate.plusDays(1);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         } finally {
@@ -285,7 +283,7 @@ public class ActivityStepDefs {
     public void theUserHasRegisteredHoursOn(double hours, String activityName) {
         currentDate = myApp.getTimeServer().getCurrentDate();
         try {
-            myApp.registerTime(myProject.getId(), myActivity.getId(), hours);
+            myApp.registerTime(projectHolder.getProject().getId(), myActivity.getId(), hours);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -297,7 +295,7 @@ public class ActivityStepDefs {
     @When("the user changes the registered time on activity {string} to {double}")
     public void theUserChangesTheRegisteredTimeOnActivityTo(String activityName, Double hours) {
         try {
-            myApp.editTime(myProject.getId(), myActivity.getId(), currentDate, hours);
+            myApp.editTime(projectHolder.getProject().getId(), myActivity.getId(), currentDate, hours);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -321,7 +319,7 @@ public class ActivityStepDefs {
         myApp.login(assigner);
         try {
             Activity activity = getActivitybyName(activityName);
-            myApp.addEmployeeToActivity(myProject.getId(), activity.getId(), assignee);
+            myApp.addEmployeeToActivity(projectHolder.getProject().getId(), activity.getId(), assignee);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -357,7 +355,7 @@ public class ActivityStepDefs {
         TimeFrame timeFrame = new TimeFrame(startWeek, endWeek);
 
         try {
-            myActivity = myApp.createActivity(myProject.getId(), string, timeFrame);
+            myActivity = myApp.createActivity(projectHolder.getProject().getId(), string, timeFrame);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         }
@@ -366,7 +364,7 @@ public class ActivityStepDefs {
     @When("the user sets the budgeted time of the activity to {double} hour(s)")
     public void theUserSetsTheBudgetedTimeOfTheActivityToHours(double d) {
         try {
-            myApp.setBudgetedTime(myProject.getId(), myActivity.getId(), d);
+            myApp.setBudgetedTime(projectHolder.getProject().getId(), myActivity.getId(), d);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -399,13 +397,13 @@ public class ActivityStepDefs {
             TimeFrame myTimeFrame = new TimeFrame(startTime, endTime);
 
             try {
-                myApp.createActivity(myProject.getId(), activityName, myTimeFrame);
+                myApp.createActivity(projectHolder.getProject().getId(), activityName, myTimeFrame);
             } catch (IllegalAccessException e) {
                 errorHolder.setError(e.getMessage());
                 break;
             }
         }
-        assertEquals(activities.size(), myProject.getActivitySet().size(),
+        assertEquals(activities.size(), projectHolder.getProject().getActivitySet().size(),
                 "Failed to add the activities to the project.");
     }
 
@@ -435,7 +433,7 @@ public class ActivityStepDefs {
         myActivity.getTimeFrame().getEndDate().setWeek(endWeek);
         assertNotNull(myActivity);
         try {
-            availableEmployees = myApp.getAvailableEmployees(myProject.getId(), myActivity.getId());
+            availableEmployees = myApp.getAvailableEmployees(projectHolder.getProject().getId(), myActivity.getId());
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         }
@@ -458,7 +456,7 @@ public class ActivityStepDefs {
         Activity activity = getActivitybyName(activityName);
         assertNotNull(activity, "Activity does not exist");
         try {
-            myApp.addEmployeeToActivity(myProject.getId(), activity.getId(), employeeInitials);
+            myApp.addEmployeeToActivity(projectHolder.getProject().getId(), activity.getId(), employeeInitials);
         } catch (IllegalAccessException e) {
             errorHolder.setError(e.getMessage());
         }
@@ -470,8 +468,8 @@ public class ActivityStepDefs {
     @Given("{string} is the project leader")
     public void isTheProjectLeader(String employee) throws IllegalAccessException {
         addEmployee(employee);
-        myApp.setProjectLeader(myProject.getId(), employee);
-        assertEquals(employee, myProject.getProjectLeader());
+        myApp.setProjectLeader(projectHolder.getProject().getId(), employee);
+        assertEquals(employee, projectHolder.getProject().getProjectLeader());
     }
 
     /**
@@ -505,10 +503,10 @@ public class ActivityStepDefs {
         int month = Integer.parseInt(splitString[1]);
         int year = Integer.parseInt(splitString[2]);
         LocalDate date = LocalDate.of(year, month, day);
-        int activityId = myProject.getActivitySet().stream().filter(a -> a.getName().equals(activityName)).findFirst().orElseThrow().getId();
+        int activityId = projectHolder.getProject().getActivitySet().stream().filter(a -> a.getName().equals(activityName)).findFirst().orElseThrow().getId();
         try {
             
-            myApp.editTime(myProject.getId(), activityId, date, hours);
+            myApp.editTime(projectHolder.getProject().getId(), activityId, date, hours);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -535,7 +533,7 @@ public class ActivityStepDefs {
      */
     @Then("the activity with id {int} should be {string}")
     public void theActivityWithIdShouldBe(Integer id, String name) {
-        assertEquals(name, myProject.getActivityMap().get(id).getName());
+        assertEquals(name, projectHolder.getProject().getActivityMap().get(id).getName());
     }
 
     /**
@@ -552,5 +550,6 @@ public class ActivityStepDefs {
             errorHolder.setError(e.getMessage());
         }
     }
+    
 
 }

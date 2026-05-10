@@ -53,9 +53,6 @@ public class Activity extends AbstractActivity {
      * @author BenjaminEwe
      */
     public void editTime(String initials, LocalDate date, double newTime) throws IllegalArgumentException {
-        if (newTime < 0 || 24 < newTime) {
-            throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
-        }
         if (!employeeTimeLedgers.containsKey(initials)) 
             throw new IllegalArgumentException("Cannot edit time for an activity where the employee has no time registered");
         employeeTimeLedgers.get(initials).editTime(date, newTime);

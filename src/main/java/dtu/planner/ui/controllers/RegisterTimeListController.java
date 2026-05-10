@@ -33,6 +33,7 @@ public class RegisterTimeListController extends ProjectManagementAwareController
 
     @FXML
     private void initialize() {
+        setDailyTimeRegisteredLabel();
         activityGridPane.getChildren().clear();
         datePicker = new DatePicker(app.getTimeServer().getCurrentDate());
         datePicker.setPrefWidth(120);
@@ -102,8 +103,8 @@ public class RegisterTimeListController extends ProjectManagementAwareController
     }
 
     private void setDailyTimeRegisteredLabel() {
-        // double timeRegistered = app.getDailyRegisteredTime();
-        // dailyTimeRegisteredLabel.setText(timeRegistered + " hours");
+        double timeRegistered = app.getTimeRegisteredToday();
+        dailyTimeRegisteredLabel.setText("Time registered today: " + timeRegistered);
     }
 
 }

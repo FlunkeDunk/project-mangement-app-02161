@@ -22,7 +22,6 @@ public class ProjectStepDefs {
     public String user;
     // public String date;
     public ProjectManagementApp myApp;
-    public Project project;
     private ErrorMessageHolder errorHolder;
     private ProjectHolder projectHolder;
     private int year;
@@ -55,8 +54,7 @@ public class ProjectStepDefs {
     @Given("a project with name {string}")
     public void aProjectWithName(String string) {
         try {
-            project = myApp.createProject(string);
-            projectHolder.setProject(project);
+            projectHolder.setProject(myApp.createProject(string));
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -76,7 +74,8 @@ public class ProjectStepDefs {
     @When("the user creates a project")
     public void theUserCreatesAProject() {
         try {
-            project = myApp.createProject();
+            Project project = myApp.createProject();
+            projectHolder.setProject(project);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -85,12 +84,12 @@ public class ProjectStepDefs {
 
     @Then("there is a project")
     public void thereIsAProject() {
-        assertNotNull(project);
+        assertNotNull(projectHolder.getProject());
     }
 
     @Then("project has the id {int}")
     public void projects_has_the_id(Integer expectedId) {
-        assertEquals(expectedId, project.getId());
+        assertEquals(expectedId, projectHolder.getProject().getId());
     }
 
     /**
@@ -98,13 +97,13 @@ public class ProjectStepDefs {
      */
     @Then("the project has no project leader")
     public void the_projects_has_no_project_leader() {
-        project.setProjectLeader(null);
-        assertNull(project.getProjectLeader());
+        projectHolder.getProject().setProjectLeader(null);
+        assertNull(projectHolder.getProject().getProjectLeader());
     }
 
     @Then("the project starts in week {int} and year {int}")
     public void theProjectStartsInWeekAndYear(int weekInput, int yearInput) {
-        WeekBasedCalendar startDate = project.getStartDate();
+        WeekBasedCalendar startDate = projectHolder.getProject().getStartDate();
         int week = startDate.getWeek();
         int year = startDate.getYear();
 
@@ -115,7 +114,7 @@ public class ProjectStepDefs {
 
     @Then("the project has the id {int}")
     public void the_project_has_the_id(int i) {
-        assertEquals(i, project.getId());
+        assertEquals(i, projectHolder.getProject().getId());
     }
 
     @When("there are {int} project(s) created this year")
@@ -143,7 +142,7 @@ public class ProjectStepDefs {
 
     @When("the user creates a project {string}")
     public void theUserCreatesAProject(String string) {
-        project = myApp.createProject(string);
+        projectHolder.setProject(myApp.createProject(string));
     }
 
     /**
@@ -151,7 +150,7 @@ public class ProjectStepDefs {
      */
     @Then("the project has the name {string}")
     public void theProjectHasTheName(String string) {
-        assertEquals(string, project.getName());
+        assertEquals(string, projectHolder.getProject().getName());
     }
 
     @When("the user creates {int} project(s)")
@@ -172,8 +171,8 @@ public class ProjectStepDefs {
      */
     @Given("the user is the project leader")
     public void the_user_is_a_project_leader() throws IllegalAccessException {
-        myApp.setProjectLeader(project.getId(), myApp.getUserInitials());
-        assertEquals(user, project.getProjectLeader());
+        myApp.setProjectLeader(projectHolder.getProject().getId(), myApp.getUserInitials());
+        assertEquals(user, projectHolder.getProject().getProjectLeader());
     }
 
     /**
@@ -181,7 +180,7 @@ public class ProjectStepDefs {
      */
     @Given("the user is not a project leader")
     public void the_user_is_not_a_project_leader() {
-        assertNotEquals(myApp.getUserInitials(), project.getProjectLeader());
+        assertNotEquals(myApp.getUserInitials(), projectHolder.getProject().getProjectLeader());
     }
 
     /**
@@ -190,7 +189,7 @@ public class ProjectStepDefs {
     @When("the user changes the project name to {string}")
     public void the_user_changes_the_project_name_to(String newName) {
         try {
-            myApp.setProjectName(project.getId(), newName);
+            myApp.setProjectName(projectHolder.getProject().getId(), newName);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }
@@ -201,13 +200,8 @@ public class ProjectStepDefs {
      */
     @Given("a project with the name {string}")
     public void aProjectWithTheName(String projectName) {
-        try {
-            project = myApp.createProject(projectName);
-        } catch (Exception e) {
-            errorHolder.setError(e.getMessage());
-        }
-
-        assertNotNull(project, "Project was not created");
+        theUserCreatesAProject(projectName);
+        assertNotNull(projectHolder.getProject(), "Project was not created");
     }
 
     /**
@@ -222,7 +216,7 @@ public class ProjectStepDefs {
             TimeFrame timeFrame = new TimeFrame(startWeek, endWeek);
 
             try {
-                myApp.createActivity(project.getId(), name, timeFrame);
+                myApp.createActivity(projectHolder.getProject().getId(), name, timeFrame);
             } catch (IllegalAccessException e) {
                 errorHolder.setError(e.getMessage());
             }
@@ -248,7 +242,7 @@ public class ProjectStepDefs {
     public void theProjectLeaderIs(String initials) {
         myApp.createEmployee(initials);
         try {
-            myApp.setProjectLeader(project.getId(), initials);
+            myApp.setProjectLeader(projectHolder.getProject().getId(), initials);
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
         }

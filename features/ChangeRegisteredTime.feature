@@ -35,5 +35,5 @@ Feature: Change Registered Time
 
   Scenario: Change time for a date where user has no time registered
     Given the user has registered 2 hours on "Run tests"
-    When the user changes the registered time on activity "Run tests" at date "09-11-2001" to 6.7
+    When the user changes the registered time on activity "Run tests" at date "10-12-2002" to 6.7
     Then an exception is thrown "Cannot edit time for a date where the employee has no time registered"

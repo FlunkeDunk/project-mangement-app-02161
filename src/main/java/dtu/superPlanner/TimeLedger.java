@@ -34,7 +34,7 @@ public class TimeLedger {
      * @author BenjaminEwe
      */
     public double getTime(LocalDate date) {
-        return entries.containsKey(date) ? entries.get(date) : 0;
+        return entries.getOrDefault(date, 0.0);
     }
 
     public double getTotalTime() {

@@ -97,6 +97,19 @@ public class ProjectManagementApp {
      */
     public void editTime(int projectId, int activityId, LocalDate date, double newTime)
             throws IllegalArgumentException {
+        if (newTime < 0 || 24 < newTime) {
+            throw new IllegalArgumentException("Time registered has to be between 0 and 24 hours");
+        }
+
+        TimeLedger timeLedger = getActivity(projectId, activityId).getTimeLedger(getUserInitials());
+        double oldTime = 0;
+        if (timeLedger != null) {
+            oldTime = timeLedger.getTime(date);
+        }
+
+        if ((getTimeRegisteredForDate(date) + newTime - oldTime) > 24) {
+            throw new IllegalArgumentException("Cannot register more than 24 hour in a day");
+        }
         getProject(projectId).editTime(activityId, userInitials, date, newTime);
     }
 
@@ -244,16 +257,21 @@ public class ProjectManagementApp {
     public void createEmployee(String initials) {
         EMPLOYEE_REPOSITORY.addEmployee(initials);
     }
+
     /**
      * @author Arthur
      */
     public double getTimeRegisteredForDate(LocalDate date) {
-        System.out.println("date is: " + date);
         return getAllProjects().stream()
                 .mapToDouble(p -> p.getActivitySet().stream()
-                        .mapToDouble(a -> a.getTimeLedger(getUserInitials()) != null ? 
-                                a.getTimeLedger(getUserInitials()).getTime(date) : 0)
+                        .mapToDouble(a -> a.getTimeLedger(getUserInitials()) != null
+                                ? a.getTimeLedger(getUserInitials()).getTime(date)
+                                : 0)
                         .sum())
                 .sum();
+    }
+
+    public double getTimeRegisteredToday() {
+        return getTimeRegisteredForDate(timeServer.getCurrentDate());
     }
 }

@@ -1,7 +1,6 @@
 package hellocucumber;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dtu.superPlanner.Activity;
-import dtu.superPlanner.Project;
 import dtu.superPlanner.ProjectManagementApp;
 import dtu.superPlanner.TimeFrame;
 import dtu.superPlanner.TimeLedger;
@@ -19,22 +17,22 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class RegisterTimeStepDefs {
-    public Project project;
     public Activity activity;
     public TimeFrame timeFrame;
-    public List<Activity> activities;
     public ProjectManagementApp myApp;
     public LocalDate date = LocalDate.now();
     public final String USER = "huba";
     private ErrorMessageHolder errorHolder;
+    private ProjectHolder projectHolder;
 
-    public RegisterTimeStepDefs(TestContext context, ErrorMessageHolder errorHolder) {
+    public RegisterTimeStepDefs(TestContext context, ErrorMessageHolder errorHolder, ProjectHolder projectHolder) {
         this.myApp = context.app;
         this.errorHolder = errorHolder;
+        this.projectHolder = projectHolder;
     }
 
     private Activity getActivityByName(String names) {
-        for (Activity activity : activities) {
+        for (Activity activity : projectHolder.getProject().getActivitySet()) {
             if (activity.getName().equals(names)) {
                 return activity;
             }
@@ -53,27 +51,22 @@ public class RegisterTimeStepDefs {
 
     @Given("the project has activities with the names:")
     public void theProjectHasActivitiesWithTheNames(List<String> activityNames) throws IllegalAccessException {
-        if (myApp.getAllProjects().isEmpty()) {
-            project = myApp.createProject();
-        } else {
-            project = myApp.getAllProjects().iterator().next();
+        if (projectHolder.getProject() == null) {
+            projectHolder.setProject(myApp.createProject());
         }
-
-        activities = new ArrayList<>();
 
         WeekBasedCalendar startDate = new WeekBasedCalendar(4, 2026);
         WeekBasedCalendar endDate = new WeekBasedCalendar(7, 2026);
         TimeFrame timeFrame = new TimeFrame(startDate, endDate);
 
         for (int i = 0; i < activityNames.size(); i++) {
-            Activity activity = myApp.createActivity(project.getId(), activityNames.get(i), timeFrame);
-            activities.add(activity);
+            myApp.createActivity(projectHolder.getProject().getId(), activityNames.get(i), timeFrame);
         }
     }
 
     @Given("the employee is assigned to the activity {string}")
     public void theEmployeeIsAssignedToTheActivity(String string) throws IllegalAccessException {
-        myApp.addEmployeeToActivity(project.getId(), getActivityByName(string).getId(), USER);
+        myApp.addEmployeeToActivity(projectHolder.getProject().getId(), getActivityByName(string).getId(), USER);
         assertTrue(getActivityByName(string).getEmployees().contains(USER));
     }
 
@@ -86,7 +79,7 @@ public class RegisterTimeStepDefs {
 
     @When("the employee registers {double} hours on {string}")
     public void theEmployeeRegistersHoursOn(Double double1, String string) {
-        myApp.registerTime(project.getId(), getActivityByName(string).getId(), double1);
+        myApp.registerTime(projectHolder.getProject().getId(), getActivityByName(string).getId(), double1);
     }
 
     @Then("the employee's total time on {string} is {double} hours")
@@ -97,7 +90,7 @@ public class RegisterTimeStepDefs {
     @When("the employee registers {double} hours on {string} on the date {string}")
     public void theEmployeeRegistersHoursOnOnTheDate(Double double1, String string, String string2) {
         try {
-            myApp.registerTime(project.getId(), getActivityByName(string).getId(), double1,
+            myApp.registerTime(projectHolder.getProject().getId(), getActivityByName(string).getId(), double1,
                     getLocalDateFromString(string2));
 
         } catch (Exception e) {
@@ -140,7 +133,7 @@ public class RegisterTimeStepDefs {
     @When("the employee registers a negative {double} hours on {string}")
     public void theEmployeeRegistersANegativeHoursOn(Double double1, String string) {
         try {
-            myApp.registerTime(project.getId(), getActivityByName(string).getId(), double1);
+            myApp.registerTime(projectHolder.getProject().getId(), getActivityByName(string).getId(), double1);
 
         } catch (Exception e) {
             errorHolder.setError(e.getMessage());
@@ -150,7 +143,7 @@ public class RegisterTimeStepDefs {
     @When("the employee registers a negative {double} hours on {string} on the date {string}")
     public void theEmployeeRegistersANegativeHoursOnOnTheDate(Double double1, String string, String string2) {
         try {
-            myApp.registerTime(project.getId(), getActivityByName(string).getId(), double1,
+            myApp.registerTime(projectHolder.getProject().getId(), getActivityByName(string).getId(), double1,
                     getLocalDateFromString(string2));
 
         } catch (Exception e) {

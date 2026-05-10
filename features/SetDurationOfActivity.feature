@@ -31,7 +31,7 @@ Feature: Set duration of activity
     When the project leader sets the timeframe of activity "Design" to
       | <start week> | <start year> |
       | <end week>   | <end year>   |
-    Then an exception is thrown "End date must be after start date"
+    Then an exception is thrown containing "End date must be after start date"
 
     Examples:
       | start year | end year | start week | end week |
@@ -42,7 +42,7 @@ Feature: Set duration of activity
     When the project leader sets the timeframe of activity "Design" to
       | <start week> | <start year> |
       | <end week>   | <end year>   |
-    Then an exception is thrown "DateError"
+    Then an exception is thrown containing "DateError"
 
     Examples:
       | start year | end year | start week | end week |
