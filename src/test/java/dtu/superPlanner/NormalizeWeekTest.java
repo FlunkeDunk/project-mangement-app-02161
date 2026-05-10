@@ -3,7 +3,7 @@ package dtu.superPlanner;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WeekBasedCalendarTest {
+public class NormalizeWeekTest {
 
     @Test
     public void testNormalizeWeekZeroThrowsException() {
@@ -31,8 +31,8 @@ public class WeekBasedCalendarTest {
     }
 
     @Test
-    public void testNormalizeWeekOverflow() {
-        // Set B
+    public void testNormalizeWeekNormal() {
+        // Set C
         WeekBasedCalendar cal = new WeekBasedCalendar(4, 1996);
         assertEquals(4, cal.getWeek());
         assertEquals(1996, cal.getYear());

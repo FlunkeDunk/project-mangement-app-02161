@@ -34,7 +34,9 @@ public class Employee {
                 }
                 break;
             default:
+                throw new IllegalArgumentException("Not a valid type of activity");
         }
+
     }
 
     public Set<Activity> getActivities() {

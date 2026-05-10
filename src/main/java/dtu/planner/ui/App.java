@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 
 /**
  * JavaFX App
+ * @author Arthur
  */
 public class App extends Application {
     public static void main(String[] args) {

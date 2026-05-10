@@ -10,6 +10,9 @@ import dtu.planner.ui.interfaces.UiActionExecutor;
 import dtu.superPlanner.Activity;
 import dtu.superPlanner.Project;
 
+/**
+ * @author Arthur
+ */
 public class ActivityItemFactoryImplementation implements ActivityItemFactory {
 
     public ActivityItemFactoryImplementation() {
