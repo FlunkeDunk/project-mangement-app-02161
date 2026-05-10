@@ -22,13 +22,20 @@ public class Employee {
      * @author Emanuel
      */
     public void addActivity(AbstractActivity activity) throws IllegalArgumentException {
+        // Precondition
+        assert true;
+
+        boolean containedActivity = true;
+
         switch (activity) {
             case Activity a:
+                containedActivity = activities.contains(a);
                 if (!activities.add(a)) {
                     throw new IllegalArgumentException("The employee already has that activity");
                 }
                 break;
             case FixedActivity a:
+                containedActivity = fixedActivities.contains(a);
                 if (!fixedActivities.add(a)) {
                     throw new IllegalArgumentException("The employee already has that fixed activity");
                 }
@@ -37,6 +44,9 @@ public class Employee {
                 throw new IllegalArgumentException("Not a valid type of activity");
         }
 
+        // Postcondition: the activity is added to the correct Set
+        assert !containedActivity && ((activity instanceof Activity && activities.contains(activity))
+                || (activity instanceof FixedActivity && fixedActivities.contains(activity))) : "Postcondition";
     }
 
     public Set<Activity> getActivities() {
