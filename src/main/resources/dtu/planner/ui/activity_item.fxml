@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root animated="false" stylesheets="@style.css" type="TitledPane" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root animated="false" stylesheets="@style.css" type="TitledPane" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <AnchorPane prefHeight="160.0" prefWidth="200.0">
          <children>
