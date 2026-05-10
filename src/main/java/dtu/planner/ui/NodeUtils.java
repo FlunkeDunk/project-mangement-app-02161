@@ -2,6 +2,9 @@ package dtu.planner.ui;
 
 import javafx.scene.Node;
 
+/**
+ * @author Arthur
+ */
 public final class NodeUtils {
 
     private NodeUtils() {}

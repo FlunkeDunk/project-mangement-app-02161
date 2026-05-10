@@ -10,6 +10,9 @@ import dtu.planner.ui.interfaces.UiStateAware;
 import dtu.superPlanner.ProjectManagementApp;
 import javafx.util.Callback;
 
+/**
+ * @author Arthur
+ */
 public class ControllerFactory implements Callback<Class<?>, Object> {
 
     ProjectManagementApp app;

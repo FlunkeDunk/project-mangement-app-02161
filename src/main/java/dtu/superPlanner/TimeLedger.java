@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author Emanuel
+ */
 public class TimeLedger {
     private Map<LocalDate, Double> entries;
     private double totalTime;
