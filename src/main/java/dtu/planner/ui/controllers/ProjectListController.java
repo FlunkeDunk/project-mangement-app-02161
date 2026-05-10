@@ -31,6 +31,8 @@ import javafx.scene.layout.VBox;
 public class ProjectListController extends ProjectManagementAwareController
         implements UiStateAware, ActivityItemFactoryAware, PopupServiceFactoryAware {
 
+    private static final String ERROR_MESSAGE = "Operation failed";
+
     private ActivityItemFactory activityItemFactory;
     private PopupServiceFactory popupServiceFactory;
 
@@ -45,7 +47,7 @@ public class ProjectListController extends ProjectManagementAwareController
     @FXML
     private Label selectedProjectLeaderLabel;
     @FXML
-    private Accordion activityListAccordion;
+    private Accordion activityAccordion;
     @FXML
     private ListView<Project> projectList;
     @FXML
@@ -79,8 +81,9 @@ public class ProjectListController extends ProjectManagementAwareController
         });
 
         // Updates activity ui in uiState
-        activityListAccordion.expandedPaneProperty().addListener((obs, oldPane, newPane) -> {
-            int activityId = activityListAccordion.getPanes().indexOf(newPane) + 1;
+        activityAccordion.expandedPaneProperty().addListener((obs, oldPane, newPane) -> {
+            int paneIndex = activityAccordion.getPanes().indexOf(newPane);
+            int activityId = paneIndex + 1;
             uiState.setActivityId(activityId);
         });
 
@@ -94,6 +97,7 @@ public class ProjectListController extends ProjectManagementAwareController
     }
 
     private void loadProjects() {
+        clearProjectList();
         int i = 0;
         projectList.getItems().addAll(app.getAllProjects());
         for (Project project : projectList.getItems()) {
@@ -104,30 +108,40 @@ public class ProjectListController extends ProjectManagementAwareController
             i++;
         }
     }
+    private void clearProjectList() {
+        projectList.getItems().clear();
+    }
 
     private void showProject(Project project) {
         if (project == null)
             return;
         boolean isUserLeader = project.isProjectLeader(app.getUserInitials());
         uiState.setProjectId(project.getId());
+        System.out.println("activityid = " + uiState.getActivityId());
+
         setProjectDetails(new ProjectDetailsView(project));
-        activityListAccordion.getPanes()
+        activityAccordion.getPanes()
                 .setAll(activityItemFactory.create(project, isUserLeader, popupService, this::executeUiAction));
-        selectActivity();
+                
+        expandActivityItem();
                 
         setSelectedProjectButtonsDisabled(!project.isProjectLeader(app.getUserInitials()));
     }
 
-    private void selectActivity() {
+    private void expandActivityItem() {
+        // ID start at 1 but index begin at 0 so we subtract 1
         int paneIndex = uiState.getActivityId() - 1;
-        if (0 <= paneIndex && paneIndex < activityListAccordion.getPanes().size()) {
-            TitledPane pane = activityListAccordion.getPanes().get(paneIndex);
-            if (pane != null) {
-                activityListAccordion.expandedPaneProperty().set(pane);
-            }
-
+        int paneCount = activityAccordion.getPanes().size();
+        if (!isBetween(paneIndex, 0, paneCount)) {
+            return;
         }
+        TitledPane pane = activityAccordion.getPanes().get(paneIndex);
+        activityAccordion.expandedPaneProperty().set(pane);
 
+    }
+
+    private boolean isBetween(int value, int lowerBound, int upperBound) {
+        return lowerBound <= value && value <= upperBound;
     }
 
     private void setProjectDetails(ProjectDetailsView details) {
@@ -146,7 +160,7 @@ public class ProjectListController extends ProjectManagementAwareController
     }
 
     private void clearActivityList() {
-        activityListAccordion.getPanes().clear();
+        activityAccordion.getPanes().clear();
     }
 
     private int getSelectedProjectId() {
@@ -160,7 +174,7 @@ public class ProjectListController extends ProjectManagementAwareController
         executeUiAction(
                 popupService::popUp,
                 CustomScene.CREATE_ACTIVITY,
-                "Operation failed");
+                ERROR_MESSAGE);
     }
 
     @FXML
@@ -168,7 +182,7 @@ public class ProjectListController extends ProjectManagementAwareController
         executeUiAction(
                 popupService::popUp,
                 CustomScene.EDIT_PROJECT,
-                "Operation failed");
+                ERROR_MESSAGE);
     }
 
     @FXML
@@ -176,7 +190,7 @@ public class ProjectListController extends ProjectManagementAwareController
         executeUiAction(
                 popupService::popUp,
                 CustomScene.CREATE_PROJECT,
-                "Operation failed");
+                ERROR_MESSAGE);
     }
 
     @FXML
@@ -185,7 +199,7 @@ public class ProjectListController extends ProjectManagementAwareController
         executeUiAction(
                 navigator::changeScene,
                 CustomScene.VIEW_REPORT,
-                "Operation failed");
+                ERROR_MESSAGE);
     }
 
     @FXML
@@ -193,7 +207,7 @@ public class ProjectListController extends ProjectManagementAwareController
         executeUiAction(
                 navigator::changeScene,
                 CustomScene.LOGIN,
-                "Operation failed");
+                ERROR_MESSAGE);
     }
 
     @FXML
@@ -201,7 +215,7 @@ public class ProjectListController extends ProjectManagementAwareController
         executeUiAction(
                 navigator::changeScene,
                 CustomScene.ADD_FIXED_ACTIVITY,
-                "Operation failed");
+                ERROR_MESSAGE);
     }
 
     @FXML
@@ -209,7 +223,7 @@ public class ProjectListController extends ProjectManagementAwareController
         executeUiAction(
                 navigator::changeScene,
                 CustomScene.REGISTER_TIME_LIST,
-                "Operation failed");
+                ERROR_MESSAGE);
     }
 
     @FXML
@@ -218,12 +232,14 @@ public class ProjectListController extends ProjectManagementAwareController
         // Check if the clicked node is NOT inside popUpPane
         if (!NodeUtils.isDescendant(clickedNode, popUpPane)) {
             popupService.popDown();
+            loadProjects();
         }
     }
 
     @FXML
     private void closePopUpClicked() {
         popupService.popDown();
+        loadProjects();
     }
 
     @Override
