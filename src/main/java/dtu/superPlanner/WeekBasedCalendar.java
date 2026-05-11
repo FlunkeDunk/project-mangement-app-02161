@@ -67,10 +67,12 @@ public class WeekBasedCalendar {
      * @author BenjaminEwe
      */
     private void setWeekAndYear(int week, int year) throws IllegalArgumentException {
-        assert true;
         if (week == 0) {
             throw new IllegalArgumentException(String.format("DateError: Invalid week: %d", week));
-        } else if (week < 0) {
+        }
+        assert (week != 0) : "Week 0 is undefined";
+
+        if (week < 0) {
             // Since no week 0 exists, we take negative weeks to mean weeks before first
             // week of a given year
             week++;
@@ -82,16 +84,18 @@ public class WeekBasedCalendar {
         // The new week number must at most be the last week of the year we are in and
         // at least 1 to be a valid week number
         assert(this.week <= LocalDate.of(this.year, 12, 28).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
-                && this.week > 0);
+                && this.week > 0)
+                : "Week number " + week + " falls outside of valid week range for year " + this.year;
         // Year 0 does not exist, all other integers are valid
-        assert (this.year != 0);
+        assert (this.year != 0) : "The year 0 is undefined";
         // The new date is 'week' weeks after the input years first week
         assert (ChronoUnit.WEEKS.between(
                 LocalDate.of(year, 1, 4).with(WeekFields.ISO.dayOfWeek(), 1),
                 LocalDate.of(this.year, 1, 4)
                         .withYear(this.year)
                         .with(WeekFields.ISO.weekOfWeekBasedYear(), this.week)
-                        .with(WeekFields.ISO.dayOfWeek(), 1)) == week - 1);
+                        .with(WeekFields.ISO.dayOfWeek(), 1)) == week - 1)
+                : "The normalized date is being normalized to an incorrect date";
     }
 
     /**
