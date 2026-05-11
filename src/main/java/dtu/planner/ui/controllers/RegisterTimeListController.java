@@ -17,6 +17,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
+/**
+ * @author Arthur
+ */
+
 public class RegisterTimeListController extends ProjectManagementAwareController {
 
     @FXML

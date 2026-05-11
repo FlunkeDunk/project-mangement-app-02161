@@ -1,11 +1,11 @@
 package dtu.planner.ui.controllers;
 
-import dtu.planner.ui.ActivityItemFactoryAware;
 import dtu.planner.ui.CustomScene;
 import dtu.planner.ui.NodeUtils;
 import dtu.planner.ui.ProjectDetailsView;
 import dtu.planner.ui.UiState;
 import dtu.planner.ui.interfaces.ActivityItemFactory;
+import dtu.planner.ui.interfaces.ActivityItemFactoryAware;
 import dtu.planner.ui.interfaces.PopupService;
 import dtu.planner.ui.interfaces.PopupServiceFactory;
 import dtu.planner.ui.interfaces.PopupServiceFactoryAware;

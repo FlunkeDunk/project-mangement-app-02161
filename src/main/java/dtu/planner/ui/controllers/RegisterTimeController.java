@@ -12,6 +12,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 
+/**
+ * @author Arthur
+ */
+
 public class RegisterTimeController extends ProjectManagementAwareController implements UiStateAware {
 
     @FXML

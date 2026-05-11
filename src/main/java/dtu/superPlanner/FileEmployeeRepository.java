@@ -125,7 +125,6 @@ public class FileEmployeeRepository implements EmployeeRepository {
         // Assert that all employees are either
         // in the result and eligible
         // or not in the result and not eligible
-
         assert getAllEmployees().stream().allMatch(employee -> {
             boolean inResult = result.contains(employee);
             boolean eligible = isEligibleForTimeActivity(employee, activity);
@@ -134,16 +133,15 @@ public class FileEmployeeRepository implements EmployeeRepository {
         }) : "Inconsistent employee selection: some employees are neither correctly included nor excluded";
 
         // Assert result is sorted by ovelapping activities post condition
-        for (int i = 1; i < result.size(); i++) {
-            Employee prev = result.get(i - 1);
-            Employee curr = result.get(i);
+        assert result.stream().allMatch(e1 -> {
+            int i = result.indexOf(e1);
+            if ((i + 1) >= result.size()) {
+                return true;
+            }
 
-            int prevLoad = getActivitiesOverlapping(timeFrame, prev);
-            int currLoad = getActivitiesOverlapping(timeFrame, curr);
-
-            assert prevLoad <= currLoad
-                    : "Employees are not ordered by workload";
-        }
+            Employee e2 = result.get(i + 1  );
+            return getActivitiesOverlapping(timeFrame, e1) <= getActivitiesOverlapping(timeFrame, e2);
+        }) : "result not sorted";
 
         return result;
     }

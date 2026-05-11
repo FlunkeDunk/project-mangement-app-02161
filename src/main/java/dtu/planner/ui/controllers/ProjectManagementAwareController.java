@@ -13,6 +13,10 @@ import dtu.planner.ui.interfaces.ThrowingRunnable;
 import dtu.superPlanner.ProjectManagementApp;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * @author Arthur
+ */
+
 public abstract class ProjectManagementAwareController implements ProjectManagementAware, NavigatorAware, AlertServiceAware {
     protected ProjectManagementApp app;
     protected Navigator navigator;
