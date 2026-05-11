@@ -63,8 +63,10 @@ public class FileEmployeeRepository implements EmployeeRepository {
         //postconditions
         assert loadedEmployees != null : "loadedEmployees was null";
         assert loadedEmployees.keySet().stream().allMatch(i -> i.length() == 4): "Not all initials are exactly 4 characters";
+        assert loadedEmployees.keySet().stream().allMatch(i -> loadedEmployees.get(i) != null): "Null elements in map";
+        assert loadedEmployees.keySet().stream().allMatch(i -> i.equals(loadedEmployees.get(i).getInitials())): "Mismatch between initials in map and initials of employee";
         assert (lineCount == loadedEmployees.size()) != skippedLines : "Skipped lines, but skippedLines was false";
-        
+
         return loadedEmployees;
     }
 
