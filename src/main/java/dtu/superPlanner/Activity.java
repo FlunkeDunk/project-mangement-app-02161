@@ -40,7 +40,7 @@ public class Activity extends AbstractActivity {
     public double getTotalTimeSpent() {
         double totalTimeSpent = 0;
         for (TimeLedger timeLedger : employeeTimeLedgers.values()) {
-            totalTimeSpent = timeLedger.getTotalTime();
+            totalTimeSpent += timeLedger.getTotalTime();
         }
         return totalTimeSpent;
     }
