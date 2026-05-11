@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 /**
  * @author Arthur
  */
+
 public class UiState {
     private final IntegerProperty selectedProjectId;
     private final IntegerProperty selectedActivityId;

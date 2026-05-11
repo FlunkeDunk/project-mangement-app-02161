@@ -13,7 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-
+    /**
+    * @author Arthur
+    */
 public class ActivityItem extends TitledPane {
 
     @FXML

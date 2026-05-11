@@ -12,6 +12,7 @@ import dtu.superPlanner.ProjectRepository;
 /**
  * @author Arthur
  */
+
 public class AppFactory {
     public ProjectManagementApp createApp() throws IOException {
         EmployeeRepository employeeRepository = createEmployeeRepository();

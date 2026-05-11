@@ -13,6 +13,7 @@ import javafx.util.Callback;
 /**
  * @author Arthur
  */
+
 public class ControllerFactory implements Callback<Class<?>, Object> {
 
     ProjectManagementApp app;

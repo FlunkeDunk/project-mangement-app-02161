@@ -10,6 +10,7 @@ import javafx.scene.control.SpinnerValueFactory;
 /**
  * @author Arthur
  */
+
 public class TimeSpinnerValueFactory
         extends SpinnerValueFactory.ListSpinnerValueFactory<LocalTime> {
 

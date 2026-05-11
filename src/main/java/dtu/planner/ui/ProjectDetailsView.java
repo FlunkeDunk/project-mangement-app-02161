@@ -5,6 +5,7 @@ import dtu.superPlanner.Project;
 /**
  * @author Arthur
  */
+
 public class ProjectDetailsView {
     private final String name;
     private final String id;
