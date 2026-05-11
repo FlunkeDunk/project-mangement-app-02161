@@ -61,8 +61,10 @@ public class Activity extends AbstractActivity {
     /**
      * @author Ebbe
      */
-    protected void addEmployee(String assignedInitials) {
-        employees.add(assignedInitials);
+    protected void addEmployee(String assignedInitials) throws IllegalArgumentException {
+        if (!employees.add(assignedInitials)) {
+            throw new IllegalArgumentException("Employee is already added to the activity");
+        }
     }
 
     public Set<String> getEmployees() {
