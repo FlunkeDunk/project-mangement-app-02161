@@ -22,9 +22,6 @@ public class Employee {
      * @author Emanuel
      */
     public void addActivity(AbstractActivity activity) throws IllegalArgumentException {
-        // Precondition
-        assert true;
-
         boolean containedActivity = true;
 
         switch (activity) {
@@ -43,10 +40,12 @@ public class Employee {
             default:
                 throw new IllegalArgumentException("Not a valid type of activity");
         }
+        // Precondition
+        assert !containedActivity && (activity instanceof Activity || activity instanceof FixedActivity) : "Failsafe precondition";
 
         // Postcondition: the activity is added to the correct Set
-        assert !containedActivity && ((activity instanceof Activity && activities.contains(activity))
-                || (activity instanceof FixedActivity && fixedActivities.contains(activity))) : "Postcondition";
+        assert (activity instanceof Activity && activities.contains((Activity)activity))
+                || (activity instanceof FixedActivity && fixedActivities.contains((FixedActivity)activity)) : "Postcondition";
     }
 
     public Set<Activity> getActivities() {
