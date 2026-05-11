@@ -44,8 +44,8 @@ public class FileEmployeeRepository implements EmployeeRepository {
         if (input == null) {
             throw new IllegalArgumentException("Input file was null");
         }
-        int lineCount = 0;
-        // Throws error if input can't be read
+        assert input != null : "Failsafe, when defensive code is wrong";
+        int lineCount = 0; // Used for assertion
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
             String initials;
             while ((initials = reader.readLine()) != null) {
@@ -58,9 +58,10 @@ public class FileEmployeeRepository implements EmployeeRepository {
                 }
             }
         } catch (IOException ex) {
+            // This error is not a precondition, due to readLine() is the one that can throw
             throw new IOException("Failed reading input file");
         }
-        // postconditions
+        // Postconditions
         assert loadedEmployees != null : "loadedEmployees was null";
         assert loadedEmployees.keySet().stream().allMatch(i -> i.length() == 4)
                 : "Not all initials are exactly 4 characters";
