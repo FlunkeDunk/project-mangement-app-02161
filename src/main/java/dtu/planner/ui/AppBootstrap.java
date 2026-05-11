@@ -12,10 +12,9 @@ import javafx.stage.Stage;
  * @author Arthur
  */
 
-public class AppBootstrap {
 
-    public AppBootstrap() {
-    }
+//
+public class AppBootstrap {
 
     void start(Stage stage) {
         AlertService alertService = new AlertService();

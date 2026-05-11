@@ -56,7 +56,7 @@ public class Project {
         getActivityById(activityId).setTimeFrame(timeFrame);
     }
 
-    public void addEmployeeToActivity(int activityId, String employeeInitials) {
+    public void addEmployeeToActivity(int activityId, String employeeInitials) throws IllegalArgumentException {
         getActivityById(activityId).addEmployee(employeeInitials);
     }
 

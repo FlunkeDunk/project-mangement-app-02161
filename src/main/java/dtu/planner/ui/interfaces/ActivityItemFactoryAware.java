@@ -1,10 +1,5 @@
-package dtu.planner.ui;
+package dtu.planner.ui.interfaces;
 
-import dtu.planner.ui.interfaces.ActivityItemFactory;
-
-/**
- * @author Arthur
- */
 public interface ActivityItemFactoryAware {
 
     public void setActivityItemFactory(ActivityItemFactory activityItemFactory);

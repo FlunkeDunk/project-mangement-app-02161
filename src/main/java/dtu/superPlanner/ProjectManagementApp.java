@@ -161,17 +161,22 @@ public class ProjectManagementApp {
      */
     public void addEmployeeToActivity(int projectId, int activityId, String employeeInitials)
             throws IllegalAccessException, IllegalArgumentException {
-        Project proj = PROJECT_REPOSITORY.get(projectId);
+        Project proj = getProject(projectId);
         Employee employee = getEmployee(employeeInitials);
         Activity activity = proj.getActivityById(activityId);
         if (!proj.isProjectLeader(userInitials)) {
             throw new IllegalAccessException("Only the project leader can assign employees to activities");
         }
-        if (activity.getEmployees().contains(employeeInitials)) {
-            throw new IllegalArgumentException("Employee is already added to the activity");
-        }
+
+        // Precondition: Failsafe precondition
+        assert proj.isProjectLeader(userInitials) : "User is not a project leader";
+
         proj.addEmployeeToActivity(activityId, employeeInitials);
         employee.addActivity(proj.getActivityById(activityId));
+
+        // Postcondition: Employee must be assigned to activity and the activity must be added to the employee's activities
+        assert activity.getEmployees().contains(employeeInitials);
+        assert employee.getActivities().contains(activity);
     }
 
     /**

@@ -13,6 +13,7 @@ import dtu.superPlanner.Project;
 /**
  * @author Arthur
  */
+
 public class ActivityItemFactoryImplementation implements ActivityItemFactory {
 
     public ActivityItemFactoryImplementation() {

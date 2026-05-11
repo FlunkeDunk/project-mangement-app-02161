@@ -1,6 +1,7 @@
 package dtu.planner.ui;
 
 import dtu.planner.ui.interfaces.ActivityItemFactory;
+import dtu.planner.ui.interfaces.ActivityItemFactoryAware;
 import dtu.planner.ui.interfaces.AlertServiceAware;
 import dtu.planner.ui.interfaces.PopupServiceFactory;
 import dtu.planner.ui.interfaces.PopupServiceFactoryAware;

@@ -6,6 +6,7 @@ import javafx.scene.control.Alert.AlertType;
 /**
  * @author Arthur
  */
+
 public class AlertService {
     public void show(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);

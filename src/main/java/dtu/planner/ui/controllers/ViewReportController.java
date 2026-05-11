@@ -13,6 +13,10 @@ import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 
+/**
+ * @author Arthur
+ */
+
 public class ViewReportController extends ProjectManagementAwareController implements ReportAware {
 
     @FXML
