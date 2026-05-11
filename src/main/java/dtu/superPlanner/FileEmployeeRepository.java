@@ -39,16 +39,19 @@ public class FileEmployeeRepository implements EmployeeRepository {
      */
     private final Map<String, Employee> loadEmployees(InputStream input) throws IOException {
         Map<String, Employee> loadedEmployees = new TreeMap<>();
-
+        // Preconditions
+        // Throws error if input is null
         if (input == null) {
             throw new IllegalArgumentException("Input file was null");
         }
-
+        int lineCount = 0;
+        // Throws error if input can't be read
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
             String initials;
             while ((initials = reader.readLine()) != null) {
                 initials = initials.strip();
-                if (initials.length() == 4) {
+                lineCount++;
+                if (initials.length() == 4 && !loadedEmployees.containsKey(initials)) {
                     loadedEmployees.put(initials, new Employee(initials));
                 } else {
                     skippedLines = true;
@@ -57,6 +60,11 @@ public class FileEmployeeRepository implements EmployeeRepository {
         } catch (IOException ex) {
             throw new IOException("Failed reading input file");
         }
+        //postconditions
+        assert loadedEmployees != null : "loadedEmployees was null";
+        assert loadedEmployees.keySet().stream().allMatch(i -> i.length() == 4): "Not all initials are exactly 4 characters";
+        assert (lineCount == loadedEmployees.size()) != skippedLines : "Skipped lines, but skippedLines was false";
+        
         return loadedEmployees;
     }
 

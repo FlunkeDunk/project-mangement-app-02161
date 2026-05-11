@@ -139,7 +139,6 @@ public class ProjectManagementApp {
         FixedActivity activity = new FixedActivity(type, timeFrame);
         Employee user = EMPLOYEE_REPOSITORY.get(userInitials);
         user.addActivity(activity);
-
         return activity;
     }
 
@@ -250,6 +249,7 @@ public class ProjectManagementApp {
      * @author Emanuel
      */
     public Set<FixedActivity> getFixedActivities() {
+
         Employee user = EMPLOYEE_REPOSITORY.get(userInitials);
         return user.getFixedActivities();
     }
