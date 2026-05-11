@@ -216,4 +216,37 @@ public class ProjectStepDefs {
             errorHolder.setError(e.getMessage());
         }
     }
+
+        @Given("no projects have been created")
+    public void noProjectsHaveBeenCreated() {
+        assertEquals(0, myApp.getAllProjects().size());
+    }
+
+
+    
+    @When("the user creates {int} project(s)")
+    public void theUserCreatesProject(Integer int1) {
+        for (int i = 0; i < int1; i++) {
+            myApp.createProject();
+        }
+    }
+
+    @Then("{int} project(s) exist(s)")
+    public void projectExists(Integer int1) {
+        Set<Project> projects = myApp.getAllProjects();
+        assertEquals(int1, projects.size());
+    }
+
+    /**
+     * @author Emanuel
+     */
+    @When("the user tries to get the project with id {int}")
+    public void theUserTriesToGetTheProjectWithId(Integer id) {
+        try {
+            myApp.getProject(id);
+        } catch (Exception e) {
+            errorHolder.setError(e.getMessage());
+        }
+    }
+
 }
