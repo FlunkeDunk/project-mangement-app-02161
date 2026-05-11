@@ -1,6 +1,5 @@
 package dtu.planner.ui.controllers;
 
-import java.io.IOException;
 import java.time.LocalDate;
 
 import dtu.planner.ui.CustomScene;
@@ -36,7 +35,7 @@ public class AddFixedActivityController extends ProjectManagementAwareController
     }
 
     @FXML
-    private void addFixedActivity() throws IOException {
+    private void addFixedActivity() {
         FixedActivityType type = activityTypeComboBox.getValue();
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
@@ -50,13 +49,23 @@ public class AddFixedActivityController extends ProjectManagementAwareController
 
         TimeFrame timeFrame;
         try {
-            timeFrame = new TimeFrame(new WeekBasedCalendar(startDate), new WeekBasedCalendar(startDate));
+            timeFrame = new TimeFrame(new WeekBasedCalendar(startDate), new WeekBasedCalendar(endDate));
         } catch (IllegalArgumentException ex) {
             alertService.show("Invalid dates", ex.getMessage());
             return;
         }
+        try {
+            app.createFixedActivity(type, timeFrame);
+            
+        } catch (IllegalArgumentException ex) {
+            alertService.show("Illegal argument", ex.getMessage());
+            return;
 
-        app.createFixedActivity(type, timeFrame);
-        navigator.changeScene(CustomScene.PROJECT_LIST);
+        }
+
+        executeUiAction(
+                navigator::changeScene,
+                CustomScene.PROJECT_LIST,
+                "Scene change failed");
     }
 }
