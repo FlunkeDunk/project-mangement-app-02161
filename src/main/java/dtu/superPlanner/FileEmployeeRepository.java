@@ -60,11 +60,13 @@ public class FileEmployeeRepository implements EmployeeRepository {
         } catch (IOException ex) {
             throw new IOException("Failed reading input file");
         }
-        //postconditions
+        // postconditions
         assert loadedEmployees != null : "loadedEmployees was null";
-        assert loadedEmployees.keySet().stream().allMatch(i -> i.length() == 4): "Not all initials are exactly 4 characters";
-        assert loadedEmployees.keySet().stream().allMatch(i -> loadedEmployees.get(i) != null): "Null elements in map";
-        assert loadedEmployees.keySet().stream().allMatch(i -> i.equals(loadedEmployees.get(i).getInitials())): "Mismatch between initials in map and initials of employee";
+        assert loadedEmployees.keySet().stream().allMatch(i -> i.length() == 4)
+                : "Not all initials are exactly 4 characters";
+        assert loadedEmployees.keySet().stream().allMatch(i -> loadedEmployees.get(i) != null) : "Null elements in map";
+        assert loadedEmployees.keySet().stream().allMatch(i -> i.equals(loadedEmployees.get(i).getInitials()))
+                : "Mismatch between initials in map and initials of employee";
         assert (lineCount == loadedEmployees.size()) != skippedLines : "Skipped lines, but skippedLines was false";
 
         return loadedEmployees;
@@ -104,9 +106,9 @@ public class FileEmployeeRepository implements EmployeeRepository {
      */
     public List<Employee> findAvailableEmployees(Activity activity) {
         // Assert preconditions
-        assert activity != null                                         // activity is not null
-                && activity.getTimeFrame() != null                      // activitys TimeFrame is not null
-                && employees != null                                    // employees map is not null
+        assert activity != null // activity is not null
+                && activity.getTimeFrame() != null // activitys TimeFrame is not null
+                && employees != null // employees map is not null
                 && !employees.values().contains(null) // no employees are null
                 : "Preconditions not met";
 
@@ -114,9 +116,9 @@ public class FileEmployeeRepository implements EmployeeRepository {
 
         Comparator<Employee> bySmallestOverlap = Comparator.comparingInt(e -> getActivitiesOverlapping(timeFrame, e));
 
-        List<Employee> result = getAllEmployees().stream()              // 1
-                .filter(e -> isEligibleForTimeActivity(e, activity))    // 2
-                .sorted(bySmallestOverlap)                              // 3
+        List<Employee> result = getAllEmployees().stream() // 1
+                .filter(e -> isEligibleForTimeActivity(e, activity)) // 2
+                .sorted(bySmallestOverlap) // 3
                 .toList();
 
         // Assert that all employees are either
@@ -130,7 +132,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
             return inResult == eligible;
         }) : "Inconsistent employee selection: some employees are neither correctly included nor excluded";
 
-        // Assert result is ordered post condition
+        // Assert result is sorted by ovelapping activities post condition
         for (int i = 1; i < result.size(); i++) {
             Employee prev = result.get(i - 1);
             Employee curr = result.get(i);

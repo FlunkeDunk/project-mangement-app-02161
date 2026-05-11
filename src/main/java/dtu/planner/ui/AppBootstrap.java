@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 /**
  * @author Arthur
  */
+
 public class AppBootstrap {
 
     public AppBootstrap() {

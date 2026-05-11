@@ -1,5 +1,9 @@
 package dtu.planner.ui;
 
+/**
+ * @author Arthur
+ */
+
 public enum CustomScene {
 
     ADD_FIXED_ACTIVITY("add_fixed_activity"),

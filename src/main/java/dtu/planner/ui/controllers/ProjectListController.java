@@ -37,6 +37,7 @@ public class ProjectListController extends ProjectManagementAwareController
     private PopupServiceFactory popupServiceFactory;
 
     private PopupService popupService;
+    private UiState uiState;
 
     @FXML
     private Label selectedProjectNameLabel;
@@ -64,7 +65,6 @@ public class ProjectListController extends ProjectManagementAwareController
     @FXML
     private Button viewReportButton;
 
-    private UiState uiState;
 
     @FXML
     private void initialize() {
@@ -108,6 +108,7 @@ public class ProjectListController extends ProjectManagementAwareController
             i++;
         }
     }
+
     private void clearProjectList() {
         projectList.getItems().clear();
     }
@@ -121,9 +122,9 @@ public class ProjectListController extends ProjectManagementAwareController
         setProjectDetails(new ProjectDetailsView(project));
         activityAccordion.getPanes()
                 .setAll(activityItemFactory.create(project, isUserLeader, popupService, this::executeUiAction));
-                
+
         expandActivityItem();
-                
+
         setSelectedProjectButtonsDisabled(!project.isProjectLeader(app.getUserInitials()));
     }
 

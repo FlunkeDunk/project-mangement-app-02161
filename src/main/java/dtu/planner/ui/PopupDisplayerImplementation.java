@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 /**
  * @author Arthur
  */
+
 public class PopupDisplayerImplementation implements PopupDisplayer{
 
     private final AnchorPane POPUP_PANE;

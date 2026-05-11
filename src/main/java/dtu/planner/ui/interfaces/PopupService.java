@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import dtu.planner.ui.CustomScene;
-
+/**
+ * @author Arthur
+ */
 public interface PopupService {
 
     public void popUp(CustomScene scene) throws IOException;

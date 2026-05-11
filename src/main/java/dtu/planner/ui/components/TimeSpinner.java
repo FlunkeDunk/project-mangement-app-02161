@@ -4,7 +4,9 @@ import java.time.LocalTime;
 
 import dtu.planner.ui.TimeSpinnerValueFactory;
 import javafx.scene.control.Spinner;
-
+    /**
+    * @author Arthur
+    */
 public class TimeSpinner extends Spinner<LocalTime> {
 
     public TimeSpinner(LocalTime time) {
