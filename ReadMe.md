@@ -1,4 +1,8 @@
-# Run the application
+# Run the JAR
+A jar is provided at ``/out/artifacts/javaFX_project_jar``, run it with ``java -jar SuperPlanner2000.jar``.
+
+# Run the application from an IDE
+The application was written in and tested for Java 21.
 
 To run the application press `mvn javafx:run`
 Alternatively, in an IDE, go to ``/src/main/java/dtu/planner.ui`` and run ``App.java``
@@ -7,8 +11,9 @@ You will have to log in as one of the users in the database, one of which is ``h
 
 # Run tests
 
-To run the tests, press `mvn clean test`
-Alternatively, in an IDE, go to ``/src/test/java/hellocucumber`` and run ``RunCucumberTest.java``
+To run the tests, press `mvn clean test` (Both cucumber TDD tests and WhiteBox tests).
+Alternatively, in an IDE, go to ``/src/test/java/hellocucumber`` and run ``RunCucumberTest.java`` to run the cucumber TDD tests,
+and to run WhiteBox tests go to ``/src/test/java/dtu/whitebox`` and run the files in the folder (right-click and run the entire folder).
 
 # Using the application
 
