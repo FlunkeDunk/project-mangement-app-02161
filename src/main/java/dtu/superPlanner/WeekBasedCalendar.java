@@ -67,10 +67,10 @@ public class WeekBasedCalendar {
      * @author BenjaminEwe
      */
     private void setWeekAndYear(int week, int year) throws IllegalArgumentException {
-        if (week == 0) {
-            throw new IllegalArgumentException(String.format("DateError: Invalid week: %d", week));
+        if (week == 0 || year == 0) {
+            throw new IllegalArgumentException(String.format("DateError: Invalid date, week: %d, year: %d", week, year));
         }
-        assert (week != 0) : "Week 0 is undefined";
+        assert (week != 0 && year != 0) : "Date is undefined";
 
         if (week < 0) {
             // Since no week 0 exists, we take negative weeks to mean weeks before first
